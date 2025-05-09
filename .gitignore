@@ -1,0 +1,87 @@
+# Specific project files
+.vscode/deprecated-hooks.json
+.vscode/hook-settings.json
+.vscode/hook-styles.json
+.vscode/rust-hooks.json
+# General exclusions
+*.user
+*.lock
+*.DS_Store
+*.suo
+*.sln.docstates
+*.log
+*.env
+
+# Build folders
+bin/
+obj/
+out/
+
+# Package files
+*.nupkg
+*.snupkg
+packages/
+!packages/build/
+!packages/repositories.config
+
+# Visual Studio configuration files
+*.sln.ide
+*.suo
+*.vsp
+*.user
+*.userosscache
+*.sln.docstates
+
+# Auto-generated files
+*.generated.cs
+*.g.i.cs
+*.g.cs
+
+# IDE-specific directories and files
+.vs/
+.idea/
+.cache/
+*.pidb
+*.ide-helper
+
+# Certificates and keys
+*.pfx
+*.cer
+*.key
+*.snk
+
+# Components and dependencies
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Resharper files
+_ReSharper*/
+*.DotSettings.user
+
+# Entity Framework migrations
+App_Data/
+migrations/
+
+# Docker
+docker-compose.override.yml
+.dockerignore
+
+# JetBrains Rider
+.idea/
+
+# macOS specific
+.DS_Store
+*.dSYM
+
+# Windows-incompatible files with special characters
+*<<*>*>d.cstxt
+
+# Ignore specific DLL in Managed
+Managed/Newtonsoft.Json.dll
+
+# Ignore platform-specific folders in Managed
+Managed/x64/
+Managed/x86/ 
+
+Managed/Managed/
