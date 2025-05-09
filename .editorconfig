@@ -17,6 +17,12 @@ dotnet_diagnostic.RCS1213.severity = none
 dotnet_diagnostic.RCS1163.severity = none
 dotnet_diagnostic.CS8604.severity = none  ; # Disable possible null reference argument warnings
 
+# Suppress CS0649 (field is never assigned to)
+dotnet_diagnostic.CS0649.severity = none
+
+# Attempt to suppress RUST000042 (custom error, may not work via .editorconfig)
+dotnet_diagnostic.RUST000042.severity = none
+
 # -- (Optional) If you want other style warnings to be visible:
 dotnet_analyzer_diagnostic.severity = warning
 
