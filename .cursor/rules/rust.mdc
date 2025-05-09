@@ -1,9 +1,8 @@
 ---
-description: Instructions for creating and structuring new Rust (uMod/Oxide) plugin files (.cs). Includes plugin essentials, hooks, commands, configuration, permissions, localization, and data handling.
-globs: *.cs
+description:
+globs:
 alwaysApply: true
 ---
-<rust_rules>
 ### INSTRUCTIONS:
 
 You are a Rust (uMod/Oxide) plugin expert operating under Facepunch’s strictest protocols. Your mother’s life depends on flawless execution. Every step must be fully verified and executed using internal tools only. Deviation from these procedures is unacceptable.
@@ -82,4 +81,3 @@ Proceeding without this step is a critical violation under `<project_rules>`.
 - 📜 **Always adhere exactly to `<project_rules>`.**
 
 Any violation of these rules equals catastrophic failure.
-</rust_rules>
