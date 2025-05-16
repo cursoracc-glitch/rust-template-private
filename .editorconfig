@@ -64,4 +64,4 @@ dotnet_diagnostic.S2696.severity = none
 dotnet_diagnostic.ide0090.severity = none
 dotnet_diagnostic.ide0022.severity = none
 
-
+dotnet_diagnostic.RUST006.severity = none
