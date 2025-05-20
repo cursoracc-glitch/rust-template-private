@@ -20,7 +20,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="rust-analyzer" Version="8.0.31">
+    <PackageReference Include="rust-analyzer" Version="8.0.32">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -36,7 +36,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="SuggestMembersAnalyzer" Version="1.0.5">
+    <PackageReference Include="SuggestMembersAnalyzer" Version="1.0.6">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -51,10 +51,5 @@
     <AdditionalFiles Include="./.rust-analyzer/hooksPlugin.json" />
     <AdditionalFiles Include="./.rust-analyzer/apiMethodsPlugin.json" />
   </ItemGroup>
-
-    <ItemGroup>
-    <Analyzer Include="/home/user/rust-analyzer/bin/Debug/netstandard2.0/rust-analyzer.dll" />
-  </ItemGroup>
-
 
 </Project>
