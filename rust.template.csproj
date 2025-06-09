@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
     <LangVersion>11</LangVersion>
-    <NoWarn>MSB3277</NoWarn>
+    <NoWarn>MSB3277,IDE0011</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RustVersion>LastVersion</RustVersion>
     <Nullable>enable</Nullable>

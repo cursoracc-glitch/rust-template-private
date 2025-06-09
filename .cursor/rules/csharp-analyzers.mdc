@@ -3,11 +3,6 @@ description:
 globs: 
 alwaysApply: true
 ---
----
-description: Enforce analyzer compliance and hook validation in Rust plugins
-globs: ["*.cs"]
-alwaysApply: true
----
 
 # C# Analyzer Compliance
 
