@@ -1540,23 +1540,23 @@ using UnityEngine;
 [Serializable]
 public class LegStepAnimatingParameters
 {
-	[Tooltip("Average duration of the automatic leg animation")]
 	[Range(0.1f, 1f)]
+	[Tooltip("Average duration of the automatic leg animation")]
 	public float StepMoveDuration = 0.375f;
 
 	[Tooltip("Curve of ik point going towards desired position (just XZ movement, to Y - no leg rise curve)")]
 	[FPD_FixedCurveWindow(0f, 0f, 1f, 1.25f, 0.4f, 0.5f, 1f, 1f)]
 	public AnimationCurve MoveToGoalCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
-	[Tooltip("Making foot motion move towards target not in full linear straight towards target motion but adding a bit curve back (positive value) or forward (negative values) making movement a bit more natural")]
 	[FPD_FixedCurveWindow(0f, -1f, 1f, 1f, 0.4f, 0.6f, 0.9f, 1f)]
+	[Tooltip("Making foot motion move towards target not in full linear straight towards target motion but adding a bit curve back (positive value) or forward (negative values) making movement a bit more natural")]
 	public AnimationCurve SpherizeTrack = AnimationCurve.EaseInOut(0f, 0f, 1f, 0f);
 
 	[Range(0f, 2f)]
 	public float SpherizePower = 0.3f;
 
-	[Range(0f, 1f)]
 	[Tooltip("Minimum leg raise height. If distance of target step animation is small, then foot raise is smaller - down to this minimum raise value.")]
+	[Range(0f, 1f)]
 	public float MinFootRaise = 0.1f;
 
 	[Tooltip("Maximum leg raise height. If distance of target step animation is very big, then foot raise is bigger - up to this maximum raise value.")]
@@ -1567,9 +1567,9 @@ public class LegStepAnimatingParameters
 	[FPD_FixedCurveWindow(0f, 0f, 1f, 1f, 0.5f, 1f, 0.5f, 1f)]
 	public AnimationCurve RaiseYAxisCurve;
 
+	[Range(0f, 1f)]
 	[Tooltip("Allowing to speed up leg adjusting animation when leg is getting stretched, when opposite leg is requesting adjustement or when main character is rotating in place quickly")]
 	[Space(3f)]
-	[Range(0f, 1f)]
 	public float AllowSpeedups = 0.4f;
 
 	[Range(0.1f, 1f)]
@@ -5979,8 +5979,8 @@ public class FGroundFitter_Demo_NavMesh : MonoBehaviour
 	[Range(0.5f, 50f)]
 	public float RotationSpeed = 3f;
 
-	[Range(0f, 1f)]
 	[Tooltip("Moving Accordingly to rotation after acceleration")]
+	[Range(0f, 1f)]
 	public float DirectMovement = 0.8f;
 
 	public float AnimationSpeedScale = 1f;
@@ -6570,16 +6570,16 @@ public class FGroundFitter_Movement : MonoBehaviour
 
 	private float? yAdjustPos;
 
-	[Tooltip("If you want to set some animator parameter during being grounded")]
 	[HideInInspector]
+	[Tooltip("If you want to set some animator parameter during being grounded")]
 	public string SetIsGroundedParam = "";
 
-	[Tooltip("If you want to set some animator parameter during accelerating moving")]
 	[HideInInspector]
+	[Tooltip("If you want to set some animator parameter during accelerating moving")]
 	public string SetIsMovingParam = "";
 
-	[Tooltip("If using physical move with collider, assigning to the collider sliding material")]
 	[HideInInspector]
+	[Tooltip("If using physical move with collider, assigning to the collider sliding material")]
 	public bool UseSlidingMat = true;
 
 	private static PhysicMaterial pm_Sliding = null;
@@ -7255,8 +7255,8 @@ using UnityEngine;
 public abstract class FGroundFitter_Base : MonoBehaviour
 {
 	[Header("> Main Variables <", order = 0)]
-	[Tooltip("How quick rotation should be corrected to target")]
 	[Range(1f, 30f)]
+	[Tooltip("How quick rotation should be corrected to target")]
 	[Space(4f, order = 1)]
 	public float FittingSpeed = 6f;
 
@@ -7264,37 +7264,37 @@ public abstract class FGroundFitter_Base : MonoBehaviour
 	[Range(0f, 1f)]
 	public float TotalSmoother;
 
-	[Space(3f)]
 	[Tooltip("Transform which will be rotated by script, usually it can be the same transform as component's")]
 	[HideInInspector]
+	[Space(3f)]
 	public Transform TransformToRotate;
 
-	[Space(3f)]
 	[Tooltip("If you want this script only to change your object's rotation and do nothing with position, untoggle this")]
+	[Space(3f)]
 	public bool GlueToGround;
 
-	[Header("> Tweaking Settings <", order = 0)]
 	[Space(4f, order = 1)]
-	[Tooltip("If forward/pitch rotation value should go in lighter value than real normal hit direction")]
 	[Range(0f, 1f)]
+	[Header("> Tweaking Settings <", order = 0)]
+	[Tooltip("If forward/pitch rotation value should go in lighter value than real normal hit direction")]
 	public float MildForwardValue;
 
-	[Tooltip("Maximum rotation angle in rotation of x/pitch axis, so rotating forward - degrees value of maximum rotation")]
 	[Range(0f, 90f)]
+	[Tooltip("Maximum rotation angle in rotation of x/pitch axis, so rotating forward - degrees value of maximum rotation")]
 	public float MaxForwardRotation = 90f;
 
 	[Range(0f, 1f)]
-	[Tooltip("If side rotation value/roll should go in lighter value than real normal hit direction")]
 	[Space(5f)]
+	[Tooltip("If side rotation value/roll should go in lighter value than real normal hit direction")]
 	public float MildHorizontalValue;
 
-	[Tooltip("Max roll rotation. If rotation should work on also on x axis - good for spiders, can look wrong on quadropeds etc.")]
 	[Range(0f, 90f)]
+	[Tooltip("Max roll rotation. If rotation should work on also on x axis - good for spiders, can look wrong on quadropeds etc.")]
 	public float MaxHorizontalRotation = 90f;
 
-	[Header("> Advanced settings <", order = 0)]
-	[Space(4f, order = 1)]
 	[Tooltip("We should cast raycast from position little higher than foots of your game object")]
+	[Space(4f, order = 1)]
+	[Header("> Advanced settings <", order = 0)]
 	public float RaycastHeightOffset = 0.5f;
 
 	[Tooltip("How far ray should cast to check if ground is under feet")]
@@ -7306,12 +7306,12 @@ public abstract class FGroundFitter_Base : MonoBehaviour
 	[Tooltip("Blending with predicted forward raycast rotation")]
 	public float AheadBlend = 0.5f;
 
-	[Tooltip("Offset over ground")]
 	[HideInInspector]
+	[Tooltip("Offset over ground")]
 	public float UpOffset;
 
-	[Space(8f)]
 	[Tooltip("What collision layers should be included by algorithm")]
+	[Space(8f)]
 	public LayerMask GroundLayerMask = LayerMask.op_Implicit(1);
 
 	[Tooltip("When casting down vector should adjust with transform's rotation")]
@@ -7746,8 +7746,8 @@ public abstract class FGroundFitter_Base_RootMotion : FGroundFitter_Base
 	[HideInInspector]
 	protected Transform parentTransform;
 
-	[SerializeField]
 	[HideInInspector]
+	[SerializeField]
 	protected CharacterController optionalCharContr;
 
 	[HideInInspector]
@@ -10121,6 +10121,13 @@ public abstract class BaseTip
 	protected bool PlayerIsInTutorial => false;
 
 	public abstract Phrase GetPhrase();
+}
+
+
+using UnityEngine;
+
+public class EnableCanvasOnClientConnect : MonoBehaviour
+{
 }
 
 
@@ -14320,8 +14327,8 @@ public struct RaycastRaySetupJob : IJobParallelFor
 	[ReadOnly]
 	public NativeArray<int2> samplePositions;
 
-	[WriteOnly]
 	[NativeMatchesParallelForLength]
+	[WriteOnly]
 	public NativeArray<RaycastCommand> raycastCommands;
 
 	public void Execute(int index)
@@ -14389,8 +14396,8 @@ public struct RaycastRayProcessingJob : IJobParallelFor
 	[NativeDisableParallelForRestriction]
 	public NativeArray<int> colliderHits;
 
-	[NativeMatchesParallelForLength]
 	[WriteOnly]
+	[NativeMatchesParallelForLength]
 	public NativeArray<int> outputs;
 
 	[NativeDisableParallelForRestriction]
@@ -15667,7 +15674,7 @@ using UnityEngine;
 
 public class ConditionalModelConfig
 {
-	public int ModelStateMask;
+	public ulong ModelStateMask;
 
 	public uint TargetPrefabId;
 
@@ -17102,7 +17109,7 @@ public struct RenderUpdate
 
 	public ulong Skin;
 
-	public int ModelState;
+	public ulong ModelState;
 
 	public Vector3 Position;
 
@@ -20115,8 +20122,8 @@ public struct CheckBoundsJobIndirect : IJob
 	[WriteOnly]
 	public NativeList<int> OverlapIndices;
 
-	[NativeDisableContainerSafetyRestriction]
 	[ReadOnly]
+	[NativeDisableContainerSafetyRestriction]
 	public CoarseQueryGrid Grid;
 
 	[ReadOnly]
@@ -20404,8 +20411,8 @@ public class TonemappingColorGrading : MonoBehaviour
 	{
 		public bool enabled;
 
-		[Tooltip("Midpoint Adjustment.")]
 		[Min(0f)]
+		[Tooltip("Midpoint Adjustment.")]
 		public float middleGrey;
 
 		[Tooltip("The lowest possible exposure value; adjust this value to modify the brightest areas of your level.")]
@@ -20509,8 +20516,8 @@ public class TonemappingColorGrading : MonoBehaviour
 		[Tooltip("Custom lookup texture (strip format, e.g. 256x16).")]
 		public Texture texture;
 
-		[Tooltip("Blending factor.")]
 		[Range(0f, 1f)]
+		[Tooltip("Blending factor.")]
 		public float contribution;
 
 		public static LUTSettings defaultSettings
@@ -20564,8 +20571,8 @@ public class TonemappingColorGrading : MonoBehaviour
 		[Tooltip("Sets the white balance to a custom color temperature.")]
 		public float temperatureShift;
 
-		[Range(-2f, 2f)]
 		[Tooltip("Sets the white balance to compensate for a green or magenta tint.")]
+		[Range(-2f, 2f)]
 		public float tint;
 
 		[Space]
@@ -20585,13 +20592,13 @@ public class TonemappingColorGrading : MonoBehaviour
 		[Range(0f, 10f)]
 		public float value;
 
+		[Space]
 		[Range(0f, 2f)]
 		[Tooltip("Expands or shrinks the overall range of tonal values.")]
-		[Space]
 		public float contrast;
 
-		[Tooltip("Contrast gain curve. Controls the steepness of the curve.")]
 		[Range(0.01f, 5f)]
+		[Tooltip("Contrast gain curve. Controls the steepness of the curve.")]
 		public float gain;
 
 		[Tooltip("Applies a pow function to the source.")]
@@ -20708,12 +20715,12 @@ public class TonemappingColorGrading : MonoBehaviour
 		[ChannelMixer]
 		public ChannelMixerSettings channelMixer;
 
-		[Space]
 		[IndentedGroup]
+		[Space]
 		public CurvesSettings curves;
 
-		[Space]
 		[Tooltip("Use dithering to try and minimize color banding in dark areas.")]
+		[Space]
 		public bool useDithering;
 
 		[Tooltip("Displays the generated LUT in the top left corner of the GameView.")]
@@ -20754,8 +20761,8 @@ public class TonemappingColorGrading : MonoBehaviour
 	[SerializeField]
 	private ColorGradingSettings m_ColorGrading = ColorGradingSettings.defaultSettings;
 
-	[SettingsGroup]
 	[SerializeField]
+	[SettingsGroup]
 	private LUTSettings m_Lut = LUTSettings.defaultSettings;
 
 	[SerializeField]
@@ -20836,8 +20843,8 @@ public struct EyeAdaptationSettings
 {
 	public bool enabled;
 
-	[Tooltip("Midpoint Adjustment.")]
 	[Min(0f)]
+	[Tooltip("Midpoint Adjustment.")]
 	public float middleGrey;
 
 	[Tooltip("The lowest possible exposure value; adjust this value to modify the brightest areas of your level.")]
@@ -20950,8 +20957,8 @@ public struct LUTSettings
 	[Tooltip("Custom lookup texture (strip format, e.g. 256x16).")]
 	public Texture texture;
 
-	[Tooltip("Blending factor.")]
 	[Range(0f, 1f)]
+	[Tooltip("Blending factor.")]
 	public float contribution;
 
 	public static LUTSettings defaultSettings
@@ -21013,8 +21020,8 @@ public struct BasicsSettings
 	[Tooltip("Sets the white balance to a custom color temperature.")]
 	public float temperatureShift;
 
-	[Range(-2f, 2f)]
 	[Tooltip("Sets the white balance to compensate for a green or magenta tint.")]
+	[Range(-2f, 2f)]
 	public float tint;
 
 	[Space]
@@ -21034,13 +21041,13 @@ public struct BasicsSettings
 	[Range(0f, 10f)]
 	public float value;
 
+	[Space]
 	[Range(0f, 2f)]
 	[Tooltip("Expands or shrinks the overall range of tonal values.")]
-	[Space]
 	public float contrast;
 
-	[Tooltip("Contrast gain curve. Controls the steepness of the curve.")]
 	[Range(0.01f, 5f)]
+	[Tooltip("Contrast gain curve. Controls the steepness of the curve.")]
 	public float gain;
 
 	[Tooltip("Applies a pow function to the source.")]
@@ -21170,12 +21177,12 @@ public struct ColorGradingSettings
 	[ChannelMixer]
 	public ChannelMixerSettings channelMixer;
 
-	[Space]
 	[IndentedGroup]
+	[Space]
 	public CurvesSettings curves;
 
-	[Space]
 	[Tooltip("Use dithering to try and minimize color banding in dark areas.")]
+	[Space]
 	public bool useDithering;
 
 	[Tooltip("Displays the generated LUT in the top left corner of the GameView.")]
@@ -21208,8 +21215,8 @@ public struct ColorGradingSettings
 using UnityEngine;
 using UnityStandardAssets.ImageEffects;
 
-[AddComponentMenu("Image Effects/Other/Scope Overlay")]
 [ExecuteInEditMode]
+[AddComponentMenu("Image Effects/Other/Scope Overlay")]
 public class ScopeEffect : PostEffectsBase, IImageEffect
 {
 	public Material overlayMaterial;
@@ -22153,6 +22160,19 @@ public class ConsoleInput
 			RedrawInputLine();
 		}
 	}
+}
+
+
+using Rust.Rendering.IndirectInstancing;
+using UnityEngine;
+
+[DisallowMultipleComponent]
+[RequireComponent(typeof(Camera))]
+public class InstancedDebugDraw : SingletonComponent<InstancedDebugDraw>, IClientComponent, IRebindBuffer<GraphicsBuffer>, IRebindBuffer<ComputeBuffer>
+{
+	public Material overlayMaterial;
+
+	public Material depthTestedMaterial;
 }
 
 
@@ -23451,10 +23471,10 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-[SelectionBase]
-[RequireComponent(typeof(RectTransform))]
-[ExecuteInEditMode]
 [AddComponentMenu("UI/Scroll Rect Ex", 37)]
+[SelectionBase]
+[ExecuteInEditMode]
+[RequireComponent(typeof(RectTransform))]
 public class ScrollRectEx : UIBehaviour, IInitializePotentialDragHandler, IEventSystemHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IScrollHandler, ICanvasElement, ILayoutGroup, ILayoutController
 {
 	public enum MovementType
@@ -25371,8 +25391,8 @@ using UnityEngine.UI.Extensions;
 [AddComponentMenu("UI/Extensions/Primitives/UI Circle Simple")]
 public class UICircleSimple : UIPrimitiveBase
 {
-	[Tooltip("The Arc Steps property defines the number of segments that the Arc will be divided into.")]
 	[Range(0f, 1000f)]
+	[Tooltip("The Arc Steps property defines the number of segments that the Arc will be divided into.")]
 	public int ArcSteps = 100;
 
 	public bool Fill = true;
@@ -26273,8 +26293,8 @@ using UnityEngine.Sprites;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 
-[RequireComponent(typeof(RectTransform))]
 [AddComponentMenu("UI/Extensions/Primitives/UILineRenderer")]
+[RequireComponent(typeof(RectTransform))]
 public class UILineRenderer : UIPrimitiveBase
 {
 	private enum SegmentType
@@ -26328,8 +26348,8 @@ public class UILineRenderer : UIPrimitiveBase
 
 	private static Vector2[] fullUvs;
 
-	[Tooltip("Points to draw lines between\n Can be improved using the Resolution Option")]
 	[SerializeField]
+	[Tooltip("Points to draw lines between\n Can be improved using the Resolution Option")]
 	internal Vector2[] m_points;
 
 	[SerializeField]
@@ -26344,16 +26364,16 @@ public class UILineRenderer : UIPrimitiveBase
 	[SerializeField]
 	internal bool relativeSize;
 
-	[SerializeField]
 	[Tooltip("Do the points identify a single line or split pairs of lines")]
+	[SerializeField]
 	internal bool lineList;
 
-	[Tooltip("Add end caps to each line\nMultiple caps when used with Line List")]
 	[SerializeField]
+	[Tooltip("Add end caps to each line\nMultiple caps when used with Line List")]
 	internal bool lineCaps;
 
-	[Tooltip("Resolution of the Bezier curve, different to line Resolution")]
 	[SerializeField]
+	[Tooltip("Resolution of the Bezier curve, different to line Resolution")]
 	internal int bezierSegmentsPerCurve = 10;
 
 	[Tooltip("The type of Join used between lines, Square/Mitre or Curved/Bevel")]
@@ -27141,8 +27161,8 @@ public class UILineRendererList : UIPrimitiveBase
 
 	private static Vector2[] fullUvs;
 
-	[SerializeField]
 	[Tooltip("Points to draw lines between\n Can be improved using the Resolution Option")]
+	[SerializeField]
 	internal List<Vector2> m_points;
 
 	[Tooltip("Thickness of the line")]
@@ -27153,16 +27173,16 @@ public class UILineRendererList : UIPrimitiveBase
 	[SerializeField]
 	internal bool relativeSize;
 
-	[SerializeField]
 	[Tooltip("Do the points identify a single line or split pairs of lines")]
+	[SerializeField]
 	internal bool lineList;
 
-	[SerializeField]
 	[Tooltip("Add end caps to each line\nMultiple caps when used with Line List")]
+	[SerializeField]
 	internal bool lineCaps;
 
-	[SerializeField]
 	[Tooltip("Resolution of the Bezier curve, different to line Resolution")]
+	[SerializeField]
 	internal int bezierSegmentsPerCurve = 10;
 
 	[Tooltip("The type of Join used between lines, Square/Mitre or Curved/Bevel")]
