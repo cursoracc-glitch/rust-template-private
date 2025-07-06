@@ -17,9 +17,9 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using VLB;
 
-[AddComponentMenu("")]
 [ExecuteInEditMode]
 [HelpURL("http://saladgamer.com/vlb-doc/comp-lightbeam/")]
+[AddComponentMenu("")]
 public class BeamGeometry : MonoBehaviour
 {
 	private VolumetricLightBeam m_Master;
@@ -356,10 +356,10 @@ public class Config : ScriptableObject
 	[HighlightNull]
 	private Shader beamShader1Pass;
 
+	[HighlightNull]
 	[SerializeField]
 	[FormerlySerializedAs("beamShader")]
 	[FormerlySerializedAs("BeamShader")]
-	[HighlightNull]
 	private Shader beamShader2Pass;
 
 	public int sharedMeshSides = 24;
@@ -1281,8 +1281,8 @@ using UnityEngine;
 using VLB;
 
 [DisallowMultipleComponent]
-[RequireComponent(typeof(VolumetricLightBeam))]
 [HelpURL("http://saladgamer.com/vlb-doc/comp-triggerzone/")]
+[RequireComponent(typeof(VolumetricLightBeam))]
 public class TriggerZone : MonoBehaviour
 {
 	public bool setIsTrigger = true;
@@ -1623,9 +1623,9 @@ using System;
 using UnityEngine;
 using VLB;
 
-[RequireComponent(typeof(VolumetricLightBeam))]
-[DisallowMultipleComponent]
 [ExecuteInEditMode]
+[DisallowMultipleComponent]
+[RequireComponent(typeof(VolumetricLightBeam))]
 [HelpURL("http://saladgamer.com/vlb-doc/comp-dustparticles/")]
 public class VolumetricDustParticles : MonoBehaviour
 {
@@ -1920,9 +1920,9 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using VLB;
 
+[DisallowMultipleComponent]
 [ExecuteInEditMode]
 [SelectionBase]
-[DisallowMultipleComponent]
 [HelpURL("http://saladgamer.com/vlb-doc/comp-lightbeam/")]
 public class VolumetricLightBeam : MonoBehaviour
 {
@@ -10498,9 +10498,9 @@ public class FimpIK_Limb : FIK_ProcessorBase
 	[Tooltip("3-Bones limb array")]
 	private IKBone[] IKBones;
 
-	[Tooltip("Blend value for goal position")]
-	[Space(4f)]
 	[Range(0f, 1f)]
+	[Space(4f)]
+	[Tooltip("Blend value for goal position")]
 	public float IKPositionWeight = 1f;
 
 	[Range(0f, 1f)]
@@ -13303,16 +13303,16 @@ public class FBasic_TPPCameraBehaviour : MonoBehaviour
 
 	private Vector2 animatedSphericRotation = new Vector2(0f, 0f);
 
-	[Tooltip("Sensitivity value for rotating camera around following object")]
 	[Space(10f)]
+	[Tooltip("Sensitivity value for rotating camera around following object")]
 	public float RotationSensitivity = 10f;
 
 	[Header("If you want camera rotation to be smooth")]
 	[Range(0.1f, 1f)]
 	public float RotationSpeed = 1f;
 
-	[Header("If you want camera to follow target with some smoothness")]
 	[Range(0f, 1f)]
+	[Header("If you want camera to follow target with some smoothness")]
 	public float HardFollowValue = 1f;
 
 	[Header("If you want to hold cursor (cursor switch on TAB)")]
@@ -13938,9 +13938,9 @@ using UnityEngine;
 
 public class FBasic_MaterialTiler : FBasic_MaterialScriptBase
 {
+	[Space(10f)]
 	[Header("When you scale object change")]
 	[Tooltip("Texture identificator in shader")]
-	[Space(10f)]
 	[Header("something in script to apply")]
 	public string TextureProperty = "_MainTex";
 
@@ -17257,12 +17257,12 @@ public class PrefabReference
 
 	public static bool StopReloadLayoutOptions;
 
-	[SerializeField]
 	[HideInInspector]
+	[SerializeField]
 	protected Mesh _refMesh;
 
-	[SerializeField]
 	[HideInInspector]
+	[SerializeField]
 	protected Collider _refCol;
 
 	public GameObject CoreGameObject => Prefab;
@@ -17514,9 +17514,9 @@ using FIMSpace.FTools;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-[HelpURL("https://assetstore.unity.com/packages/tools/animation/tail-animator-121819")]
 [DefaultExecutionOrder(-4)]
 [AddComponentMenu("FImpossible Creations/Tail Animator 2")]
+[HelpURL("https://assetstore.unity.com/packages/tools/animation/tail-animator-121819")]
 public class TailAnimator2 : MonoBehaviour, IDropHandler, IEventSystemHandler, IFHierarchyIcon, IClientComponent
 {
 	[Serializable]
@@ -18180,8 +18180,8 @@ public class TailAnimator2 : MonoBehaviour, IDropHandler, IEventSystemHandler, I
 	[Range(0f, 1f)]
 	public float CollisionSlippery = 1f;
 
-	[Tooltip("If tail colliding objects should fit to colliders (0) or be reflect from them (Reflecting Only with 'Slithery' parameter greater than ~0.2)")]
 	[Range(0f, 1f)]
+	[Tooltip("If tail colliding objects should fit to colliders (0) or be reflect from them (Reflecting Only with 'Slithery' parameter greater than ~0.2)")]
 	public float ReflectCollision;
 
 	public AnimationCurve CollidersScaleCurve = AnimationCurve.Linear(0f, 1f, 1f, 1f);
@@ -18308,8 +18308,8 @@ public class TailAnimator2 : MonoBehaviour, IDropHandler, IEventSystemHandler, I
 	[FPD_Suffix(0f, 1f, FPD_SuffixAttribute.SuffixMode.From0to100, "%", true, 0)]
 	public float IKAnimatorBlend = 0.5f;
 
-	[Tooltip("How much iterations should do CCDIK algorithm in one frame")]
 	[Range(1f, 32f)]
+	[Tooltip("How much iterations should do CCDIK algorithm in one frame")]
 	public int IKReactionQuality = 2;
 
 	[Range(0f, 1f)]
@@ -18368,8 +18368,8 @@ public class TailAnimator2 : MonoBehaviour, IDropHandler, IEventSystemHandler, I
 	[Tooltip("Spread gravity weight over tail segments")]
 	public bool UseGravityCurve;
 
-	[FPD_FixedCurveWindow(0f, 0f, 1f, 1f, 0.85f, 0.35f, 0.25f, 0.85f)]
 	[Tooltip("Spread gravity weight over tail segments")]
+	[FPD_FixedCurveWindow(0f, 0f, 1f, 1f, 0.85f, 0.35f, 0.25f, 0.85f)]
 	public AnimationCurve GravityCurve = AnimationCurve.EaseInOut(0f, 0.65f, 1f, 1f);
 
 	[Tooltip("Simulate gravity weight for tail logics")]
@@ -18462,8 +18462,8 @@ public class TailAnimator2 : MonoBehaviour, IDropHandler, IEventSystemHandler, I
 	[Tooltip("Max distance to main camera / target object to smoothly turn off tail animator.")]
 	public float MaximumDistance = 35f;
 
-	[Tooltip("If object in range should be detected only when is nearer than 'MaxDistance' to avoid stuttery enabled - disable switching")]
 	[Range(0f, 1f)]
+	[Tooltip("If object in range should be detected only when is nearer than 'MaxDistance' to avoid stuttery enabled - disable switching")]
 	public float MaxOutDistanceFactor;
 
 	[Tooltip("If distance should be measured not using Up (y) axis")]
@@ -18540,8 +18540,8 @@ public class TailAnimator2 : MonoBehaviour, IDropHandler, IEventSystemHandler, I
 
 	private bool fixedAllow = true;
 
-	[Range(0f, 1f)]
 	[Tooltip("Making tail segment deflection influence back segments")]
+	[Range(0f, 1f)]
 	public float Deflection;
 
 	[FPD_Suffix(1f, 89f, FPD_SuffixAttribute.SuffixMode.FromMinToMaxRounded, "°", true, 0)]
@@ -18619,12 +18619,12 @@ public class TailAnimator2 : MonoBehaviour, IDropHandler, IEventSystemHandler, I
 	[Range(0f, 1f)]
 	public float Curling = 0.5f;
 
-	[Range(0f, 1f)]
 	[Tooltip("Elastic spring effect making motion more 'meaty'")]
+	[Range(0f, 1f)]
 	public float Springiness;
 
-	[Tooltip("If you want to limit stretching/gumminess of position motion when object moves fast. Recommended adjust to go with it under 0.3 value.\nValue = 1: Unlimited stretching")]
 	[Range(0f, 1f)]
+	[Tooltip("If you want to limit stretching/gumminess of position motion when object moves fast. Recommended adjust to go with it under 0.3 value.\nValue = 1: Unlimited stretching")]
 	public float MaxStretching = 0.375f;
 
 	[Tooltip("Limiting max rotation angle for each tail segment")]
@@ -18637,16 +18637,16 @@ public class TailAnimator2 : MonoBehaviour, IDropHandler, IEventSystemHandler, I
 	[Tooltip("If you want limit axes symmetrically leave this parameter unchanged, if you want limit one direction of axis more than reversed, tweak this parameter")]
 	public Vector2 LimitAxisRange = Vector2.zero;
 
-	[Tooltip("If limiting shouldn't be too rapidly performed")]
 	[Range(0f, 1f)]
+	[Tooltip("If limiting shouldn't be too rapidly performed")]
 	public float LimitSmoothing = 0.5f;
 
 	[FPD_Suffix(0f, 1.5f, FPD_SuffixAttribute.SuffixMode.PercentageUnclamped, "%", true, 0)]
 	[Tooltip("If your object moves very fast making tail influenced by speed too much then you can controll it with this parameter")]
 	public float MotionInfluence = 1f;
 
-	[Range(0f, 1f)]
 	[Tooltip("Additional Y influence controll useful when your character is jumping (works only when MotionInfluence value is other than 100%)")]
+	[Range(0f, 1f)]
 	public float MotionInfluenceInY = 1f;
 
 	[Tooltip("If first bone of chain should also be affected with whole chain")]
@@ -18660,12 +18660,12 @@ public class TailAnimator2 : MonoBehaviour, IDropHandler, IEventSystemHandler, I
 	[Range(0f, 1f)]
 	public float ReactionSpeed = 0.9f;
 
-	[Tooltip("Sustain is similar to reaction speed in reverse, but providing sustain motion effect when increased")]
 	[Range(0f, 1f)]
+	[Tooltip("Sustain is similar to reaction speed in reverse, but providing sustain motion effect when increased")]
 	public float Sustain;
 
-	[Tooltip("Rotation speed is defining how fast tail segments will return to target rotation, it gives animation more lazy feeling if it's lower")]
 	[Range(0f, 1f)]
+	[Tooltip("Rotation speed is defining how fast tail segments will return to target rotation, it gives animation more lazy feeling if it's lower")]
 	public float RotationRelevancy = 1f;
 
 	[Tooltip("Smoothing motion values change over time style to be applied for 'Reaction Speed' and 'Rotation Relevancy' parameters")]
@@ -18702,8 +18702,8 @@ public class TailAnimator2 : MonoBehaviour, IDropHandler, IEventSystemHandler, I
 	[Tooltip("If tail movement should not move in depth you can use this parameter")]
 	public int Axis2D;
 
-	[Range(-1f, 1f)]
 	[Tooltip("[Experimental: Works only with Slithery Blend set to >= 1] Making each segment go to target pose in front of parent segment creating new animation effect")]
+	[Range(-1f, 1f)]
 	public float Tangle;
 
 	[Tooltip("Making tail animate also roll rotation like it was done in Tail Animator V1 ! Use Rotation Relevancy Parameter (set lower than 0.5) !")]

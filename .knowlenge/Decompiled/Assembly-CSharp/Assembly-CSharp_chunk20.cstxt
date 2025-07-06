@@ -4,6 +4,568 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 
+[AddComponentMenu("UI/Extensions/Primitives/UILineTextureRenderer")]
+public class UILineTextureRenderer : UIPrimitiveBase
+{
+	[SerializeField]
+	private Rect m_UVRect = new Rect(0f, 0f, 1f, 1f);
+
+	[SerializeField]
+	private Vector2[] m_points;
+
+	public float LineThickness = 2f;
+
+	public bool UseMargins;
+
+	public Vector2 Margin;
+
+	public bool relativeSize;
+
+	public Rect uvRect
+	{
+		get
+		{
+			//IL_0001: Unknown result type (might be due to invalid IL or missing references)
+			return m_UVRect;
+		}
+		set
+		{
+			//IL_0001: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0006: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0010: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0011: Unknown result type (might be due to invalid IL or missing references)
+			if (!(m_UVRect == value))
+			{
+				m_UVRect = value;
+				((Graphic)this).SetVerticesDirty();
+			}
+		}
+	}
+
+	public Vector2[] Points
+	{
+		get
+		{
+			return m_points;
+		}
+		set
+		{
+			if (m_points != value)
+			{
+				m_points = value;
+				((Graphic)this).SetAllDirty();
+			}
+		}
+	}
+
+	protected override void OnPopulateMesh(VertexHelper vh)
+	{
+		//IL_0026: Unknown result type (might be due to invalid IL or missing references)
+		//IL_002b: Unknown result type (might be due to invalid IL or missing references)
+		//IL_003c: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0041: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0054: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0059: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0069: Unknown result type (might be due to invalid IL or missing references)
+		//IL_006e: Unknown result type (might be due to invalid IL or missing references)
+		//IL_007e: Unknown result type (might be due to invalid IL or missing references)
+		//IL_008f: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0094: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00a5: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00b6: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00bb: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00eb: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00fc: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0108: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0114: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0119: Unknown result type (might be due to invalid IL or missing references)
+		//IL_011e: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0122: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0129: Unknown result type (might be due to invalid IL or missing references)
+		//IL_012e: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0133: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0137: Unknown result type (might be due to invalid IL or missing references)
+		//IL_014d: Unknown result type (might be due to invalid IL or missing references)
+		//IL_017b: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0190: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01a5: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01aa: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01af: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01b3: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01ba: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01bf: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01c4: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01c8: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01e1: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0248: Unknown result type (might be due to invalid IL or missing references)
+		//IL_024d: Unknown result type (might be due to invalid IL or missing references)
+		//IL_024f: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0254: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0264: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0269: Unknown result type (might be due to invalid IL or missing references)
+		//IL_026f: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0274: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0278: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0283: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0296: Unknown result type (might be due to invalid IL or missing references)
+		//IL_02a1: Unknown result type (might be due to invalid IL or missing references)
+		//IL_02b2: Unknown result type (might be due to invalid IL or missing references)
+		//IL_02b9: Unknown result type (might be due to invalid IL or missing references)
+		//IL_02c1: Unknown result type (might be due to invalid IL or missing references)
+		//IL_02c8: Unknown result type (might be due to invalid IL or missing references)
+		//IL_02e3: Unknown result type (might be due to invalid IL or missing references)
+		//IL_02f7: Unknown result type (might be due to invalid IL or missing references)
+		//IL_02fc: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0301: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0303: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0316: Unknown result type (might be due to invalid IL or missing references)
+		//IL_031b: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0320: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0322: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0335: Unknown result type (might be due to invalid IL or missing references)
+		//IL_033a: Unknown result type (might be due to invalid IL or missing references)
+		//IL_033f: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0341: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0355: Unknown result type (might be due to invalid IL or missing references)
+		//IL_035a: Unknown result type (might be due to invalid IL or missing references)
+		//IL_035f: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0362: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0364: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0369: Unknown result type (might be due to invalid IL or missing references)
+		//IL_036b: Unknown result type (might be due to invalid IL or missing references)
+		//IL_037c: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0381: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0386: Unknown result type (might be due to invalid IL or missing references)
+		//IL_038b: Unknown result type (might be due to invalid IL or missing references)
+		//IL_038e: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0390: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0395: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0397: Unknown result type (might be due to invalid IL or missing references)
+		//IL_03a8: Unknown result type (might be due to invalid IL or missing references)
+		//IL_03ad: Unknown result type (might be due to invalid IL or missing references)
+		//IL_03b2: Unknown result type (might be due to invalid IL or missing references)
+		//IL_03b7: Unknown result type (might be due to invalid IL or missing references)
+		//IL_03ba: Unknown result type (might be due to invalid IL or missing references)
+		//IL_03bc: Unknown result type (might be due to invalid IL or missing references)
+		//IL_03c1: Unknown result type (might be due to invalid IL or missing references)
+		//IL_03c3: Unknown result type (might be due to invalid IL or missing references)
+		//IL_03d4: Unknown result type (might be due to invalid IL or missing references)
+		//IL_03d9: Unknown result type (might be due to invalid IL or missing references)
+		//IL_03de: Unknown result type (might be due to invalid IL or missing references)
+		//IL_03e3: Unknown result type (might be due to invalid IL or missing references)
+		//IL_03e6: Unknown result type (might be due to invalid IL or missing references)
+		//IL_03e8: Unknown result type (might be due to invalid IL or missing references)
+		//IL_03ed: Unknown result type (might be due to invalid IL or missing references)
+		//IL_03ef: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0400: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0405: Unknown result type (might be due to invalid IL or missing references)
+		//IL_040a: Unknown result type (might be due to invalid IL or missing references)
+		//IL_040f: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0411: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0416: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0475: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0477: Unknown result type (might be due to invalid IL or missing references)
+		//IL_047e: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0480: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0487: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0489: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0490: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0492: Unknown result type (might be due to invalid IL or missing references)
+		//IL_04a8: Unknown result type (might be due to invalid IL or missing references)
+		//IL_04aa: Unknown result type (might be due to invalid IL or missing references)
+		//IL_04b1: Unknown result type (might be due to invalid IL or missing references)
+		//IL_04b3: Unknown result type (might be due to invalid IL or missing references)
+		//IL_04ba: Unknown result type (might be due to invalid IL or missing references)
+		//IL_04bc: Unknown result type (might be due to invalid IL or missing references)
+		//IL_04c3: Unknown result type (might be due to invalid IL or missing references)
+		//IL_04c5: Unknown result type (might be due to invalid IL or missing references)
+		//IL_04e3: Unknown result type (might be due to invalid IL or missing references)
+		//IL_04e5: Unknown result type (might be due to invalid IL or missing references)
+		//IL_04ec: Unknown result type (might be due to invalid IL or missing references)
+		//IL_04ee: Unknown result type (might be due to invalid IL or missing references)
+		//IL_04f5: Unknown result type (might be due to invalid IL or missing references)
+		//IL_04f7: Unknown result type (might be due to invalid IL or missing references)
+		//IL_04fe: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0500: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0549: Unknown result type (might be due to invalid IL or missing references)
+		//IL_054b: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0552: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0554: Unknown result type (might be due to invalid IL or missing references)
+		//IL_055b: Unknown result type (might be due to invalid IL or missing references)
+		//IL_055d: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0564: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0566: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0577: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0579: Unknown result type (might be due to invalid IL or missing references)
+		//IL_057b: Unknown result type (might be due to invalid IL or missing references)
+		//IL_057d: Unknown result type (might be due to invalid IL or missing references)
+		//IL_051b: Unknown result type (might be due to invalid IL or missing references)
+		//IL_051d: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0524: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0526: Unknown result type (might be due to invalid IL or missing references)
+		//IL_052d: Unknown result type (might be due to invalid IL or missing references)
+		//IL_052f: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0536: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0538: Unknown result type (might be due to invalid IL or missing references)
+		if (m_points == null || m_points.Length < 2)
+		{
+			m_points = (Vector2[])(object)new Vector2[2]
+			{
+				new Vector2(0f, 0f),
+				new Vector2(1f, 1f)
+			};
+		}
+		int num = 24;
+		Rect rect = ((Graphic)this).rectTransform.rect;
+		float num2 = ((Rect)(ref rect)).width;
+		rect = ((Graphic)this).rectTransform.rect;
+		float num3 = ((Rect)(ref rect)).height;
+		float num4 = 0f - ((Graphic)this).rectTransform.pivot.x;
+		rect = ((Graphic)this).rectTransform.rect;
+		float num5 = num4 * ((Rect)(ref rect)).width;
+		float num6 = 0f - ((Graphic)this).rectTransform.pivot.y;
+		rect = ((Graphic)this).rectTransform.rect;
+		float num7 = num6 * ((Rect)(ref rect)).height;
+		if (!relativeSize)
+		{
+			num2 = 1f;
+			num3 = 1f;
+		}
+		List<Vector2> list = new List<Vector2>();
+		list.Add(m_points[0]);
+		Vector2 val = m_points[0];
+		Vector2 val2 = m_points[1] - m_points[0];
+		Vector2 item = val + ((Vector2)(ref val2)).normalized * (float)num;
+		list.Add(item);
+		for (int i = 1; i < m_points.Length - 1; i++)
+		{
+			list.Add(m_points[i]);
+		}
+		Vector2 val3 = m_points[m_points.Length - 1];
+		val2 = m_points[m_points.Length - 1] - m_points[m_points.Length - 2];
+		item = val3 - ((Vector2)(ref val2)).normalized * (float)num;
+		list.Add(item);
+		list.Add(m_points[m_points.Length - 1]);
+		Vector2[] array = list.ToArray();
+		if (UseMargins)
+		{
+			num2 -= Margin.x;
+			num3 -= Margin.y;
+			num5 += Margin.x / 2f;
+			num7 += Margin.y / 2f;
+		}
+		vh.Clear();
+		Vector2 val4 = Vector2.zero;
+		Vector2 val5 = Vector2.zero;
+		Vector2 val12 = default(Vector2);
+		Vector2 val13 = default(Vector2);
+		Vector2 val14 = default(Vector2);
+		Vector2 val15 = default(Vector2);
+		Vector2 val16 = default(Vector2);
+		for (int j = 1; j < array.Length; j++)
+		{
+			Vector2 val6 = array[j - 1];
+			Vector2 val7 = array[j];
+			((Vector2)(ref val6))..ctor(val6.x * num2 + num5, val6.y * num3 + num7);
+			((Vector2)(ref val7))..ctor(val7.x * num2 + num5, val7.y * num3 + num7);
+			float num8 = Mathf.Atan2(val7.y - val6.y, val7.x - val6.x) * 180f / MathF.PI;
+			Vector2 val8 = val6 + new Vector2(0f, (0f - LineThickness) / 2f);
+			Vector2 val9 = val6 + new Vector2(0f, LineThickness / 2f);
+			Vector2 val10 = val7 + new Vector2(0f, LineThickness / 2f);
+			Vector2 val11 = val7 + new Vector2(0f, (0f - LineThickness) / 2f);
+			val8 = Vector2.op_Implicit(RotatePointAroundPivot(Vector2.op_Implicit(val8), Vector2.op_Implicit(val6), new Vector3(0f, 0f, num8)));
+			val9 = Vector2.op_Implicit(RotatePointAroundPivot(Vector2.op_Implicit(val9), Vector2.op_Implicit(val6), new Vector3(0f, 0f, num8)));
+			val10 = Vector2.op_Implicit(RotatePointAroundPivot(Vector2.op_Implicit(val10), Vector2.op_Implicit(val7), new Vector3(0f, 0f, num8)));
+			val11 = Vector2.op_Implicit(RotatePointAroundPivot(Vector2.op_Implicit(val11), Vector2.op_Implicit(val7), new Vector3(0f, 0f, num8)));
+			Vector2 zero = Vector2.zero;
+			((Vector2)(ref val12))..ctor(0f, 1f);
+			((Vector2)(ref val13))..ctor(0.5f, 0f);
+			((Vector2)(ref val14))..ctor(0.5f, 1f);
+			((Vector2)(ref val15))..ctor(1f, 0f);
+			((Vector2)(ref val16))..ctor(1f, 1f);
+			Vector2[] uvs = (Vector2[])(object)new Vector2[4] { val13, val14, val14, val13 };
+			if (j > 1)
+			{
+				vh.AddUIVertexQuad(SetVbo((Vector2[])(object)new Vector2[4] { val4, val5, val8, val9 }, uvs));
+			}
+			if (j == 1)
+			{
+				uvs = (Vector2[])(object)new Vector2[4] { zero, val12, val14, val13 };
+			}
+			else if (j == array.Length - 1)
+			{
+				uvs = (Vector2[])(object)new Vector2[4] { val13, val14, val16, val15 };
+			}
+			vh.AddUIVertexQuad(SetVbo((Vector2[])(object)new Vector2[4] { val8, val9, val10, val11 }, uvs));
+			val4 = val10;
+			val5 = val11;
+		}
+	}
+
+	public Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles)
+	{
+		//IL_0000: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0001: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0008: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0009: Unknown result type (might be due to invalid IL or missing references)
+		//IL_000e: Unknown result type (might be due to invalid IL or missing references)
+		//IL_000f: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0014: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0015: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0016: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0017: Unknown result type (might be due to invalid IL or missing references)
+		//IL_001c: Unknown result type (might be due to invalid IL or missing references)
+		//IL_001e: Unknown result type (might be due to invalid IL or missing references)
+		Vector3 val = point - pivot;
+		val = Quaternion.Euler(angles) * val;
+		point = val + pivot;
+		return point;
+	}
+}
+
+
+using System;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.UI.Extensions;
+
+[AddComponentMenu("UI/Extensions/Primitives/UI Polygon")]
+public class UIPolygon : UIPrimitiveBase
+{
+	public bool fill = true;
+
+	public float thickness = 5f;
+
+	[Range(3f, 360f)]
+	public int sides = 3;
+
+	[Range(0f, 360f)]
+	public float rotation;
+
+	[Range(0f, 1f)]
+	public float[] VerticesDistances = new float[3];
+
+	private float size;
+
+	public void DrawPolygon(int _sides)
+	{
+		sides = _sides;
+		VerticesDistances = new float[_sides + 1];
+		for (int i = 0; i < _sides; i++)
+		{
+			VerticesDistances[i] = 1f;
+		}
+		rotation = 0f;
+		((Graphic)this).SetAllDirty();
+	}
+
+	public void DrawPolygon(int _sides, float[] _VerticesDistances)
+	{
+		sides = _sides;
+		VerticesDistances = _VerticesDistances;
+		rotation = 0f;
+		((Graphic)this).SetAllDirty();
+	}
+
+	public void DrawPolygon(int _sides, float[] _VerticesDistances, float _rotation)
+	{
+		sides = _sides;
+		VerticesDistances = _VerticesDistances;
+		rotation = _rotation;
+		((Graphic)this).SetAllDirty();
+	}
+
+	private void Update()
+	{
+		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
+		//IL_000c: Unknown result type (might be due to invalid IL or missing references)
+		//IL_001f: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0024: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0032: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0037: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0063: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0068: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0048: Unknown result type (might be due to invalid IL or missing references)
+		//IL_004d: Unknown result type (might be due to invalid IL or missing references)
+		Rect rect = ((Graphic)this).rectTransform.rect;
+		size = ((Rect)(ref rect)).width;
+		rect = ((Graphic)this).rectTransform.rect;
+		float width = ((Rect)(ref rect)).width;
+		rect = ((Graphic)this).rectTransform.rect;
+		if (width > ((Rect)(ref rect)).height)
+		{
+			rect = ((Graphic)this).rectTransform.rect;
+			size = ((Rect)(ref rect)).height;
+		}
+		else
+		{
+			rect = ((Graphic)this).rectTransform.rect;
+			size = ((Rect)(ref rect)).width;
+		}
+		thickness = Mathf.Clamp(thickness, 0f, size / 2f);
+	}
+
+	protected override void OnPopulateMesh(VertexHelper vh)
+	{
+		//IL_0006: Unknown result type (might be due to invalid IL or missing references)
+		//IL_000b: Unknown result type (might be due to invalid IL or missing references)
+		//IL_000c: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0011: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00ca: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00ee: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0179: Unknown result type (might be due to invalid IL or missing references)
+		//IL_017a: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01b6: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01b7: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0195: Unknown result type (might be due to invalid IL or missing references)
+		//IL_019a: Unknown result type (might be due to invalid IL or missing references)
+		//IL_019c: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01a1: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01b9: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01bb: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01bc: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01be: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01c9: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01cb: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01d2: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01d4: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01db: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01dd: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01e4: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01e6: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01f3: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01f4: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01fb: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01fc: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0203: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0205: Unknown result type (might be due to invalid IL or missing references)
+		//IL_020c: Unknown result type (might be due to invalid IL or missing references)
+		//IL_020e: Unknown result type (might be due to invalid IL or missing references)
+		vh.Clear();
+		Vector2 val = Vector2.zero;
+		Vector2 val2 = Vector2.zero;
+		Vector2 val3 = default(Vector2);
+		((Vector2)(ref val3))..ctor(0f, 0f);
+		Vector2 val4 = default(Vector2);
+		((Vector2)(ref val4))..ctor(0f, 1f);
+		Vector2 val5 = default(Vector2);
+		((Vector2)(ref val5))..ctor(1f, 1f);
+		Vector2 val6 = default(Vector2);
+		((Vector2)(ref val6))..ctor(1f, 0f);
+		float num = 360f / (float)sides;
+		int num2 = sides + 1;
+		if (VerticesDistances.Length != num2)
+		{
+			VerticesDistances = new float[num2];
+			for (int i = 0; i < num2 - 1; i++)
+			{
+				VerticesDistances[i] = 1f;
+			}
+		}
+		VerticesDistances[num2 - 1] = VerticesDistances[0];
+		Vector2 val8 = default(Vector2);
+		Vector2 zero = default(Vector2);
+		for (int j = 0; j < num2; j++)
+		{
+			float num3 = (0f - ((Graphic)this).rectTransform.pivot.x) * size * VerticesDistances[j];
+			float num4 = (0f - ((Graphic)this).rectTransform.pivot.x) * size * VerticesDistances[j] + thickness;
+			float num5 = MathF.PI / 180f * ((float)j * num + rotation);
+			float num6 = Mathf.Cos(num5);
+			float num7 = Mathf.Sin(num5);
+			((Vector2)(ref val3))..ctor(0f, 1f);
+			((Vector2)(ref val4))..ctor(1f, 1f);
+			((Vector2)(ref val5))..ctor(1f, 0f);
+			((Vector2)(ref val6))..ctor(0f, 0f);
+			Vector2 val7 = val;
+			((Vector2)(ref val8))..ctor(num3 * num6, num3 * num7);
+			Vector2 val9;
+			if (fill)
+			{
+				zero = Vector2.zero;
+				val9 = Vector2.zero;
+			}
+			else
+			{
+				((Vector2)(ref zero))..ctor(num4 * num6, num4 * num7);
+				val9 = val2;
+			}
+			val = val8;
+			val2 = zero;
+			vh.AddUIVertexQuad(SetVbo((Vector2[])(object)new Vector2[4] { val7, val8, zero, val9 }, (Vector2[])(object)new Vector2[4] { val3, val4, val5, val6 }));
+		}
+	}
+}
+
+
+public enum ResolutionMode
+{
+	None,
+	PerSegment,
+	PerLine
+}
+
+
+using System;
+using UnityEngine;
+
+internal static class SetPropertyUtility
+{
+	public static bool SetColor(ref Color currentValue, Color newValue)
+	{
+		//IL_0006: Unknown result type (might be due to invalid IL or missing references)
+		//IL_003b: Unknown result type (might be due to invalid IL or missing references)
+		//IL_003c: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0014: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0022: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0030: Unknown result type (might be due to invalid IL or missing references)
+		if (currentValue.r == newValue.r && currentValue.g == newValue.g && currentValue.b == newValue.b && currentValue.a == newValue.a)
+		{
+			return false;
+		}
+		currentValue = newValue;
+		return true;
+	}
+
+	public static bool SetEquatableStruct<T>(ref T currentValue, T newValue) where T : IEquatable<T>
+	{
+		if (currentValue.Equals(newValue))
+		{
+			return false;
+		}
+		currentValue = newValue;
+		return true;
+	}
+
+	public static bool SetStruct<T>(ref T currentValue, T newValue) where T : struct
+	{
+		if (currentValue.Equals(newValue))
+		{
+			return false;
+		}
+		currentValue = newValue;
+		return true;
+	}
+
+	public static bool SetClass<T>(ref T currentValue, T newValue) where T : class
+	{
+		if ((currentValue == null && newValue == null) || (currentValue != null && currentValue.Equals(newValue)))
+		{
+			return false;
+		}
+		currentValue = newValue;
+		return true;
+	}
+}
+
+
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.UI.Extensions;
+
 public class UIPrimitiveBase : MaskableGraphic, ILayoutElement, ICanvasRaycastFilter
 {
 	protected static Material s_ETC1DefaultUI;
@@ -1307,11 +1869,11 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.Scripting;
 
-[RequireComponent(typeof(Camera))]
-[AddComponentMenu("Rendering/Post-process Layer", 1000)]
-[ImageEffectAllowedInSceneView]
-[DisallowMultipleComponent]
 [ExecuteAlways]
+[DisallowMultipleComponent]
+[ImageEffectAllowedInSceneView]
+[AddComponentMenu("Rendering/Post-process Layer", 1000)]
+[RequireComponent(typeof(Camera))]
 public class PostProcessLayer : MonoBehaviour
 {
 	private enum ScalingMode
@@ -3016,8 +3578,8 @@ public sealed class AmbientOcclusion : PostProcessEffectSettings
 		value = -12f
 	};
 
-	[Tooltip("This modifies the thickness of occluders. It increases the size of dark areas and also introduces a dark halo around objects.")]
 	[Range(1f, 10f)]
+	[Tooltip("This modifies the thickness of occluders. It increases the size of dark areas and also introduces a dark halo around objects.")]
 	public FloatParameter thicknessModifier = new FloatParameter
 	{
 		value = 1f
@@ -3184,9 +3746,9 @@ public sealed class AutoExposure : PostProcessEffectSettings
 		value = new Vector2(50f, 95f)
 	};
 
+	[Range(-9f, 9f)]
 	[Tooltip("Minimum average luminance to consider for auto exposure. Unit is EV.")]
 	[DisplayName("Minimum (EV)")]
-	[Range(-9f, 9f)]
 	public FloatParameter minLuminance = new FloatParameter
 	{
 		value = 0f
@@ -3200,9 +3762,9 @@ public sealed class AutoExposure : PostProcessEffectSettings
 		value = 0f
 	};
 
-	[Min(0f)]
-	[DisplayName("Exposure Compensation")]
 	[Tooltip("Use this to scale the global exposure of the scene.")]
+	[DisplayName("Exposure Compensation")]
+	[Min(0f)]
 	public FloatParameter keyValue = new FloatParameter
 	{
 		value = 1f
@@ -3360,8 +3922,8 @@ using UnityEngine.Serialization;
 [PostProcess(typeof(BloomRenderer), "Unity/Bloom", true)]
 public sealed class Bloom : PostProcessEffectSettings
 {
-	[Tooltip("Strength of the bloom filter. Values higher than 1 will make bloom contribute more energy to the final render.")]
 	[Min(0f)]
+	[Tooltip("Strength of the bloom filter. Values higher than 1 will make bloom contribute more energy to the final render.")]
 	public FloatParameter intensity = new FloatParameter
 	{
 		value = 0f
@@ -3374,8 +3936,8 @@ public sealed class Bloom : PostProcessEffectSettings
 		value = 1f
 	};
 
-	[Tooltip("Makes transitions between under/over-threshold gradual. 0 for a hard threshold, 1 for a soft threshold).")]
 	[Range(0f, 1f)]
+	[Tooltip("Makes transitions between under/over-threshold gradual. 0 for a hard threshold, 1 for a soft threshold).")]
 	public FloatParameter softKnee = new FloatParameter
 	{
 		value = 0.5f
@@ -3394,37 +3956,37 @@ public sealed class Bloom : PostProcessEffectSettings
 		value = 7f
 	};
 
-	[Range(-1f, 1f)]
 	[Tooltip("Distorts the bloom to give an anamorphic look. Negative values distort vertically, positive values distort horizontally.")]
+	[Range(-1f, 1f)]
 	public FloatParameter anamorphicRatio = new FloatParameter
 	{
 		value = 0f
 	};
 
-	[ColorUsage(false, true)]
 	[Tooltip("Global tint of the bloom filter.")]
+	[ColorUsage(false, true)]
 	public ColorParameter color = new ColorParameter
 	{
 		value = Color.white
 	};
 
-	[Tooltip("Boost performance by lowering the effect quality. This settings is meant to be used on mobile and other low-end platforms but can also provide a nice performance boost on desktops and consoles.")]
 	[FormerlySerializedAs("mobileOptimized")]
+	[Tooltip("Boost performance by lowering the effect quality. This settings is meant to be used on mobile and other low-end platforms but can also provide a nice performance boost on desktops and consoles.")]
 	public BoolParameter fastMode = new BoolParameter
 	{
 		value = false
 	};
 
-	[Tooltip("The lens dirt texture used to add smudges or dust to the bloom effect.")]
 	[DisplayName("Texture")]
+	[Tooltip("The lens dirt texture used to add smudges or dust to the bloom effect.")]
 	public TextureParameter dirtTexture = new TextureParameter
 	{
 		value = null
 	};
 
-	[Min(0f)]
 	[Tooltip("The intensity of the lens dirtiness.")]
 	[DisplayName("Intensity")]
+	[Min(0f)]
 	public FloatParameter dirtIntensity = new FloatParameter
 	{
 		value = 0f
@@ -3660,8 +4222,8 @@ public sealed class ChromaticAberration : PostProcessEffectSettings
 		value = null
 	};
 
-	[Range(0f, 1f)]
 	[Tooltip("Amount of tangential distortion.")]
+	[Range(0f, 1f)]
 	public FloatParameter intensity = new FloatParameter
 	{
 		value = 0f
@@ -3809,54 +4371,54 @@ using UnityEngine.Rendering.PostProcessing;
 [PostProcess(typeof(ColorGradingRenderer), "Unity/Color Grading", true)]
 public sealed class ColorGrading : PostProcessEffectSettings
 {
-	[Tooltip("Select a color grading mode that fits your dynamic range and workflow. Use HDR if your camera is set to render in HDR and your target platform supports it. Use LDR for low-end mobiles or devices that don't support HDR. Use External if you prefer authoring a Log LUT in an external software.")]
 	[DisplayName("Mode")]
+	[Tooltip("Select a color grading mode that fits your dynamic range and workflow. Use HDR if your camera is set to render in HDR and your target platform supports it. Use LDR for low-end mobiles or devices that don't support HDR. Use External if you prefer authoring a Log LUT in an external software.")]
 	public GradingModeParameter gradingMode = new GradingModeParameter
 	{
 		value = GradingMode.HighDefinitionRange
 	};
 
-	[DisplayName("Lookup Texture")]
 	[Tooltip("A custom 3D log-encoded texture.")]
+	[DisplayName("Lookup Texture")]
 	public TextureParameter externalLut = new TextureParameter
 	{
 		value = null
 	};
 
-	[DisplayName("Mode")]
 	[Tooltip("Select a tonemapping algorithm to use at the end of the color grading process.")]
+	[DisplayName("Mode")]
 	public TonemapperParameter tonemapper = new TonemapperParameter
 	{
 		value = Tonemapper.None
 	};
 
-	[DisplayName("Toe Strength")]
 	[Range(0f, 1f)]
 	[Tooltip("Affects the transition between the toe and the mid section of the curve. A value of 0 means no toe, a value of 1 means a very hard transition.")]
+	[DisplayName("Toe Strength")]
 	public FloatParameter toneCurveToeStrength = new FloatParameter
 	{
 		value = 0f
 	};
 
-	[DisplayName("Toe Length")]
 	[Tooltip("Affects how much of the dynamic range is in the toe. With a small value, the toe will be very short and quickly transition into the linear section, with a larger value, the toe will be longer.")]
+	[DisplayName("Toe Length")]
 	[Range(0f, 1f)]
 	public FloatParameter toneCurveToeLength = new FloatParameter
 	{
 		value = 0.5f
 	};
 
+	[DisplayName("Shoulder Strength")]
 	[Tooltip("Affects the transition between the mid section and the shoulder of the curve. A value of 0 means no shoulder, a value of 1 means a very hard transition.")]
 	[Range(0f, 1f)]
-	[DisplayName("Shoulder Strength")]
 	public FloatParameter toneCurveShoulderStrength = new FloatParameter
 	{
 		value = 0f
 	};
 
 	[Tooltip("Affects how many F-stops (EV) to add to the dynamic range of the curve.")]
-	[Min(0f)]
 	[DisplayName("Shoulder Length")]
+	[Min(0f)]
 	public FloatParameter toneCurveShoulderLength = new FloatParameter
 	{
 		value = 0.5f
@@ -3870,9 +4432,9 @@ public sealed class ColorGrading : PostProcessEffectSettings
 		value = 0f
 	};
 
-	[DisplayName("Gamma")]
-	[Min(0.001f)]
 	[Tooltip("Applies a gamma function to the curve.")]
+	[Min(0.001f)]
+	[DisplayName("Gamma")]
 	public FloatParameter toneCurveGamma = new FloatParameter
 	{
 		value = 1f
@@ -3886,9 +4448,9 @@ public sealed class ColorGrading : PostProcessEffectSettings
 		defaultState = TextureParameterDefault.Lut2D
 	};
 
+	[Tooltip("How much of the lookup texture will contribute to the color grading effect.")]
 	[DisplayName("Contribution")]
 	[Range(0f, 1f)]
-	[Tooltip("How much of the lookup texture will contribute to the color grading effect.")]
 	public FloatParameter ldrLutContribution = new FloatParameter
 	{
 		value = 1f
@@ -3902,41 +4464,41 @@ public sealed class ColorGrading : PostProcessEffectSettings
 		value = 0f
 	};
 
+	[DisplayName("Tint")]
 	[Range(-100f, 100f)]
 	[Tooltip("Sets the white balance to compensate for a green or magenta tint.")]
-	[DisplayName("Tint")]
 	public FloatParameter tint = new FloatParameter
 	{
 		value = 0f
 	};
 
 	[DisplayName("Color Filter")]
-	[ColorUsage(false, true)]
 	[Tooltip("Tint the render by multiplying a color.")]
+	[ColorUsage(false, true)]
 	public ColorParameter colorFilter = new ColorParameter
 	{
 		value = Color.white
 	};
 
-	[DisplayName("Hue Shift")]
-	[Range(-180f, 180f)]
 	[Tooltip("Shift the hue of all colors.")]
+	[Range(-180f, 180f)]
+	[DisplayName("Hue Shift")]
 	public FloatParameter hueShift = new FloatParameter
 	{
 		value = 0f
 	};
 
-	[DisplayName("Saturation")]
-	[Range(-100f, 100f)]
 	[Tooltip("Pushes the intensity of all colors.")]
+	[Range(-100f, 100f)]
+	[DisplayName("Saturation")]
 	public FloatParameter saturation = new FloatParameter
 	{
 		value = 0f
 	};
 
-	[Range(-100f, 100f)]
 	[DisplayName("Brightness")]
 	[Tooltip("Makes the image brighter or darker.")]
+	[Range(-100f, 100f)]
 	public FloatParameter brightness = new FloatParameter
 	{
 		value = 0f
@@ -3949,63 +4511,63 @@ public sealed class ColorGrading : PostProcessEffectSettings
 		value = 0f
 	};
 
-	[Tooltip("Expands or shrinks the overall range of tonal values.")]
 	[Range(-100f, 100f)]
+	[Tooltip("Expands or shrinks the overall range of tonal values.")]
 	[DisplayName("Contrast")]
 	public FloatParameter contrast = new FloatParameter
 	{
 		value = 0f
 	};
 
-	[Tooltip("Select masking type to avoid applying grading to certain areas.")]
 	[DisplayName("Mode")]
+	[Tooltip("Select masking type to avoid applying grading to certain areas.")]
 	public MaskingModeParameter maskMode = new MaskingModeParameter
 	{
 		value = MaskingMode.None
 	};
 
-	[Tooltip("Mask intensity.")]
-	[Range(0f, 10f)]
 	[DisplayName("Intensity")]
+	[Range(0f, 10f)]
+	[Tooltip("Mask intensity.")]
 	public FloatParameter maskIntensity = new FloatParameter
 	{
 		value = 1f
 	};
 
-	[Tooltip("Modify influence of the red channel in the overall mix.")]
-	[Range(-200f, 200f)]
 	[DisplayName("Red")]
+	[Range(-200f, 200f)]
+	[Tooltip("Modify influence of the red channel in the overall mix.")]
 	public FloatParameter mixerRedOutRedIn = new FloatParameter
 	{
 		value = 100f
 	};
 
-	[Range(-200f, 200f)]
-	[Tooltip("Modify influence of the green channel in the overall mix.")]
 	[DisplayName("Green")]
+	[Tooltip("Modify influence of the green channel in the overall mix.")]
+	[Range(-200f, 200f)]
 	public FloatParameter mixerRedOutGreenIn = new FloatParameter
 	{
 		value = 0f
 	};
 
 	[DisplayName("Blue")]
-	[Range(-200f, 200f)]
 	[Tooltip("Modify influence of the blue channel in the overall mix.")]
+	[Range(-200f, 200f)]
 	public FloatParameter mixerRedOutBlueIn = new FloatParameter
 	{
 		value = 0f
 	};
 
+	[Tooltip("Modify influence of the red channel in the overall mix.")]
 	[DisplayName("Red")]
 	[Range(-200f, 200f)]
-	[Tooltip("Modify influence of the red channel in the overall mix.")]
 	public FloatParameter mixerGreenOutRedIn = new FloatParameter
 	{
 		value = 0f
 	};
 
-	[Range(-200f, 200f)]
 	[Tooltip("Modify influence of the green channel in the overall mix.")]
+	[Range(-200f, 200f)]
 	[DisplayName("Green")]
 	public FloatParameter mixerGreenOutGreenIn = new FloatParameter
 	{
@@ -4020,33 +4582,33 @@ public sealed class ColorGrading : PostProcessEffectSettings
 		value = 0f
 	};
 
+	[Tooltip("Modify influence of the red channel in the overall mix.")]
 	[DisplayName("Red")]
 	[Range(-200f, 200f)]
-	[Tooltip("Modify influence of the red channel in the overall mix.")]
 	public FloatParameter mixerBlueOutRedIn = new FloatParameter
 	{
 		value = 0f
 	};
 
 	[Tooltip("Modify influence of the green channel in the overall mix.")]
-	[Range(-200f, 200f)]
 	[DisplayName("Green")]
+	[Range(-200f, 200f)]
 	public FloatParameter mixerBlueOutGreenIn = new FloatParameter
 	{
 		value = 0f
 	};
 
+	[DisplayName("Blue")]
 	[Tooltip("Modify influence of the blue channel in the overall mix.")]
 	[Range(-200f, 200f)]
-	[DisplayName("Blue")]
 	public FloatParameter mixerBlueOutBlueIn = new FloatParameter
 	{
 		value = 100f
 	};
 
+	[DisplayName("Lift")]
 	[Tooltip("Controls the darkest portions of the render.")]
 	[Trackball(TrackballAttribute.Mode.Lift)]
-	[DisplayName("Lift")]
 	public Vector4Parameter lift = new Vector4Parameter
 	{
 		value = new Vector4(1f, 1f, 1f, 0f)
@@ -4060,9 +4622,9 @@ public sealed class ColorGrading : PostProcessEffectSettings
 		value = new Vector4(1f, 1f, 1f, 0f)
 	};
 
-	[Trackball(TrackballAttribute.Mode.Gain)]
 	[DisplayName("Gain")]
 	[Tooltip("Controls the lightest portions of the render.")]
+	[Trackball(TrackballAttribute.Mode.Gain)]
 	public Vector4Parameter gain = new Vector4Parameter
 	{
 		value = new Vector4(1f, 1f, 1f, 0f)
@@ -4752,8 +5314,8 @@ public sealed class DepthOfField : PostProcessEffectSettings
 		value = 10f
 	};
 
-	[Tooltip("Ratio of aperture (known as f-stop or f-number). The smaller the value is, the shallower the depth of field is.")]
 	[Range(0.05f, 32f)]
+	[Tooltip("Ratio of aperture (known as f-stop or f-number). The smaller the value is, the shallower the depth of field is.")]
 	public FloatParameter aperture = new FloatParameter
 	{
 		value = 5.6f
@@ -5024,8 +5586,8 @@ using UnityEngine.Serialization;
 [Preserve]
 public sealed class FastApproximateAntialiasing
 {
-	[Tooltip("Boost performances by lowering the effect quality. This setting is meant to be used on mobile and other low-end platforms but can also provide a nice performance boost on desktops and consoles.")]
 	[FormerlySerializedAs("mobileOptimized")]
+	[Tooltip("Boost performances by lowering the effect quality. This setting is meant to be used on mobile and other low-end platforms but can also provide a nice performance boost on desktops and consoles.")]
 	public bool fastMode;
 
 	[Tooltip("Keep alpha channel. This will slightly lower the effect quality but allows rendering against a transparent background.")]
@@ -5111,8 +5673,8 @@ public sealed class Grain : PostProcessEffectSettings
 		value = true
 	};
 
-	[Range(0f, 1f)]
 	[Tooltip("Grain strength. Higher values mean more visible grain.")]
+	[Range(0f, 1f)]
 	public FloatParameter intensity = new FloatParameter
 	{
 		value = 0f
@@ -5233,8 +5795,8 @@ using UnityEngine.Rendering.PostProcessing;
 [PostProcess(typeof(LensDistortionRenderer), "Unity/Lens Distortion", true)]
 public sealed class LensDistortion : PostProcessEffectSettings
 {
-	[Tooltip("Total distortion amount.")]
 	[Range(-100f, 100f)]
+	[Tooltip("Total distortion amount.")]
 	public FloatParameter intensity = new FloatParameter
 	{
 		value = 0f
@@ -5248,24 +5810,24 @@ public sealed class LensDistortion : PostProcessEffectSettings
 		value = 1f
 	};
 
+	[Range(0f, 1f)]
 	[Tooltip("Intensity multiplier on the y-axis. Set it to 0 to disable distortion on this axis.")]
 	[DisplayName("Y Multiplier")]
-	[Range(0f, 1f)]
 	public FloatParameter intensityY = new FloatParameter
 	{
 		value = 1f
 	};
 
-	[Space]
-	[Tooltip("Distortion center point (x-axis).")]
 	[Range(-1f, 1f)]
+	[Tooltip("Distortion center point (x-axis).")]
+	[Space]
 	public FloatParameter centerX = new FloatParameter
 	{
 		value = 0f
 	};
 
-	[Tooltip("Distortion center point (y-axis).")]
 	[Range(-1f, 1f)]
+	[Tooltip("Distortion center point (y-axis).")]
 	public FloatParameter centerY = new FloatParameter
 	{
 		value = 0f
@@ -6274,8 +6836,8 @@ public sealed class ScreenSpaceReflections : PostProcessEffectSettings
 		value = ScreenSpaceReflectionResolution.Downsampled
 	};
 
-	[Tooltip("Ray thickness. Lower values are more expensive but allow the effect to detect smaller details.")]
 	[Range(1f, 64f)]
+	[Tooltip("Ray thickness. Lower values are more expensive but allow the effect to detect smaller details.")]
 	public FloatParameter thickness = new FloatParameter
 	{
 		value = 8f
@@ -6287,15 +6849,15 @@ public sealed class ScreenSpaceReflections : PostProcessEffectSettings
 		value = 100f
 	};
 
-	[Tooltip("Fades reflections close to the near planes.")]
 	[Range(0f, 1f)]
+	[Tooltip("Fades reflections close to the near planes.")]
 	public FloatParameter distanceFade = new FloatParameter
 	{
 		value = 0.5f
 	};
 
-	[Tooltip("Fades reflections close to the screen edges.")]
 	[Range(0f, 1f)]
+	[Tooltip("Fades reflections close to the screen edges.")]
 	public FloatParameter vignette = new FloatParameter
 	{
 		value = 0.5f
@@ -6691,16 +7253,16 @@ public sealed class TemporalAntialiasing
 		SolverNoDilate
 	}
 
-	[Tooltip("The diameter (in texels) inside which jitter samples are spread. Smaller values result in crisper but more aliased output, while larger values result in more stable, but blurrier, output.")]
 	[Range(0.1f, 1f)]
+	[Tooltip("The diameter (in texels) inside which jitter samples are spread. Smaller values result in crisper but more aliased output, while larger values result in more stable, but blurrier, output.")]
 	public float jitterSpread = 0.75f;
 
-	[Range(0f, 3f)]
 	[Tooltip("Controls the amount of sharpening applied to the color buffer. High values may introduce dark-border artifacts.")]
+	[Range(0f, 3f)]
 	public float sharpness = 0.25f;
 
-	[Range(0f, 0.99f)]
 	[Tooltip("The blend coefficient for a stationary fragment. Controls the percentage of history sample blended into the final color.")]
+	[Range(0f, 0.99f)]
 	public float stationaryBlending = 0.95f;
 
 	[Tooltip("The blend coefficient for a fragment with significant motion. Controls the percentage of history sample blended into the final color.")]
@@ -6984,8 +7546,8 @@ public sealed class Vignette : PostProcessEffectSettings
 		value = 0f
 	};
 
-	[Tooltip("Smoothness of the vignette borders.")]
 	[Range(0.01f, 1f)]
+	[Tooltip("Smoothness of the vignette borders.")]
 	public FloatParameter smoothness = new FloatParameter
 	{
 		value = 0.2f
@@ -7010,8 +7572,8 @@ public sealed class Vignette : PostProcessEffectSettings
 		value = null
 	};
 
-	[Tooltip("Mask opacity.")]
 	[Range(0f, 1f)]
+	[Tooltip("Mask opacity.")]
 	public FloatParameter opacity = new FloatParameter
 	{
 		value = 1f
@@ -15425,6 +15987,8 @@ internal struct MarchJob : IJob
 }
 
 
+using Unity.IL2CPP.CompilerServices;
+
 [Il2CppEagerStaticClassConstruction]
 public static class MarchingCubeLookup
 {
@@ -16887,7 +17451,7 @@ public class BlackjackController : CardGameController
 		base.resultInfo.winningScore = dealerCardsVal;
 		if (NumPlayersInCurrentRound() == 0)
 		{
-			base.Owner.ClientRPC<RoundResults>(RpcTarget.NetworkGroup("OnResultsDeclared"), base.resultInfo);
+			base.Owner.ClientRPC(RpcTarget.NetworkGroup("OnResultsDeclared"), base.resultInfo);
 			return;
 		}
 		bool dealerHasBlackjack = HasBlackjack(dealerCards);
@@ -16912,7 +17476,7 @@ public class BlackjackController : CardGameController
 			PayOut(item, num);
 		}
 		ClearPot();
-		base.Owner.ClientRPC<RoundResults>(RpcTarget.NetworkGroup("OnResultsDeclared"), base.resultInfo);
+		base.Owner.ClientRPC(RpcTarget.NetworkGroup("OnResultsDeclared"), base.resultInfo);
 		BlackjackRoundResult CheckResult(List<PlayingCard> cards, int betAmount, out int winnings)
 		{
 			if (cards.Count == 0)
@@ -17803,7 +18367,7 @@ public abstract class CardGameController : IDisposable
 		{
 			localPlayerCards.cards.Add(card.GetIndex());
 		}
-		Owner.ClientRPC<CardList>(RpcTarget.Player("ReceiveCardsForPlayer", basePlayer), localPlayerCards);
+		Owner.ClientRPC(RpcTarget.Player("ReceiveCardsForPlayer", basePlayer), localPlayerCards);
 	}
 
 	public void JoinTable(ulong userID)
@@ -19190,7 +19754,7 @@ public class TexasHoldEmController : CardGameController
 			PokerRoundResult resultCode2 = ((base.resultInfo.results.Count == 0) ? PokerRoundResult.PrimaryWinner : PokerRoundResult.SecondaryWinner);
 			AddRoundResult(list[0], num10, (int)resultCode2);
 		}
-		base.Owner.ClientRPC<RoundResults>(RpcTarget.NetworkGroup("OnResultsDeclared"), base.resultInfo);
+		base.Owner.ClientRPC(RpcTarget.NetworkGroup("OnResultsDeclared"), base.resultInfo);
 		StorageContainer pot = base.Owner.GetPot();
 		int amount = pot.inventory.GetAmount(base.ScrapItemID, onlyUsableAmounts: true);
 		if (amount > 0)
@@ -20456,8 +21020,8 @@ public static class Analytics
 					.AddField("ip_convar", Net.sv.ip)
 					.AddField("port_convar", Net.sv.port)
 					.AddField("net_protocol", Net.sv.ProtocolId)
-					.AddField("protocol_network", 2590)
-					.AddField("protocol_save", 268);
+					.AddField("protocol_network", 2592)
+					.AddField("protocol_save", 269);
 				BuildInfo current = BuildInfo.Current;
 				EventRecord eventRecord2 = eventRecord.AddField("changeset", ((current != null) ? current.Scm.ChangeId : null) ?? "0").AddField("unity_version", Application.unityVersion);
 				BuildInfo current2 = BuildInfo.Current;
@@ -21213,7 +21777,7 @@ public static class Analytics
 					.AddField("message", message);
 				if (BuildInfo.Current != null)
 				{
-					eventRecord.AddField("changeset", BuildInfo.Current.Scm.ChangeId).AddField("network", 2590);
+					eventRecord.AddField("changeset", BuildInfo.Current.Scm.ChangeId).AddField("network", 2592);
 				}
 				switch (type)
 				{
@@ -23171,8 +23735,8 @@ public static class Analytics
 		}
 	}
 
-	[ServerVar(Name = "pending_analytics", Help = "Shows how many analytics events are pending upload")]
 	[ClientVar(Name = "pending_analytics", Help = "Shows how many analytics events are pending upload")]
+	[ServerVar(Name = "pending_analytics", Help = "Shows how many analytics events are pending upload")]
 	public static void GetPendingAnalytics(Arg arg)
 	{
 		StringBuilder stringBuilder = new StringBuilder();
@@ -23595,8 +24159,8 @@ public static class Azure
 				.AddField("ip_convar", Net.sv.ip)
 				.AddField("port_convar", Net.sv.port)
 				.AddField("net_protocol", Net.sv.ProtocolId)
-				.AddField("protocol_network", 2590)
-				.AddField("protocol_save", 268);
+				.AddField("protocol_network", 2592)
+				.AddField("protocol_save", 269);
 			BuildInfo current = BuildInfo.Current;
 			EventRecord eventRecord2 = eventRecord.AddField("changeset", ((current != null) ? current.Scm.ChangeId : null) ?? "0").AddField("unity_version", Application.unityVersion);
 			BuildInfo current2 = BuildInfo.Current;
@@ -24352,7 +24916,7 @@ public static class Azure
 				.AddField("message", message);
 			if (BuildInfo.Current != null)
 			{
-				eventRecord.AddField("changeset", BuildInfo.Current.Scm.ChangeId).AddField("network", 2590);
+				eventRecord.AddField("changeset", BuildInfo.Current.Scm.ChangeId).AddField("network", 2592);
 			}
 			switch (type)
 			{
@@ -28149,7 +28713,7 @@ public class PerformanceLogging
 		obj3["changeset"] = ((current2 != null) ? current2.Scm.ChangeId : null) ?? "editor";
 		BuildInfo current3 = BuildInfo.Current;
 		obj3["branch"] = ((current3 != null) ? current3.Scm.Branch : null) ?? "editor";
-		obj3["network_version"] = 2590.ToString();
+		obj3["network_version"] = 2592.ToString();
 		Dictionary<string, string> dictionary = obj3;
 		dictionary["eos_sdk"] = ((object)VersionInterface.GetVersion())?.ToString() ?? "disabled";
 		record.AddObject("hardware", data).AddObject("application", dictionary);
@@ -28387,8 +28951,8 @@ public class TickLogging
 {
 	public static AzureAnalyticsUploader tickUploader;
 
-	[ServerVar]
 	[Help("time (in seconds) before the tick uploader is disposed and recreated")]
+	[ServerVar]
 	public static int tick_uploader_lifetime = 60;
 }
 
@@ -28659,1513 +29223,6 @@ public static class LagSpikeProfiler
 		return EventRecord.New("lag_spike").AddField("duration", duration).AddField("reason", reason)
 			.AddField("server_id", Server.server_id);
 	}
-}
-
-
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
-using ConVar;
-using Facepunch;
-using Facepunch.Rust;
-using Facepunch.Rust.Profiling;
-using Network;
-using Unity.Profiling;
-using Unity.Profiling.LowLevel;
-using Unity.Profiling.LowLevel.Unsafe;
-using UnityEngine;
-
-[Factory("profile")]
-public static class RuntimeProfiler
-{
-	private static class ProfilerCategories
-	{
-		public static readonly ProfilerCategory VSync = new ProfilerCategory("VSync");
-
-		public static readonly ProfilerCategory PlayerLoop = new ProfilerCategory("PlayerLoop");
-	}
-
-	private static int profilingPreset = 0;
-
-	private static int _profilingInterval = 60;
-
-	private static bool _init = false;
-
-	private static Stopwatch serializationTimer = new Stopwatch();
-
-	private static AzureAnalyticsUploader frameProfilingUploader;
-
-	private static AzureAnalyticsUploader entityProfilingUploader;
-
-	private static AzureAnalyticsUploader entityAggregateUploader;
-
-	private static AzureAnalyticsUploader invokeDetailsUploader;
-
-	private static AzureAnalyticsUploader methodUploader;
-
-	private static AzureAnalyticsUploader objectWorkQueueUploader;
-
-	private static AzureAnalyticsUploader packetUploader;
-
-	private static AzureAnalyticsUploader lagSpikeUploader;
-
-	private static AzureAnalyticsUploader rconUploader;
-
-	private static AzureAnalyticsUploader raknetUploader;
-
-	private static AzureAnalyticsUploader poolUploader;
-
-	public static TimeSpan ServerMgr_Update;
-
-	public static TimeSpan Net_Cycle;
-
-	public static TimeSpan Physics_SyncTransforms;
-
-	public static TimeSpan Companion_Tick;
-
-	public static TimeSpan BasePlayer_ServerCycle;
-
-	private static DateTime nextPoolFlush;
-
-	private static DateTime lastInvokeSerialization = DateTime.UtcNow;
-
-	private static readonly ProfilerRecorderOptions PhysicsRecorderOptions = (ProfilerRecorderOptions)8;
-
-	private static readonly List<RustProfilerRecorder> recorders = new List<RustProfilerRecorder>
-	{
-		new RustProfilerRecorder("cpu_total", ProfilerCategory.Scripts, "CPU Total Frame Time", 1, (ProfilerRecorderOptions)24),
-		new RustProfilerRecorder("main_thread", ProfilerCategory.Scripts, "CPU Main Thread Frame Time", 1, (ProfilerRecorderOptions)24),
-		new RustProfilerRecorder("gc_collect_time", ProfilerCategory.Memory, "GC.Collect", 1, (ProfilerRecorderOptions)24),
-		new RustProfilerRecorder("player_loop", ProfilerCategories.PlayerLoop, "PlayerLoop", 1, (ProfilerRecorderOptions)24),
-		new RustProfilerRecorder("wait_for_target_fps", ProfilerCategories.VSync, "WaitForTargetFPS", 1, (ProfilerRecorderOptions)24),
-		new RustProfilerRecorder("ram_app_resident", ProfilerCategory.Memory, "App Resident Memory", 1, (ProfilerRecorderOptions)24),
-		new RustProfilerRecorder("ram_total_used", ProfilerCategory.Memory, "Total Used Memory", 1, (ProfilerRecorderOptions)24),
-		new RustProfilerRecorder("ram_gc_used", ProfilerCategory.Memory, "GC Used Memory", 1, (ProfilerRecorderOptions)24),
-		new RustProfilerRecorder("gc_alloc_bytes", ProfilerCategory.Memory, "GC Allocated In Frame", 1, (ProfilerRecorderOptions)24),
-		new RustProfilerRecorder("gc_alloc_count", ProfilerCategory.Memory, "GC Allocation In Frame Count", 1, (ProfilerRecorderOptions)24),
-		new RustProfilerRecorder("active_dynamic_bodies", ProfilerCategory.Physics, "ctive Dynamic Bodies", 1, PhysicsRecorderOptions),
-		new RustProfilerRecorder("active_kinematic_bodies", ProfilerCategory.Physics, "Active Kinematic Bodies", 1, PhysicsRecorderOptions),
-		new RustProfilerRecorder("static_colliders", ProfilerCategory.Physics, "Static Colliders", 1, PhysicsRecorderOptions),
-		new RustProfilerRecorder("dynamic_bodies", ProfilerCategory.Physics, "Dynamic Bodies", 1, PhysicsRecorderOptions),
-		new RustProfilerRecorder("articulation_bodies", ProfilerCategory.Physics, "Articulation Bodies", 1, PhysicsRecorderOptions),
-		new RustProfilerRecorder("active_constraints", ProfilerCategory.Physics, "Active Constraints", 1, PhysicsRecorderOptions),
-		new RustProfilerRecorder("overlaps", ProfilerCategory.Physics, "Overlaps", 1, PhysicsRecorderOptions),
-		new RustProfilerRecorder("discreet_overlaps", ProfilerCategory.Physics, "Discreet Overlaps", 1, PhysicsRecorderOptions),
-		new RustProfilerRecorder("continuous_overlaps", ProfilerCategory.Physics, "Continuous Overlaps", 1, PhysicsRecorderOptions),
-		new RustProfilerRecorder("modified_overlaps", ProfilerCategory.Physics, "Modified Overlaps", 1, PhysicsRecorderOptions),
-		new RustProfilerRecorder("trigger_overlaps", ProfilerCategory.Physics, "Trigger Overlaps", 1, PhysicsRecorderOptions),
-		new RustProfilerRecorder("colliders_synced", ProfilerCategory.Physics, "Colliders Synced", 1, PhysicsRecorderOptions),
-		new RustProfilerRecorder("rigidbodies_synced", ProfilerCategory.Physics, "Rigidbodies Synced", 1, PhysicsRecorderOptions),
-		new RustProfilerRecorder("physics_queries", ProfilerCategory.Physics, "Physics Queries", 1, PhysicsRecorderOptions),
-		new RustProfilerRecorder("broadphase_adds_removes", ProfilerCategory.Physics, "Broadphase Adds/Removes", 1, PhysicsRecorderOptions),
-		new RustProfilerRecorder("broadphase_adds", ProfilerCategory.Physics, "Broadphase Adds", 1, PhysicsRecorderOptions),
-		new RustProfilerRecorder("broadphase_removes", ProfilerCategory.Physics, "Broadphase Removes", 1, PhysicsRecorderOptions),
-		new RustProfilerRecorder("narrowphase_touches", ProfilerCategory.Physics, "Narrowphase Touches", 1, PhysicsRecorderOptions),
-		new RustProfilerRecorder("narrowphase_new_touches", ProfilerCategory.Physics, "Narrowphase New Touches", 1, PhysicsRecorderOptions),
-		new RustProfilerRecorder("narrowphase_lost_touches", ProfilerCategory.Physics, "Narrowphase Lost Touches", 1, PhysicsRecorderOptions)
-	};
-
-	private static Stopwatch invokeExecutionResetTimer = new Stopwatch();
-
-	[ServerVar]
-	public static int rpc_lagspike_threshold
-	{
-		get
-		{
-			return (int)RpcWarningThreshold.TotalMilliseconds;
-		}
-		set
-		{
-			RpcWarningThreshold = TimeSpan.FromMilliseconds(value);
-		}
-	}
-
-	[ServerVar]
-	public static int command_lagspike_threshold
-	{
-		get
-		{
-			return (int)ConsoleCommandWarningThreshold.TotalMilliseconds;
-		}
-		set
-		{
-			ConsoleCommandWarningThreshold = TimeSpan.FromMilliseconds(value);
-		}
-	}
-
-	[ServerVar]
-	public static int rcon_lagspike_threshold
-	{
-		get
-		{
-			return (int)RconCommandWarningThreshold.TotalMilliseconds;
-		}
-		set
-		{
-			RconCommandWarningThreshold = TimeSpan.FromMilliseconds(value);
-		}
-	}
-
-	public static TimeSpan RpcWarningThreshold { get; private set; } = TimeSpan.FromMilliseconds(40.0);
-
-	public static TimeSpan ConsoleCommandWarningThreshold { get; private set; } = TimeSpan.FromMilliseconds(40.0);
-
-	public static TimeSpan RconCommandWarningThreshold { get; private set; } = TimeSpan.FromMilliseconds(40.0);
-
-	[ServerVar(Saved = true, Help = "0 = off, 1 = basic, 2 = everything. This will reset all profiling convars, however they can be modified afterwards")]
-	public static int runtime_profiling
-	{
-		get
-		{
-			return profilingPreset;
-		}
-		set
-		{
-			profilingPreset = Mathf.Max(0, value);
-			OnProfilingPresetChanged();
-		}
-	}
-
-	[ServerVar(Saved = true, Help = "Enable to allow runtime profiling to persist across restarts")]
-	public static bool runtime_profiling_persist { get; set; } = false;
-
-	[ServerVar(Help = "Record inbound RPC & ConsoleCommands that cause lag spikes")]
-	public static bool profiling_lagspikes
-	{
-		get
-		{
-			return LagSpikeProfiler.enabled;
-		}
-		set
-		{
-			LagSpikeProfiler.enabled = value;
-		}
-	}
-
-	[ServerVar(Help = "Record type of packets inbound/outbound per frame")]
-	public static bool profiling_packets
-	{
-		get
-		{
-			return PacketProfiler.enabled;
-		}
-		set
-		{
-			PacketProfiler.enabled = value;
-		}
-	}
-
-	[ServerVar(Help = "0 = off, 1 = stats per frame, 2 = stats per method")]
-	public static int profiling_invokes
-	{
-		get
-		{
-			return InvokeProfiler.update.mode;
-		}
-		set
-		{
-			InvokeProfiler.update.mode = Mathf.Max(0, value);
-		}
-	}
-
-	[ServerVar(Help = "0 = off, 1 = stats per frame, 2 = stats per method")]
-	public static int profiling_fixed_invokes
-	{
-		get
-		{
-			return InvokeProfiler.fixedUpdate.mode;
-		}
-		set
-		{
-			InvokeProfiler.fixedUpdate.mode = Mathf.Max(0, value);
-		}
-	}
-
-	[ServerVar(Help = "0 = off, 1 = spawn/kill, 2 = spawn/kill per entity, 3 = count every '5 min'")]
-	public static int profiling_entities
-	{
-		get
-		{
-			return EntityProfiler.mode;
-		}
-		set
-		{
-			EntityProfiler.mode = Mathf.Max(0, value);
-		}
-	}
-
-	[ServerVar(Help = "How frequently to count all entities across the server")]
-	public static int profiling_entity_count_interval
-	{
-		get
-		{
-			return (int)EntityProfiler.aggregateEntityCountDelay.TotalSeconds;
-		}
-		set
-		{
-			EntityProfiler.aggregateEntityCountDelay = TimeSpan.FromSeconds(Mathf.Max(60, value));
-		}
-	}
-
-	[ServerVar(Help = "Record execution time of ObjectWorkQueues per frame")]
-	public static bool profiling_work_queue
-	{
-		get
-		{
-			return WorkQueueProfiler.enabled;
-		}
-		set
-		{
-			WorkQueueProfiler.enabled = value;
-		}
-	}
-
-	[ServerVar(Help = "0 = off, 1 = count per frame, 2 = connection attempts, 3 = messages")]
-	public static int profiling_rcon
-	{
-		get
-		{
-			return RconProfiler.mode;
-		}
-		set
-		{
-			RconProfiler.mode = Mathf.Max(0, value);
-		}
-	}
-
-	[ServerVar(Help = "Clamp the length of logged RCON messages to prevent the profiler from being flooded with large messages")]
-	public static int profiling_rcon_message_length
-	{
-		get
-		{
-			return RconProfiler.ClampedMessageLength;
-		}
-		set
-		{
-			RconProfiler.ClampedMessageLength = Mathf.Max(64, value);
-		}
-	}
-
-	[ServerVar]
-	public static int runtime_profiling_interval
-	{
-		get
-		{
-			return _profilingInterval;
-		}
-		set
-		{
-			_profilingInterval = Mathf.Clamp(value, 60, 1800);
-		}
-	}
-
-	[ServerVar(Help = "Should analytics bulk uploaders use pooling")]
-	public static bool runtime_profiling_uploader_pooling
-	{
-		get
-		{
-			return AzureAnalyticsUploader.UsePooling;
-		}
-		set
-		{
-			AzureAnalyticsUploader.UsePooling = value;
-		}
-	}
-
-	[ServerVar(Help = "Raknet statistics, 0 = off, 2 = per connection")]
-	public static int profiling_ping
-	{
-		get
-		{
-			return PlayerNetworkingProfiler.level;
-		}
-		set
-		{
-			PlayerNetworkingProfiler.level = Mathf.Max(0, value);
-		}
-	}
-
-	[ServerVar(Help = "0 = off, 1 = flush every 5 minutes")]
-	public static int runtime_profiling_pooling { get; set; }
-
-	[ServerVar(Help = "How often to flush raknet stats per second")]
-	public static float profiling_ping_interval
-	{
-		get
-		{
-			return (float)PlayerNetworkingProfiler.MinFlushInterval.TotalSeconds;
-		}
-		set
-		{
-			PlayerNetworkingProfiler.MinFlushInterval = TimeSpan.FromSeconds(value);
-		}
-	}
-
-	[ServerVar]
-	public static int profiling_ping_per_frame
-	{
-		get
-		{
-			return PlayerNetworkingProfiler.ConnectionsPerFrame;
-		}
-		set
-		{
-			PlayerNetworkingProfiler.ConnectionsPerFrame = Mathf.Max(1, value);
-		}
-	}
-
-	[ServerVar(Help = "How often to flush pooling stats in seconds")]
-	public static int runtime_profiling_pool_flush_interval { get; set; } = 300;
-
-	[ServerVar]
-	[ClientVar(ClientAdmin = true)]
-	public static void dump_profile_recorders(Arg arg)
-	{
-		//IL_002c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0036: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0051: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0056: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0076: Unknown result type (might be due to invalid IL or missing references)
-		//IL_007b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_009b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a0: Unknown result type (might be due to invalid IL or missing references)
-		List<ProfilerRecorderHandle> list = new List<ProfilerRecorderHandle>();
-		ProfilerRecorderHandle.GetAvailable(list);
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.AppendLine("Name,Category,UnitType,Flags");
-		foreach (ProfilerRecorderHandle item in list)
-		{
-			ProfilerRecorderDescription description = ProfilerRecorderHandle.GetDescription(item);
-			StringBuilder stringBuilder2 = stringBuilder.Append(((ProfilerRecorderDescription)(ref description)).Name).Append(",");
-			ProfilerCategory category = ((ProfilerRecorderDescription)(ref description)).Category;
-			StringBuilder stringBuilder3 = stringBuilder2.Append(((object)(ProfilerCategory)(ref category)/*cast due to .constrained prefix*/).ToString()).Append(",");
-			ProfilerMarkerDataUnit unitType = ((ProfilerRecorderDescription)(ref description)).UnitType;
-			StringBuilder stringBuilder4 = stringBuilder3.Append(((object)(ProfilerMarkerDataUnit)(ref unitType)/*cast due to .constrained prefix*/).ToString()).Append(",");
-			MarkerFlags flags = ((ProfilerRecorderDescription)(ref description)).Flags;
-			stringBuilder4.Append(((object)(MarkerFlags)(ref flags)/*cast due to .constrained prefix*/).ToString()).AppendLine();
-		}
-		string contents = stringBuilder.ToString();
-		File.WriteAllText("profiler_recorders.csv", contents);
-		arg.ReplyWith($"Successfully dumped '{list.Count}' markers");
-	}
-
-	public static void Disable()
-	{
-		runtime_profiling = 0;
-	}
-
-	private static void Start()
-	{
-		ResetAllMeasurements();
-	}
-
-	private static void OnProfilingPresetChanged()
-	{
-		profiling_lagspikes = false;
-		profiling_packets = false;
-		profiling_invokes = 0;
-		profiling_fixed_invokes = 0;
-		profiling_entities = 0;
-		profiling_work_queue = false;
-		profiling_rcon = 0;
-		if (profilingPreset >= 1)
-		{
-			profiling_entities = 1;
-			profiling_lagspikes = true;
-			profiling_rcon = 1;
-			runtime_profiling_pooling = 1;
-		}
-		if (profilingPreset >= 2)
-		{
-			profiling_packets = true;
-			profiling_invokes = 2;
-			profiling_fixed_invokes = 2;
-			profiling_entities = 3;
-			profiling_work_queue = true;
-			profiling_rcon = 3;
-			profiling_ping = 2;
-		}
-	}
-
-	public static void Update()
-	{
-		if (!Bootstrap.bootstrapInitRun)
-		{
-			return;
-		}
-		if (runtime_profiling == 0)
-		{
-			_init = false;
-		}
-		else if (!string.IsNullOrEmpty(Analytics.BulkUploadConnectionString) || !string.IsNullOrEmpty(Analytics.BulkContainerUrl))
-		{
-			if (!_init)
-			{
-				Start();
-				_init = true;
-			}
-			EnsureUploadersCreated();
-			CollectLastFrameStats();
-		}
-	}
-
-	private static void EnsureUploadersCreated()
-	{
-		if (frameProfilingUploader.NeedsCreation())
-		{
-			frameProfilingUploader = AzureAnalyticsUploader.Create("frame_profiling", TimeSpan.FromSeconds(runtime_profiling_interval));
-		}
-		if (entityProfilingUploader.NeedsCreation())
-		{
-			entityProfilingUploader = AzureAnalyticsUploader.Create("entity_profiling", TimeSpan.FromSeconds(runtime_profiling_interval), AnalyticsDocumentMode.CSV);
-		}
-		if (entityAggregateUploader.NeedsCreation())
-		{
-			entityAggregateUploader = AzureAnalyticsUploader.Create("entity_aggregates", TimeSpan.FromSeconds(runtime_profiling_interval), AnalyticsDocumentMode.CSV);
-		}
-		if (invokeDetailsUploader.NeedsCreation())
-		{
-			invokeDetailsUploader = AzureAnalyticsUploader.Create("invoke_minute_breakdown", TimeSpan.FromSeconds(runtime_profiling_interval), AnalyticsDocumentMode.CSV);
-		}
-		if (methodUploader.NeedsCreation())
-		{
-			methodUploader = AzureAnalyticsUploader.Create("unity_methods", TimeSpan.FromSeconds(runtime_profiling_interval), AnalyticsDocumentMode.CSV);
-		}
-		if (objectWorkQueueUploader.NeedsCreation())
-		{
-			objectWorkQueueUploader = AzureAnalyticsUploader.Create("object_work_queue", TimeSpan.FromSeconds(runtime_profiling_interval), AnalyticsDocumentMode.CSV);
-		}
-		if (packetUploader.NeedsCreation())
-		{
-			packetUploader = AzureAnalyticsUploader.Create("packets_per_type", TimeSpan.FromSeconds(runtime_profiling_interval), AnalyticsDocumentMode.CSV);
-		}
-		if (lagSpikeUploader.NeedsCreation())
-		{
-			lagSpikeUploader = AzureAnalyticsUploader.Create("lag_spikes", TimeSpan.FromSeconds(runtime_profiling_interval));
-			lagSpikeUploader.UseJsonDataObject = true;
-		}
-		if (rconUploader.NeedsCreation())
-		{
-			rconUploader = AzureAnalyticsUploader.Create("rcon_profiling", TimeSpan.FromSeconds(runtime_profiling_interval));
-		}
-		if (raknetUploader.NeedsCreation())
-		{
-			raknetUploader = AzureAnalyticsUploader.Create("raknet", TimeSpan.FromSeconds(runtime_profiling_interval), AnalyticsDocumentMode.CSV);
-		}
-		if (poolUploader.NeedsCreation())
-		{
-			poolUploader = AzureAnalyticsUploader.Create("pool_profiling", TimeSpan.FromSeconds(runtime_profiling_interval));
-			poolUploader.UseJsonDataObject = true;
-		}
-	}
-
-	private static void CollectLastFrameStats()
-	{
-		WriteFrameData(Time.frameCount - 1);
-	}
-
-	private static void WriteFrameData(int frameIndex)
-	{
-		serializationTimer.Restart();
-		RconProfilerStats currentStats = RconProfiler.GetCurrentStats(true);
-		DateTime utcNow = DateTime.UtcNow;
-		EventRecord eventRecord = EventRecord.New("frame_profiling").AddField("frame_index", frameIndex);
-		eventRecord.Timestamp = utcNow;
-		LagSpikeProfiler.Serialize(lagSpikeUploader, frameIndex, utcNow);
-		SerializeCommon(eventRecord, currentStats);
-		SerializeNetworking(eventRecord, frameIndex, utcNow);
-		SerializeInvokes(eventRecord);
-		if (DateTime.UtcNow >= lastInvokeSerialization + TimeSpan.FromSeconds(60.0))
-		{
-			SerializeInvokeExecutionTime(InvokeProfiler.update, invokeDetailsUploader, utcNow);
-			SerializeInvokeExecutionTime(InvokeProfiler.fixedUpdate, invokeDetailsUploader, utcNow);
-			lastInvokeSerialization = DateTime.UtcNow;
-		}
-		SerializeProfilingSamples(eventRecord);
-		EntityProfiler.Serialize(eventRecord, frameIndex, utcNow, entityProfilingUploader);
-		EntityProfiler.TrySerializeEntityAggregates(frameIndex, utcNow, entityAggregateUploader);
-		WorkQueueProfiler.Serialize(objectWorkQueueUploader, frameIndex, utcNow);
-		PlayerNetworkingProfiler.Serialize(raknetUploader, frameIndex, utcNow);
-		SerializeRconEvents(rconUploader, frameIndex, utcNow, currentStats);
-		SerializeMemoryPool(poolUploader, frameIndex, utcNow);
-		ResetAllMeasurements();
-		Pool.Free<RconProfilerStats>(ref currentStats);
-		eventRecord.AddField("serialization_time", serializationTimer.Elapsed);
-		frameProfilingUploader.Append(eventRecord);
-	}
-
-	private static void ResetAllMeasurements()
-	{
-		LagSpikeProfiler.Reset();
-		PacketProfiler.Reset();
-		InvokeProfiler update = InvokeProfiler.update;
-		if (update != null)
-		{
-			update.Reset();
-		}
-		InvokeProfiler fixedUpdate = InvokeProfiler.fixedUpdate;
-		if (fixedUpdate != null)
-		{
-			fixedUpdate.Reset();
-		}
-		EntityProfiler.Reset();
-		WorkQueueProfiler.Reset();
-		EntityProfiler.Reset();
-		RconProfiler.Reset();
-	}
-
-	private static void SerializeCommon(EventRecord record, RconProfilerStats rconStats)
-	{
-		try
-		{
-			string hostname = Server.hostname;
-			PerformanceSamplePoint lastFrame = PerformanceMetrics.LastFrame;
-			record.AddField("server_id", Server.server_id).AddField("hostname", hostname).AddField("unity_time", Time.time)
-				.AddField("unity_realtime", Time.realtimeSinceStartup)
-				.AddField("garbage_collects", System.GC.CollectionCount(0))
-				.AddField("ram_get_total_memory", System.GC.GetTotalMemory(forceFullCollection: false))
-				.AddField("players_connected", BasePlayer.activePlayerList.Count)
-				.AddField("players_sleeping", BasePlayer.sleepingPlayerList.Count)
-				.AddField("connection_count", Net.sv.connections.Count)
-				.AddField("entity_count", BaseNetworkable.serverEntities.Count)
-				.AddField("servermgr_update", ServerMgr_Update)
-				.AddField("net_cycle", Net_Cycle)
-				.AddField("physics_sync_time", Physics_SyncTransforms)
-				.AddField("companion_tick", Companion_Tick)
-				.AddField("baseplayer_tick", BasePlayer_ServerCycle)
-				.AddField("fixed_update_scripts", lastFrame.FixedUpdate)
-				.AddField("update_scripts", lastFrame.Update)
-				.AddField("late_update_scripts", lastFrame.LateUpdate)
-				.AddField("physics_update", lastFrame.PhysicsUpdate)
-				.AddField("rcon_execution_time", RconProfiler.ExecutionTime)
-				.AddField("rcon_new_connections", rconStats.NewConnectionCount)
-				.AddField("rcon_failed_connections", rconStats.FailedConnectionCount)
-				.AddField("rcon_connection_count", rconStats.ConnectionCount)
-				.AddField("rcon_message_count", rconStats.MessageCount)
-				.AddField("rcon_messages_length", rconStats.MessageLengthSum)
-				.AddField("rcon_errors", rconStats.ErrorCount);
-		}
-		catch (Exception ex)
-		{
-			Debug.LogError((object)("Failed to serialize common data: " + ex.Message));
-		}
-	}
-
-	private static void SerializeNetworking(EventRecord frameRecord, int frameIndex, DateTime timestamp)
-	{
-		if (!PacketProfiler.enabled)
-		{
-			return;
-		}
-		try
-		{
-			int num = 0;
-			int num2 = 0;
-			int num3 = 0;
-			int num4 = 0;
-			int num5 = 0;
-			for (int i = 0; i < 29; i++)
-			{
-				int num6 = PacketProfiler.inboundCount[i];
-				int num7 = PacketProfiler.inboundBytes[i];
-				int num8 = PacketProfiler.outboundCount[i];
-				int num9 = PacketProfiler.outboundSum[i];
-				int num10 = PacketProfiler.outboundBytes[i];
-				num += num6;
-				num2 += num7;
-				num3 += num8;
-				num4 += num9;
-				num5 += num10;
-				if (num6 > 0 || num8 > 0)
-				{
-					EventRecord eventRecord = EventRecord.CSV();
-					eventRecord.AddField("", frameIndex).AddField("", timestamp).AddField("", AnalyticsKeys.MessageType[i])
-						.AddField("", num6)
-						.AddField("", num7)
-						.AddField("", num8)
-						.AddField("", num9)
-						.AddField("", num10)
-						.AddField("", Server.server_id);
-					packetUploader.Append(eventRecord);
-				}
-			}
-			frameRecord.AddField("inbound_count_total", num);
-			frameRecord.AddField("inbound_bytes_total", num2);
-			frameRecord.AddField("outbound_count_total", num3);
-			frameRecord.AddField("outbound_sum_total", num4);
-			frameRecord.AddField("outbound_bytes_total", num5);
-		}
-		catch (Exception ex)
-		{
-			Debug.LogError((object)("Failed to serialize networking data: " + ex.Message));
-		}
-	}
-
-	private static void SerializeInvokes(EventRecord record)
-	{
-		try
-		{
-			if (InvokeProfiler.update.mode != 0)
-			{
-				record.AddField("invokes_elapsed_time", InvokeProfiler.update.elapsedTime).AddField("invokes_executed", InvokeProfiler.update.executedCount).AddField("invokes_count", InvokeProfiler.update.tickCount)
-					.AddField("invokes_added", InvokeProfiler.update.addCount)
-					.AddField("invokes_removed", InvokeProfiler.update.deletedCount);
-			}
-			if (InvokeProfiler.fixedUpdate.mode != 0)
-			{
-				record.AddField("invokes_fixed_elapsed_time", InvokeProfiler.fixedUpdate.elapsedTime).AddField("invokes_fixed_executed", InvokeProfiler.fixedUpdate.executedCount).AddField("invokes_fixed_count", InvokeProfiler.fixedUpdate.tickCount)
-					.AddField("invokes_fixed_added", InvokeProfiler.fixedUpdate.addCount)
-					.AddField("invokes_fixed_removed", InvokeProfiler.fixedUpdate.deletedCount);
-			}
-		}
-		catch (Exception ex)
-		{
-			Debug.LogError((object)("Failed to serialize invoke data: " + ex.Message));
-		}
-	}
-
-	private static void SerializeInvokeExecutionTime(InvokeProfiler profiler, AzureAnalyticsUploader uploader, DateTime timestamp, bool reset = true)
-	{
-		if (profiler.mode < 2)
-		{
-			return;
-		}
-		try
-		{
-			invokeExecutionResetTimer.Restart();
-			foreach (InvokeTrackingData trackingData in profiler.trackingDataList)
-			{
-				if (trackingData.Calls != 0)
-				{
-					EventRecord eventRecord = EventRecord.CSV();
-					eventRecord.AddField("", timestamp).AddField("", profiler.Name).AddField("", trackingData.TypeName)
-						.AddField("", trackingData.Key.MethodName)
-						.AddField("", trackingData.ExecutionTime)
-						.AddField("", trackingData.Calls)
-						.AddField("", Server.server_id);
-					uploader.Append(eventRecord);
-					if (reset)
-					{
-						trackingData.Reset();
-					}
-				}
-			}
-			invokeExecutionResetTimer.Stop();
-			EventRecord eventRecord2 = EventRecord.CSV();
-			eventRecord2.AddField("", timestamp).AddField("", "Update").AddField("", "RuntimeProfiler")
-				.AddField("", "Invoke_Execution_Serialization")
-				.AddField("", invokeExecutionResetTimer.Elapsed)
-				.AddField("", 1)
-				.AddField("", Server.server_id);
-			uploader.Append(eventRecord2);
-		}
-		catch (Exception ex)
-		{
-			Debug.LogError((object)("Failed to serialize '" + profiler.Name + "' invoke execution time: " + ex.Message));
-		}
-	}
-
-	private static void SerializeProfilingSamples(EventRecord record)
-	{
-		//IL_001d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0022: Unknown result type (might be due to invalid IL or missing references)
-		try
-		{
-			foreach (RustProfilerRecorder recorder2 in recorders)
-			{
-				string columnName = recorder2.ColumnName;
-				ProfilerRecorder recorder = recorder2.Recorder;
-				record.AddField(columnName, ((ProfilerRecorder)(ref recorder)).LastValue);
-			}
-		}
-		catch (Exception ex)
-		{
-			Debug.LogError((object)("Failed to serialize profiling samples: " + ex.Message));
-		}
-	}
-
-	private static void SerializeRconEvents(AzureAnalyticsUploader uploader, int frameIndex, DateTime timestamp, RconProfilerStats rconStats)
-	{
-		//IL_0010: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0015: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0027: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0037: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0047: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0057: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0067: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a3: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00bb: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00cc: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00dd: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ee: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ff: Unknown result type (might be due to invalid IL or missing references)
-		//IL_013f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0144: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0157: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0168: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0179: Unknown result type (might be due to invalid IL or missing references)
-		foreach (RconConnectionAttempt connectionAttempt in rconStats.ConnectionAttempts)
-		{
-			EventRecord record = CreatePoint("rcon_connection_attempt", frameIndex, timestamp).AddField("ip", connectionAttempt.IP).AddField("port", connectionAttempt.Port).AddField("connection_id", connectionAttempt.ConnectionId)
-				.AddField("password", connectionAttempt.PasswordAttempt)
-				.AddField("success", connectionAttempt.Success);
-			uploader.Append(record);
-		}
-		foreach (RconMessageStats message in rconStats.Messages)
-		{
-			EventRecord record2 = CreatePoint("rcon_message", frameIndex, timestamp).AddField("ip", message.IP).AddField("port", message.Port).AddField("connection_id", message.ConnectionId)
-				.AddField("message", message.Message)
-				.AddField("message_length", message.MessageLength);
-			uploader.Append(record2);
-		}
-		foreach (RconDisconnects disconnect in rconStats.Disconnects)
-		{
-			EventRecord record3 = CreatePoint("rcon_disconnect", frameIndex, timestamp).AddField("ip", disconnect.IP).AddField("port", disconnect.Port).AddField("connection_id", disconnect.ConnectionId);
-			uploader.Append(record3);
-		}
-	}
-
-	private static void SerializeMemoryPool(AzureAnalyticsUploader uploader, int frameIndex, DateTime timestamp)
-	{
-		if (runtime_profiling_pooling == 0 || !(timestamp > nextPoolFlush))
-		{
-			return;
-		}
-		nextPoolFlush = timestamp.AddSeconds(runtime_profiling_pool_flush_interval);
-		foreach (KeyValuePair<Type, IPoolCollection> item in Pool.Directory)
-		{
-			IPoolCollection value = item.Value;
-			string name = TypeNameCache.GetName(item.Key);
-			EventRecord record = CreatePoint("pool_facepunch", frameIndex, timestamp).AddField("type_name", name).AddField("capacity", value.ItemsCapacity).AddField("stack", value.ItemsInStack)
-				.AddField("used", value.ItemsInUse)
-				.AddField("created", value.ItemsCreated)
-				.AddField("taken", value.ItemsTaken)
-				.AddField("spilled", value.ItemsSpilled)
-				.AddField("max_used", value.MaxItemsInUse);
-			uploader.Append(record);
-		}
-		ArrayPool<byte> arrayPool = BaseNetwork.ArrayPool;
-		ConcurrentQueue<byte[]>[] buffer = arrayPool.GetBuffer();
-		for (int i = 0; i < buffer.Length; i++)
-		{
-			ConcurrentQueue<byte[]> concurrentQueue = buffer[i];
-			EventRecord record2 = CreatePoint("pool_networking", frameIndex, timestamp).AddField("size", arrayPool.IndexToSize(i)).AddField("amount", concurrentQueue.Count);
-			uploader.Append(record2);
-		}
-	}
-
-	private static EventRecord CreatePoint(string type, int frameIndex, DateTime timestamp)
-	{
-		return EventRecord.New(type).AddField("frame_index", frameIndex).SetTimestamp(timestamp)
-			.AddField("server_id", Server.server_id);
-	}
-}
-
-
-using Unity.Profiling;
-
-private static class ProfilerCategories
-{
-	public static readonly ProfilerCategory VSync = new ProfilerCategory("VSync");
-
-	public static readonly ProfilerCategory PlayerLoop = new ProfilerCategory("PlayerLoop");
-}
-
-
-using Unity.Profiling;
-
-public struct RustProfilerRecorder
-{
-	public string ColumnName;
-
-	public ProfilerRecorder Recorder;
-
-	public RustProfilerRecorder(string column, ProfilerCategory category, string sample, int sampleCount = 1, ProfilerRecorderOptions options = 24)
-	{
-		//IL_0008: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0013: Unknown result type (might be due to invalid IL or missing references)
-		ColumnName = column;
-		Recorder = ProfilerRecorder.StartNew(category, sample, sampleCount, options);
-	}
-}
-
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using ConVar;
-using Facepunch.Rust;
-using Facepunch.Rust.Profiling;
-using Unity.Profiling;
-using Unity.Profiling.LowLevel.Unsafe;
-using UnityEngine;
-
-public static class UnityProfiler
-{
-	private struct RecorderInfo
-	{
-		public string MethodName;
-
-		public ProfilerRecorder Recorder;
-	}
-
-	private static List<RecorderInfo> ActiveRecorders = new List<RecorderInfo>();
-
-	private static bool _enabled;
-
-	public static bool enabled
-	{
-		get
-		{
-			return _enabled;
-		}
-		set
-		{
-			SetEnabled(value);
-		}
-	}
-
-	private static void SetEnabled(bool state)
-	{
-		//IL_004d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0052: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0055: Unknown result type (might be due to invalid IL or missing references)
-		//IL_005b: Invalid comparison between Unknown and I4
-		//IL_005f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0069: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0077: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0086: Unknown result type (might be due to invalid IL or missing references)
-		//IL_008b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a5: Unknown result type (might be due to invalid IL or missing references)
-		_enabled = state;
-		Unload();
-		if (!state)
-		{
-			return;
-		}
-		List<ProfilerRecorderHandle> list = new List<ProfilerRecorderHandle>();
-		ProfilerRecorderHandle.GetAvailable(list);
-		foreach (ProfilerRecorderDescription item2 in list.Select((ProfilerRecorderHandle x) => ProfilerRecorderHandle.GetDescription(x)).ToList())
-		{
-			ProfilerRecorderDescription current = item2;
-			if ((int)((ProfilerRecorderDescription)(ref current)).UnitType == 1 && ProfilerCategory.op_Implicit(((ProfilerRecorderDescription)(ref current)).Category) == ProfilerCategory.op_Implicit(ProfilerCategory.Scripts))
-			{
-				ProfilerRecorder recorder = ProfilerRecorder.StartNew(((ProfilerRecorderDescription)(ref current)).Category, ((ProfilerRecorderDescription)(ref current)).Name, 2, (ProfilerRecorderOptions)24);
-				RecorderInfo recorderInfo = default(RecorderInfo);
-				recorderInfo.MethodName = ((ProfilerRecorderDescription)(ref current)).Name;
-				recorderInfo.Recorder = recorder;
-				RecorderInfo item = recorderInfo;
-				ActiveRecorders.Add(item);
-			}
-		}
-	}
-
-	public static void Unload()
-	{
-		//IL_0016: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001b: Unknown result type (might be due to invalid IL or missing references)
-		foreach (RecorderInfo activeRecorder in ActiveRecorders)
-		{
-			ProfilerRecorder recorder = activeRecorder.Recorder;
-			((ProfilerRecorder)(ref recorder)).Dispose();
-		}
-		ActiveRecorders.Clear();
-	}
-
-	public static void Serialize(AzureAnalyticsUploader uploader, DateTime timestamp, int frameIndex)
-	{
-		//IL_001f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0024: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0061: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0066: Unknown result type (might be due to invalid IL or missing references)
-		if (!enabled)
-		{
-			return;
-		}
-		try
-		{
-			foreach (RecorderInfo activeRecorder in ActiveRecorders)
-			{
-				ProfilerRecorder recorder = activeRecorder.Recorder;
-				if (((ProfilerRecorder)(ref recorder)).LastValue != 0L)
-				{
-					EventRecord eventRecord = EventRecord.CSV();
-					EventRecord eventRecord2 = eventRecord.AddField("", frameIndex).AddField("", timestamp).AddField("", activeRecorder.MethodName);
-					recorder = activeRecorder.Recorder;
-					eventRecord2.AddField("", ((ProfilerRecorder)(ref recorder)).LastValue).AddField("", Server.server_id);
-					uploader.Append(eventRecord);
-				}
-			}
-		}
-		catch (Exception ex)
-		{
-			Debug.LogError((object)("Failed to serialize profiler data: " + ex.Message));
-		}
-	}
-}
-
-
-using Unity.Profiling;
-
-private struct RecorderInfo
-{
-	public string MethodName;
-
-	public ProfilerRecorder Recorder;
-}
-
-
-using System;
-using ConVar;
-using Facepunch.Rust;
-using UnityEngine;
-
-public static class WorkQueueProfiler
-{
-	public static bool enabled;
-
-	public static void Serialize(AzureAnalyticsUploader uploader, int frameIndex, DateTime timestamp)
-	{
-		if (!enabled)
-		{
-			return;
-		}
-		try
-		{
-			foreach (ObjectWorkQueue item in ObjectWorkQueue.All)
-			{
-				if (item.LastProcessedCount != 0)
-				{
-					EventRecord eventRecord = EventRecord.CSV();
-					eventRecord.AddField("", frameIndex).AddField("", timestamp).AddField("", item.Name)
-						.AddField("", item.LastQueueLength)
-						.AddField("", item.LastExecutionTime)
-						.AddField("", item.LastProcessedCount)
-						.AddField("", Server.server_id);
-					uploader.Append(eventRecord);
-				}
-			}
-			foreach (PersistentObjectWorkQueue item2 in PersistentObjectWorkQueue.All)
-			{
-				if (item2.ListLength != 0)
-				{
-					EventRecord eventRecord2 = EventRecord.CSV();
-					eventRecord2.AddField("", frameIndex).AddField("", timestamp).AddField("", item2.Name)
-						.AddField("", item2.ListLength)
-						.AddField("", item2.LastExecutionTime)
-						.AddField("", item2.LastProcessedCount)
-						.AddField("", Server.server_id);
-					uploader.Append(eventRecord2);
-				}
-			}
-		}
-		catch (Exception ex)
-		{
-			Debug.LogError((object)("Failed to serialize work queues: " + ex.Message));
-		}
-	}
-
-	public static void Reset()
-	{
-	}
-}
-
-
-using System;
-using ModelViewer;
-using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.PostProcessing;
-
-[Serializable]
-public class ModelViewer_RenderParameters
-{
-	public enum SampleCountLevel
-	{
-		Low,
-		Medium,
-		High,
-		VeryHigh
-	}
-
-	public enum renderResolution
-	{
-		_16,
-		_32,
-		_64,
-		_128,
-		_256,
-		_512,
-		_1024,
-		_2048
-	}
-
-	[Header("Anti Aliasing")]
-	public PostProcessLayer.Antialiasing antialiasing = PostProcessLayer.Antialiasing.TemporalAntialiasing;
-
-	[Range(1f, 4f)]
-	[Header("Shadows")]
-	public int shadowCascades = 4;
-
-	[Range(1f, 3f)]
-	public int shadowLights = 3;
-
-	[Range(1f, 4f)]
-	public int shadowMode = 4;
-
-	public float shadowDistance = 50f;
-
-	[Range(0f, 3f)]
-	public int shadowQuality = 3;
-
-	[Range(0f, 0.02f)]
-	public float shadowSoftness = 0.01f;
-
-	[Range(0f, 2f)]
-	public float sunShadowBias = 0.01f;
-
-	[Header("                ")]
-	[Header("Contact Shadows")]
-	public bool enableContactShadows = true;
-
-	[Range(0f, 1f)]
-	public float blendStrength = 1f;
-
-	[Range(0f, 1f)]
-	public float accumulation = 0.9f;
-
-	[Range(0.1f, 5f)]
-	public float lengthFade = 0.7f;
-
-	[Range(0.01f, 5f)]
-	public float range = 0.7f;
-
-	[Range(0f, 1f)]
-	public float zThickness = 0.1f;
-
-	[Range(2f, 92f)]
-	public int samples = 32;
-
-	[Range(0.5f, 4f)]
-	public float nearSampleQuality = 1.5f;
-
-	[Range(0f, 1f)]
-	public float traceBias = 0.03f;
-
-	[Header("Ambient Occlusion")]
-	[Header("                ")]
-	public bool enableAmbientOcclusion = true;
-
-	public SampleCountLevel SampleCount = SampleCountLevel.Medium;
-
-	public float Intensity = 1f;
-
-	public Color Tint = Color.black;
-
-	[Tooltip("Radius spread of the occlusion.")]
-	[Range(0f, 32f)]
-	public float Radius = 2f;
-
-	[Tooltip("Power exponent attenuation of the occlusion.")]
-	[Range(0f, 16f)]
-	public float PowerExponent = 1.8f;
-
-	[Tooltip("Controls the initial occlusion contribution offset.")]
-	[Range(0f, 0.99f)]
-	public float Bias = 0.05f;
-
-	[Range(0f, 1f)]
-	[Tooltip("Controls the thickness occlusion contribution.")]
-	public float Thickness = 1f;
-
-	[Tooltip("Compute the Occlusion and Blur at half of the resolution.")]
-	public bool Downsample = true;
-
-	[Tooltip("Control parameters at faraway.")]
-	public bool FadeEnabled;
-
-	[Tooltip("Distance in Unity unities that start to fade.")]
-	public float FadeStart = 100f;
-
-	[Tooltip("Length distance to performe the transition.")]
-	public float FadeLength = 50f;
-
-	[Range(0f, 1f)]
-	[Tooltip("Final Intensity parameter.")]
-	public float FadeToIntensity;
-
-	public Color FadeToTint = Color.black;
-
-	[Range(0f, 32f)]
-	[Tooltip("Final Radius parameter.")]
-	public float FadeToRadius = 2f;
-
-	[Range(0f, 16f)]
-	[Tooltip("Final PowerExponent parameter.")]
-	public float FadeToPowerExponent = 1.8f;
-
-	[Range(0f, 1f)]
-	[Tooltip("Final Thickness parameter.")]
-	public float FadeToThickness = 1f;
-
-	[Header("                ")]
-	[Header("Reflections")]
-	public ReflectionProbeMode Type = (ReflectionProbeMode)1;
-
-	public ReflectionProbeRefreshMode RefreshMode = (ReflectionProbeRefreshMode)1;
-
-	public ReflectionProbeTimeSlicingMode TimeSlicing = (ReflectionProbeTimeSlicingMode)1;
-
-	public renderResolution resolution;
-
-	public float reflectionShadowDistance = 100f;
-
-	public LayerMask cullingMask;
-
-	public float reflectionClippingPlaneNear = 0.1f;
-
-	public float reflectionClippingPlaneFar = 100f;
-}
-
-
-public enum SampleCountLevel
-{
-	Low,
-	Medium,
-	High,
-	VeryHigh
-}
-
-
-public enum renderResolution
-{
-	_16,
-	_32,
-	_64,
-	_128,
-	_256,
-	_512,
-	_1024,
-	_2048
-}
-
-
-using System;
-using ModelViewer;
-using UnityEngine;
-
-[Serializable]
-public class ModelViewer_MainCameraParameters
-{
-	public enum OverlayType
-	{
-		None,
-		RuleOfThirds,
-		GoldenRatio,
-		CrossHair,
-		AspectRatio,
-		SafeFrames
-	}
-
-	public enum TonemappingMode
-	{
-		None,
-		Neutral,
-		ACES
-	}
-
-	[Header("Control")]
-	public float orbitSpeed = 4f;
-
-	public float mouseZoomSpeed = 1.2f;
-
-	public float scrollZoomSpeed = 0.1f;
-
-	public float panSpeed = 0.1f;
-
-	public float moveSpeed = 0.05f;
-
-	public float followLag;
-
-	[Range(0.01f, 360f)]
-	[Header("Lens")]
-	[Header("                ")]
-	public float fieldOfView = 15f;
-
-	public float nearPlane = 0.05f;
-
-	public float farPlane = 2500f;
-
-	public OverlayType overlayType;
-
-	[Range(0.01f, 100f)]
-	public float Aspect = 4f;
-
-	[Range(0.01f, 100f)]
-	public float Ratio = 3f;
-
-	[Header("Focus")]
-	[Header("                ")]
-	public bool depthOfField;
-
-	public float focalLength = 3f;
-
-	public float focalSize = 0.1f;
-
-	public float apeture = 80f;
-
-	public float maxBlurSize = 7f;
-
-	public bool debugMode;
-
-	[Range(0f, 360f)]
-	[Header("Motion Blur")]
-	[Header("                ")]
-	public float shutterAngle;
-
-	[Range(-100f, 100f)]
-	[Header("                ")]
-	[Header("Distortion")]
-	public float barrelAndPincushion;
-
-	[Range(0f, 1f)]
-	public float chromaticAbberation;
-
-	[Header("                ")]
-	[Header("Post Effects")]
-	public TonemappingMode ToneMapping = TonemappingMode.Neutral;
-
-	public float Exposure = 2.34f;
-
-	[Range(-100f, 100f)]
-	public float Contrast;
-
-	[Range(-100f, 100f)]
-	public float Saturation;
-
-	[Header("                ")]
-	[Header("Sharpen")]
-	public float Strength;
-
-	public float limit;
-
-	[Header("                ")]
-	[Header("God Rays")]
-	public bool GodRays = true;
-
-	[Header("                ")]
-	[Header("Bloom")]
-	public float Brightness = 0.15f;
-
-	public float Threshold = 1f;
-
-	[Range(0f, 1f)]
-	public float SoftKnee = 0.5f;
-
-	public float Clamp;
-
-	[Range(0f, 10f)]
-	public float Diffusion = 8f;
-
-	[Range(0f, 1f)]
-	public float AnamorphicRatio = 0.55f;
-
-	public Color Color = Color.white;
-
-	[Header("Vignette")]
-	[Header("                ")]
-	public float Darkness;
-
-	public float Sharpness;
-
-	[Header("Grain")]
-	[Header("                ")]
-	public bool Coloured = true;
-
-	[Range(0f, 1f)]
-	public float Intensity;
-
-	[Range(0.3f, 3f)]
-	public float Size = 1f;
-
-	[Range(0f, 1f)]
-	public float luminanceContribution = 0.8f;
-}
-
-
-public enum OverlayType
-{
-	None,
-	RuleOfThirds,
-	GoldenRatio,
-	CrossHair,
-	AspectRatio,
-	SafeFrames
-}
-
-
-public enum TonemappingMode
-{
-	None,
-	Neutral,
-	ACES
-}
-
-
-using System;
-using UnityEngine;
-
-[Serializable]
-public class ModelViewer_SkyParameters
-{
-	[Header("Sky")]
-	[Range(0f, 1f)]
-	public float skyBrightness = 1f;
-
-	[Header("                ")]
-	[Header("Time of Day")]
-	[Tooltip("Current hour of the day.")]
-	public float Hour = 9f;
-
-	[Tooltip("Current day of the month.")]
-	public int Day = 20;
-
-	[Tooltip("Current month of the year.")]
-	public int Month = 5;
-
-	[TOD_Range(1f, 9999f)]
-	[Tooltip("Current year.")]
-	public int Year = 2000;
-
-	[Tooltip("Latitude of the current location in degrees.")]
-	[Range(-90f, 90f)]
-	public float Latitude = -10f;
-
-	[Range(-180f, 180f)]
-	[Tooltip("Longitude of the current location in degrees.")]
-	public float Longitude = -25f;
-
-	[Tooltip("UTC/GMT time zone of the current location in hours.")]
-	[Range(-14f, 14f)]
-	public float UTC;
-
-	[Header("Atmosphere")]
-	[Header("                ")]
-	public float skyContrast = 1.2f;
-
-	public float skyFogginess = 0.2f;
-
-	public float cloudCoverage;
-}
-
-
-using ModelViewer;
-using Rust.UI;
-using UnityEngine;
-using UnityEngine.Rendering.PostProcessing;
-using UnityEngine.UI;
-
-public class modelviewer : MonoBehaviour, IEditorComponent
-{
-	public GameObject cameraTarget;
-
-	[Header("                ")]
-	public ModelViewer_RenderParameters Render;
-
-	public ModelViewer_MainCameraParameters MainCamera;
-
-	public ModelViewer_SkyParameters Sky;
-
-	[Header("Junk to clean up:")]
-	[Header("                ")]
-	[Header("                ")]
-	public GameObject ruleOfThirds;
-
-	public GameObject goldenRatio;
-
-	public GameObject crosshair;
-
-	public GameObject aspectRatio;
-
-	public GameObject safeFrames;
-
-	private GameObject enabledOverlay;
-
-	public AspectRatioFitter aspectRatioFitter;
-
-	public AspectRatioFitter safeFrameAspectRatioFigger;
-
-	public RustText aspectRatioLabel;
-
-	private Vector3 startpos = new Vector3(0f, 130f, 60f);
-
-	public Camera maincamera;
-
-	public GameObject modelHolder;
-
-	public Transform skyDome;
-
-	public float skyrotateSpeed;
-
-	public Light sunLight;
-
-	public NGSS_Directional sunLightSoftShadows;
-
-	private GameObject orbitVector;
-
-	private Quaternion orbt_rot_original;
-
-	private Vector3 orbt_xform_original;
-
-	private SEScreenSpaceShadows screenSpaceShadows;
-
-	private AmplifyOcclusionBase ambientOcclusion;
-
-	public ReflectionProbe[] reflectionProbes;
-
-	private TOD_Sky todSky;
-
-	private PostProcessVolume[] colorGradingVolumes;
-
-	public PostProcessVolume basePostProcess;
-
-	public PostProcessVolume sharpenvignettePostProcess;
-
-	public PostProcessVolume colorGradingPostProcess;
-
-	private LensDistortion lensDistortion;
-
-	private ChromaticAberration chromaticAbberation;
-
-	private SharpenAndVignette sharpenAndVignette;
-
-	private Bloom bloom;
-
-	private Grain grain;
-
-	private ColorGrading colorGrading;
-
-	private GodRays godRays;
-
-	private MotionBlur motionBlur;
-
-	public Vector3 skyRotation;
-
-	public Vector3 cameraPosition;
-
-	public Vector3 cameraRotation;
-
-	public float cameraZoom;
-
-	public Vector3 orbitVectorPosition;
 }
 
 

@@ -243,7 +243,7 @@ public abstract class RustPlugin : CSharpPlugin
 		player.MovePosition(destination);
 		if (!player.IsSpectating() || (double)Vector3.Distance(((Component)player).transform.position, destination) > 25.0)
 		{
-			((BaseEntity)player).ClientRPC<Vector3>(RpcTarget.Player("ForcePositionTo", player), destination);
+			((BaseEntity)player).ClientRPC(RpcTarget.Player("ForcePositionTo", player), destination);
 		}
 		else
 		{
@@ -1904,7 +1904,7 @@ public static class CuiHelper
 		//IL_0031: Unknown result type (might be due to invalid IL or missing references)
 		if (((BaseNetworkable)(player?)).net != null && Interface.CallHook("CanUseUI", (object)player, (object)json) == null)
 		{
-			((BaseEntity)CommunityEntity.ServerInstance).ClientRPC<string>(RpcTarget.Player("AddUI", ((BaseNetworkable)player).net.connection), json);
+			((BaseEntity)CommunityEntity.ServerInstance).ClientRPC(RpcTarget.Player("AddUI", ((BaseNetworkable)player).net.connection), json);
 			return true;
 		}
 		return false;
@@ -1916,7 +1916,7 @@ public static class CuiHelper
 		if (((BaseNetworkable)(player?)).net != null)
 		{
 			Interface.CallHook("OnDestroyUI", (object)player, (object)elem);
-			((BaseEntity)CommunityEntity.ServerInstance).ClientRPC<string>(RpcTarget.Player("DestroyUI", ((BaseNetworkable)player).net.connection), elem);
+			((BaseEntity)CommunityEntity.ServerInstance).ClientRPC(RpcTarget.Player("DestroyUI", ((BaseNetworkable)player).net.connection), elem);
 			return true;
 		}
 		return false;
@@ -3182,7 +3182,7 @@ public class Player : Library
 				((BaseEntity)player).SetParent((BaseEntity)null, true, true);
 				player.SetServerFall(true);
 				player.MovePosition(destination);
-				((BaseEntity)player).ClientRPC<Vector3>(RpcTarget.Player("ForcePositionTo", player), destination);
+				((BaseEntity)player).ClientRPC(RpcTarget.Player("ForcePositionTo", player), destination);
 			}
 			finally
 			{

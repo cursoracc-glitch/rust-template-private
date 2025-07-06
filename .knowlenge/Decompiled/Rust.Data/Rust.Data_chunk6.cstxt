@@ -4,6 +4,2241 @@ using Facepunch;
 using SilentOrbit.ProtocolBuffers;
 using UnityEngine;
 
+public class TeamMember : IDisposable, IPooled, IProto<TeamMember>, IProto
+{
+	[NonSerialized]
+	public string displayName;
+
+	[NonSerialized]
+	public ulong userID;
+
+	[NonSerialized]
+	public float healthFraction;
+
+	[NonSerialized]
+	public Vector3 position;
+
+	[NonSerialized]
+	public bool online;
+
+	[NonSerialized]
+	public bool wounded;
+
+	[NonSerialized]
+	public ulong teamID;
+
+	public bool ShouldPool = true;
+
+	private bool _disposed;
+
+	public static void ResetToPool(TeamMember instance)
+	{
+		//IL_002d: Unknown result type (might be due to invalid IL or missing references)
+		if (instance.ShouldPool)
+		{
+			instance.displayName = string.Empty;
+			instance.userID = 0uL;
+			instance.healthFraction = 0f;
+			instance.position = default(Vector3);
+			instance.online = false;
+			instance.wounded = false;
+			instance.teamID = 0uL;
+			Pool.Free<TeamMember>(ref instance);
+		}
+	}
+
+	public void ResetToPool()
+	{
+		ResetToPool(this);
+	}
+
+	public virtual void Dispose()
+	{
+		if (!ShouldPool)
+		{
+			throw new Exception("Trying to dispose TeamMember with ShouldPool set to false!");
+		}
+		if (!_disposed)
+		{
+			ResetToPool();
+			_disposed = true;
+		}
+	}
+
+	public virtual void EnterPool()
+	{
+		_disposed = true;
+	}
+
+	public virtual void LeavePool()
+	{
+		_disposed = false;
+	}
+
+	public void CopyTo(TeamMember instance)
+	{
+		//IL_0026: Unknown result type (might be due to invalid IL or missing references)
+		//IL_002b: Unknown result type (might be due to invalid IL or missing references)
+		instance.displayName = displayName;
+		instance.userID = userID;
+		instance.healthFraction = healthFraction;
+		instance.position = position;
+		instance.online = online;
+		instance.wounded = wounded;
+		instance.teamID = teamID;
+	}
+
+	public TeamMember Copy()
+	{
+		TeamMember teamMember = Pool.Get<TeamMember>();
+		CopyTo(teamMember);
+		return teamMember;
+	}
+
+	public static TeamMember Deserialize(BufferStream stream)
+	{
+		TeamMember teamMember = Pool.Get<TeamMember>();
+		Deserialize(stream, teamMember, isDelta: false);
+		return teamMember;
+	}
+
+	public static TeamMember DeserializeLengthDelimited(BufferStream stream)
+	{
+		TeamMember teamMember = Pool.Get<TeamMember>();
+		DeserializeLengthDelimited(stream, teamMember, isDelta: false);
+		return teamMember;
+	}
+
+	public static TeamMember DeserializeLength(BufferStream stream, int length)
+	{
+		TeamMember teamMember = Pool.Get<TeamMember>();
+		DeserializeLength(stream, length, teamMember, isDelta: false);
+		return teamMember;
+	}
+
+	public static TeamMember Deserialize(byte[] buffer)
+	{
+		TeamMember teamMember = Pool.Get<TeamMember>();
+		using BufferStream stream = Pool.Get<BufferStream>().Initialize(buffer);
+		Deserialize(stream, teamMember, isDelta: false);
+		return teamMember;
+	}
+
+	public void FromProto(BufferStream stream, bool isDelta = false)
+	{
+		Deserialize(stream, this, isDelta);
+	}
+
+	public virtual void WriteToStream(BufferStream stream)
+	{
+		Serialize(stream, this);
+	}
+
+	public virtual void WriteToStreamDelta(BufferStream stream, TeamMember previous)
+	{
+		if (previous == null)
+		{
+			Serialize(stream, this);
+		}
+		else
+		{
+			SerializeDelta(stream, this, previous);
+		}
+	}
+
+	public virtual void ReadFromStream(BufferStream stream, bool isDelta = false)
+	{
+		Deserialize(stream, this, isDelta);
+	}
+
+	public virtual void ReadFromStream(BufferStream stream, int size, bool isDelta = false)
+	{
+		DeserializeLength(stream, size, this, isDelta);
+	}
+
+	public static TeamMember Deserialize(BufferStream stream, TeamMember instance, bool isDelta)
+	{
+		//IL_0078: Unknown result type (might be due to invalid IL or missing references)
+		while (true)
+		{
+			int num = stream.ReadByte();
+			switch (num)
+			{
+			case 10:
+				instance.displayName = ProtocolParser.ReadString(stream);
+				continue;
+			case 16:
+				instance.userID = ProtocolParser.ReadUInt64(stream);
+				continue;
+			case 29:
+				instance.healthFraction = ProtocolParser.ReadSingle(stream);
+				continue;
+			case 34:
+				Vector3Serialized.DeserializeLengthDelimited(stream, ref instance.position, isDelta);
+				continue;
+			case 40:
+				instance.online = ProtocolParser.ReadBool(stream);
+				continue;
+			case 48:
+				instance.wounded = ProtocolParser.ReadBool(stream);
+				continue;
+			case 56:
+				instance.teamID = ProtocolParser.ReadUInt64(stream);
+				continue;
+			case -1:
+				return instance;
+			}
+			Key key = ProtocolParser.ReadKey((byte)num, stream);
+			_ = key.Field;
+			ProtocolParser.SkipKey(stream, key);
+		}
+	}
+
+	public static TeamMember DeserializeLengthDelimited(BufferStream stream, TeamMember instance, bool isDelta)
+	{
+		//IL_00b8: Unknown result type (might be due to invalid IL or missing references)
+		long num = ProtocolParser.ReadUInt32(stream);
+		num += stream.Position;
+		while (stream.Position < num)
+		{
+			int num2 = stream.ReadByte();
+			switch (num2)
+			{
+			case -1:
+				throw new EndOfStreamException();
+			case 10:
+				instance.displayName = ProtocolParser.ReadString(stream);
+				continue;
+			case 16:
+				instance.userID = ProtocolParser.ReadUInt64(stream);
+				continue;
+			case 29:
+				instance.healthFraction = ProtocolParser.ReadSingle(stream);
+				continue;
+			case 34:
+				Vector3Serialized.DeserializeLengthDelimited(stream, ref instance.position, isDelta);
+				continue;
+			case 40:
+				instance.online = ProtocolParser.ReadBool(stream);
+				continue;
+			case 48:
+				instance.wounded = ProtocolParser.ReadBool(stream);
+				continue;
+			case 56:
+				instance.teamID = ProtocolParser.ReadUInt64(stream);
+				continue;
+			}
+			Key key = ProtocolParser.ReadKey((byte)num2, stream);
+			_ = key.Field;
+			ProtocolParser.SkipKey(stream, key);
+		}
+		if (stream.Position != num)
+		{
+			throw new ProtocolBufferException("Read past max limit");
+		}
+		return instance;
+	}
+
+	public static TeamMember DeserializeLength(BufferStream stream, int length, TeamMember instance, bool isDelta)
+	{
+		//IL_00b0: Unknown result type (might be due to invalid IL or missing references)
+		long num = stream.Position + length;
+		while (stream.Position < num)
+		{
+			int num2 = stream.ReadByte();
+			switch (num2)
+			{
+			case -1:
+				throw new EndOfStreamException();
+			case 10:
+				instance.displayName = ProtocolParser.ReadString(stream);
+				continue;
+			case 16:
+				instance.userID = ProtocolParser.ReadUInt64(stream);
+				continue;
+			case 29:
+				instance.healthFraction = ProtocolParser.ReadSingle(stream);
+				continue;
+			case 34:
+				Vector3Serialized.DeserializeLengthDelimited(stream, ref instance.position, isDelta);
+				continue;
+			case 40:
+				instance.online = ProtocolParser.ReadBool(stream);
+				continue;
+			case 48:
+				instance.wounded = ProtocolParser.ReadBool(stream);
+				continue;
+			case 56:
+				instance.teamID = ProtocolParser.ReadUInt64(stream);
+				continue;
+			}
+			Key key = ProtocolParser.ReadKey((byte)num2, stream);
+			_ = key.Field;
+			ProtocolParser.SkipKey(stream, key);
+		}
+		if (stream.Position != num)
+		{
+			throw new ProtocolBufferException("Read past max limit");
+		}
+		return instance;
+	}
+
+	public static void SerializeDelta(BufferStream stream, TeamMember instance, TeamMember previous)
+	{
+		//IL_0074: Unknown result type (might be due to invalid IL or missing references)
+		//IL_007a: Unknown result type (might be due to invalid IL or missing references)
+		//IL_009f: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00a5: Unknown result type (might be due to invalid IL or missing references)
+		if (instance.displayName != null && instance.displayName != previous.displayName)
+		{
+			stream.WriteByte(10);
+			ProtocolParser.WriteString(stream, instance.displayName);
+		}
+		if (instance.userID != previous.userID)
+		{
+			stream.WriteByte(16);
+			ProtocolParser.WriteUInt64(stream, instance.userID);
+		}
+		if (instance.healthFraction != previous.healthFraction)
+		{
+			stream.WriteByte(29);
+			ProtocolParser.WriteSingle(stream, instance.healthFraction);
+		}
+		if (instance.position != previous.position)
+		{
+			stream.WriteByte(34);
+			BufferStream.RangeHandle range = stream.GetRange(1);
+			int num = stream.Position;
+			Vector3Serialized.SerializeDelta(stream, instance.position, previous.position);
+			int num2 = stream.Position - num;
+			if (num2 > 127)
+			{
+				throw new InvalidOperationException("Not enough space was reserved for the length prefix of field position (UnityEngine.Vector3)");
+			}
+			Span<byte> span = range.GetSpan();
+			ProtocolParser.WriteUInt32((uint)num2, span, 0);
+		}
+		stream.WriteByte(40);
+		ProtocolParser.WriteBool(stream, instance.online);
+		stream.WriteByte(48);
+		ProtocolParser.WriteBool(stream, instance.wounded);
+		if (instance.teamID != previous.teamID)
+		{
+			stream.WriteByte(56);
+			ProtocolParser.WriteUInt64(stream, instance.teamID);
+		}
+	}
+
+	public static void Serialize(BufferStream stream, TeamMember instance)
+	{
+		//IL_005a: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0061: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0067: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0088: Unknown result type (might be due to invalid IL or missing references)
+		if (instance.displayName != null)
+		{
+			stream.WriteByte(10);
+			ProtocolParser.WriteString(stream, instance.displayName);
+		}
+		if (instance.userID != 0L)
+		{
+			stream.WriteByte(16);
+			ProtocolParser.WriteUInt64(stream, instance.userID);
+		}
+		if (instance.healthFraction != 0f)
+		{
+			stream.WriteByte(29);
+			ProtocolParser.WriteSingle(stream, instance.healthFraction);
+		}
+		if (instance.position != default(Vector3))
+		{
+			stream.WriteByte(34);
+			BufferStream.RangeHandle range = stream.GetRange(1);
+			int num = stream.Position;
+			Vector3Serialized.Serialize(stream, instance.position);
+			int num2 = stream.Position - num;
+			if (num2 > 127)
+			{
+				throw new InvalidOperationException("Not enough space was reserved for the length prefix of field position (UnityEngine.Vector3)");
+			}
+			Span<byte> span = range.GetSpan();
+			ProtocolParser.WriteUInt32((uint)num2, span, 0);
+		}
+		if (instance.online)
+		{
+			stream.WriteByte(40);
+			ProtocolParser.WriteBool(stream, instance.online);
+		}
+		if (instance.wounded)
+		{
+			stream.WriteByte(48);
+			ProtocolParser.WriteBool(stream, instance.wounded);
+		}
+		if (instance.teamID != 0L)
+		{
+			stream.WriteByte(56);
+			ProtocolParser.WriteUInt64(stream, instance.teamID);
+		}
+	}
+
+	public void ToProto(BufferStream stream)
+	{
+		Serialize(stream, this);
+	}
+
+	public void InspectUids(UidInspector<ulong> action)
+	{
+	}
+}
+
+
+using System;
+using System.IO;
+using Facepunch;
+using SilentOrbit.ProtocolBuffers;
+
+public class DeathInfo : IDisposable, IPooled, IProto<DeathInfo>, IProto
+{
+	[NonSerialized]
+	public string attackerName;
+
+	[NonSerialized]
+	public ulong attackerSteamID;
+
+	[NonSerialized]
+	public string hitBone;
+
+	[NonSerialized]
+	public string inflictorName;
+
+	[NonSerialized]
+	public int lastDamageType;
+
+	[NonSerialized]
+	public float attackerDistance;
+
+	public bool ShouldPool = true;
+
+	private bool _disposed;
+
+	public static void ResetToPool(DeathInfo instance)
+	{
+		if (instance.ShouldPool)
+		{
+			instance.attackerName = string.Empty;
+			instance.attackerSteamID = 0uL;
+			instance.hitBone = string.Empty;
+			instance.inflictorName = string.Empty;
+			instance.lastDamageType = 0;
+			instance.attackerDistance = 0f;
+			Pool.Free<DeathInfo>(ref instance);
+		}
+	}
+
+	public void ResetToPool()
+	{
+		ResetToPool(this);
+	}
+
+	public virtual void Dispose()
+	{
+		if (!ShouldPool)
+		{
+			throw new Exception("Trying to dispose DeathInfo with ShouldPool set to false!");
+		}
+		if (!_disposed)
+		{
+			ResetToPool();
+			_disposed = true;
+		}
+	}
+
+	public virtual void EnterPool()
+	{
+		_disposed = true;
+	}
+
+	public virtual void LeavePool()
+	{
+		_disposed = false;
+	}
+
+	public void CopyTo(DeathInfo instance)
+	{
+		instance.attackerName = attackerName;
+		instance.attackerSteamID = attackerSteamID;
+		instance.hitBone = hitBone;
+		instance.inflictorName = inflictorName;
+		instance.lastDamageType = lastDamageType;
+		instance.attackerDistance = attackerDistance;
+	}
+
+	public DeathInfo Copy()
+	{
+		DeathInfo deathInfo = Pool.Get<DeathInfo>();
+		CopyTo(deathInfo);
+		return deathInfo;
+	}
+
+	public static DeathInfo Deserialize(BufferStream stream)
+	{
+		DeathInfo deathInfo = Pool.Get<DeathInfo>();
+		Deserialize(stream, deathInfo, isDelta: false);
+		return deathInfo;
+	}
+
+	public static DeathInfo DeserializeLengthDelimited(BufferStream stream)
+	{
+		DeathInfo deathInfo = Pool.Get<DeathInfo>();
+		DeserializeLengthDelimited(stream, deathInfo, isDelta: false);
+		return deathInfo;
+	}
+
+	public static DeathInfo DeserializeLength(BufferStream stream, int length)
+	{
+		DeathInfo deathInfo = Pool.Get<DeathInfo>();
+		DeserializeLength(stream, length, deathInfo, isDelta: false);
+		return deathInfo;
+	}
+
+	public static DeathInfo Deserialize(byte[] buffer)
+	{
+		DeathInfo deathInfo = Pool.Get<DeathInfo>();
+		using BufferStream stream = Pool.Get<BufferStream>().Initialize(buffer);
+		Deserialize(stream, deathInfo, isDelta: false);
+		return deathInfo;
+	}
+
+	public void FromProto(BufferStream stream, bool isDelta = false)
+	{
+		Deserialize(stream, this, isDelta);
+	}
+
+	public virtual void WriteToStream(BufferStream stream)
+	{
+		Serialize(stream, this);
+	}
+
+	public virtual void WriteToStreamDelta(BufferStream stream, DeathInfo previous)
+	{
+		if (previous == null)
+		{
+			Serialize(stream, this);
+		}
+		else
+		{
+			SerializeDelta(stream, this, previous);
+		}
+	}
+
+	public virtual void ReadFromStream(BufferStream stream, bool isDelta = false)
+	{
+		Deserialize(stream, this, isDelta);
+	}
+
+	public virtual void ReadFromStream(BufferStream stream, int size, bool isDelta = false)
+	{
+		DeserializeLength(stream, size, this, isDelta);
+	}
+
+	public static DeathInfo Deserialize(BufferStream stream, DeathInfo instance, bool isDelta)
+	{
+		while (true)
+		{
+			int num = stream.ReadByte();
+			switch (num)
+			{
+			case 10:
+				instance.attackerName = ProtocolParser.ReadString(stream);
+				continue;
+			case 16:
+				instance.attackerSteamID = ProtocolParser.ReadUInt64(stream);
+				continue;
+			case 26:
+				instance.hitBone = ProtocolParser.ReadString(stream);
+				continue;
+			case 34:
+				instance.inflictorName = ProtocolParser.ReadString(stream);
+				continue;
+			case 40:
+				instance.lastDamageType = (int)ProtocolParser.ReadUInt64(stream);
+				continue;
+			case 53:
+				instance.attackerDistance = ProtocolParser.ReadSingle(stream);
+				continue;
+			case -1:
+				return instance;
+			}
+			Key key = ProtocolParser.ReadKey((byte)num, stream);
+			_ = key.Field;
+			ProtocolParser.SkipKey(stream, key);
+		}
+	}
+
+	public static DeathInfo DeserializeLengthDelimited(BufferStream stream, DeathInfo instance, bool isDelta)
+	{
+		long num = ProtocolParser.ReadUInt32(stream);
+		num += stream.Position;
+		while (stream.Position < num)
+		{
+			int num2 = stream.ReadByte();
+			switch (num2)
+			{
+			case -1:
+				throw new EndOfStreamException();
+			case 10:
+				instance.attackerName = ProtocolParser.ReadString(stream);
+				continue;
+			case 16:
+				instance.attackerSteamID = ProtocolParser.ReadUInt64(stream);
+				continue;
+			case 26:
+				instance.hitBone = ProtocolParser.ReadString(stream);
+				continue;
+			case 34:
+				instance.inflictorName = ProtocolParser.ReadString(stream);
+				continue;
+			case 40:
+				instance.lastDamageType = (int)ProtocolParser.ReadUInt64(stream);
+				continue;
+			case 53:
+				instance.attackerDistance = ProtocolParser.ReadSingle(stream);
+				continue;
+			}
+			Key key = ProtocolParser.ReadKey((byte)num2, stream);
+			_ = key.Field;
+			ProtocolParser.SkipKey(stream, key);
+		}
+		if (stream.Position != num)
+		{
+			throw new ProtocolBufferException("Read past max limit");
+		}
+		return instance;
+	}
+
+	public static DeathInfo DeserializeLength(BufferStream stream, int length, DeathInfo instance, bool isDelta)
+	{
+		long num = stream.Position + length;
+		while (stream.Position < num)
+		{
+			int num2 = stream.ReadByte();
+			switch (num2)
+			{
+			case -1:
+				throw new EndOfStreamException();
+			case 10:
+				instance.attackerName = ProtocolParser.ReadString(stream);
+				continue;
+			case 16:
+				instance.attackerSteamID = ProtocolParser.ReadUInt64(stream);
+				continue;
+			case 26:
+				instance.hitBone = ProtocolParser.ReadString(stream);
+				continue;
+			case 34:
+				instance.inflictorName = ProtocolParser.ReadString(stream);
+				continue;
+			case 40:
+				instance.lastDamageType = (int)ProtocolParser.ReadUInt64(stream);
+				continue;
+			case 53:
+				instance.attackerDistance = ProtocolParser.ReadSingle(stream);
+				continue;
+			}
+			Key key = ProtocolParser.ReadKey((byte)num2, stream);
+			_ = key.Field;
+			ProtocolParser.SkipKey(stream, key);
+		}
+		if (stream.Position != num)
+		{
+			throw new ProtocolBufferException("Read past max limit");
+		}
+		return instance;
+	}
+
+	public static void SerializeDelta(BufferStream stream, DeathInfo instance, DeathInfo previous)
+	{
+		if (instance.attackerName != null && instance.attackerName != previous.attackerName)
+		{
+			stream.WriteByte(10);
+			ProtocolParser.WriteString(stream, instance.attackerName);
+		}
+		if (instance.attackerSteamID != previous.attackerSteamID)
+		{
+			stream.WriteByte(16);
+			ProtocolParser.WriteUInt64(stream, instance.attackerSteamID);
+		}
+		if (instance.hitBone != null && instance.hitBone != previous.hitBone)
+		{
+			stream.WriteByte(26);
+			ProtocolParser.WriteString(stream, instance.hitBone);
+		}
+		if (instance.inflictorName != null && instance.inflictorName != previous.inflictorName)
+		{
+			stream.WriteByte(34);
+			ProtocolParser.WriteString(stream, instance.inflictorName);
+		}
+		if (instance.lastDamageType != previous.lastDamageType)
+		{
+			stream.WriteByte(40);
+			ProtocolParser.WriteUInt64(stream, (ulong)instance.lastDamageType);
+		}
+		if (instance.attackerDistance != previous.attackerDistance)
+		{
+			stream.WriteByte(53);
+			ProtocolParser.WriteSingle(stream, instance.attackerDistance);
+		}
+	}
+
+	public static void Serialize(BufferStream stream, DeathInfo instance)
+	{
+		if (instance.attackerName != null)
+		{
+			stream.WriteByte(10);
+			ProtocolParser.WriteString(stream, instance.attackerName);
+		}
+		if (instance.attackerSteamID != 0L)
+		{
+			stream.WriteByte(16);
+			ProtocolParser.WriteUInt64(stream, instance.attackerSteamID);
+		}
+		if (instance.hitBone != null)
+		{
+			stream.WriteByte(26);
+			ProtocolParser.WriteString(stream, instance.hitBone);
+		}
+		if (instance.inflictorName != null)
+		{
+			stream.WriteByte(34);
+			ProtocolParser.WriteString(stream, instance.inflictorName);
+		}
+		if (instance.lastDamageType != 0)
+		{
+			stream.WriteByte(40);
+			ProtocolParser.WriteUInt64(stream, (ulong)instance.lastDamageType);
+		}
+		if (instance.attackerDistance != 0f)
+		{
+			stream.WriteByte(53);
+			ProtocolParser.WriteSingle(stream, instance.attackerDistance);
+		}
+	}
+
+	public void ToProto(BufferStream stream)
+	{
+		Serialize(stream, this);
+	}
+
+	public void InspectUids(UidInspector<ulong> action)
+	{
+	}
+}
+
+
+using System;
+using System.IO;
+using Facepunch;
+using SilentOrbit.ProtocolBuffers;
+
+public class WeaponStats : IDisposable, IPooled, IProto<WeaponStats>, IProto
+{
+	[NonSerialized]
+	public string weaponName;
+
+	[NonSerialized]
+	public ulong shotsFired;
+
+	[NonSerialized]
+	public ulong shotsHit;
+
+	public bool ShouldPool = true;
+
+	private bool _disposed;
+
+	public static void ResetToPool(WeaponStats instance)
+	{
+		if (instance.ShouldPool)
+		{
+			instance.weaponName = string.Empty;
+			instance.shotsFired = 0uL;
+			instance.shotsHit = 0uL;
+			Pool.Free<WeaponStats>(ref instance);
+		}
+	}
+
+	public void ResetToPool()
+	{
+		ResetToPool(this);
+	}
+
+	public virtual void Dispose()
+	{
+		if (!ShouldPool)
+		{
+			throw new Exception("Trying to dispose WeaponStats with ShouldPool set to false!");
+		}
+		if (!_disposed)
+		{
+			ResetToPool();
+			_disposed = true;
+		}
+	}
+
+	public virtual void EnterPool()
+	{
+		_disposed = true;
+	}
+
+	public virtual void LeavePool()
+	{
+		_disposed = false;
+	}
+
+	public void CopyTo(WeaponStats instance)
+	{
+		instance.weaponName = weaponName;
+		instance.shotsFired = shotsFired;
+		instance.shotsHit = shotsHit;
+	}
+
+	public WeaponStats Copy()
+	{
+		WeaponStats weaponStats = Pool.Get<WeaponStats>();
+		CopyTo(weaponStats);
+		return weaponStats;
+	}
+
+	public static WeaponStats Deserialize(BufferStream stream)
+	{
+		WeaponStats weaponStats = Pool.Get<WeaponStats>();
+		Deserialize(stream, weaponStats, isDelta: false);
+		return weaponStats;
+	}
+
+	public static WeaponStats DeserializeLengthDelimited(BufferStream stream)
+	{
+		WeaponStats weaponStats = Pool.Get<WeaponStats>();
+		DeserializeLengthDelimited(stream, weaponStats, isDelta: false);
+		return weaponStats;
+	}
+
+	public static WeaponStats DeserializeLength(BufferStream stream, int length)
+	{
+		WeaponStats weaponStats = Pool.Get<WeaponStats>();
+		DeserializeLength(stream, length, weaponStats, isDelta: false);
+		return weaponStats;
+	}
+
+	public static WeaponStats Deserialize(byte[] buffer)
+	{
+		WeaponStats weaponStats = Pool.Get<WeaponStats>();
+		using BufferStream stream = Pool.Get<BufferStream>().Initialize(buffer);
+		Deserialize(stream, weaponStats, isDelta: false);
+		return weaponStats;
+	}
+
+	public void FromProto(BufferStream stream, bool isDelta = false)
+	{
+		Deserialize(stream, this, isDelta);
+	}
+
+	public virtual void WriteToStream(BufferStream stream)
+	{
+		Serialize(stream, this);
+	}
+
+	public virtual void WriteToStreamDelta(BufferStream stream, WeaponStats previous)
+	{
+		if (previous == null)
+		{
+			Serialize(stream, this);
+		}
+		else
+		{
+			SerializeDelta(stream, this, previous);
+		}
+	}
+
+	public virtual void ReadFromStream(BufferStream stream, bool isDelta = false)
+	{
+		Deserialize(stream, this, isDelta);
+	}
+
+	public virtual void ReadFromStream(BufferStream stream, int size, bool isDelta = false)
+	{
+		DeserializeLength(stream, size, this, isDelta);
+	}
+
+	public static WeaponStats Deserialize(BufferStream stream, WeaponStats instance, bool isDelta)
+	{
+		while (true)
+		{
+			int num = stream.ReadByte();
+			switch (num)
+			{
+			case 10:
+				instance.weaponName = ProtocolParser.ReadString(stream);
+				continue;
+			case 16:
+				instance.shotsFired = ProtocolParser.ReadUInt64(stream);
+				continue;
+			case 24:
+				instance.shotsHit = ProtocolParser.ReadUInt64(stream);
+				continue;
+			case -1:
+				return instance;
+			}
+			Key key = ProtocolParser.ReadKey((byte)num, stream);
+			_ = key.Field;
+			ProtocolParser.SkipKey(stream, key);
+		}
+	}
+
+	public static WeaponStats DeserializeLengthDelimited(BufferStream stream, WeaponStats instance, bool isDelta)
+	{
+		long num = ProtocolParser.ReadUInt32(stream);
+		num += stream.Position;
+		while (stream.Position < num)
+		{
+			int num2 = stream.ReadByte();
+			switch (num2)
+			{
+			case -1:
+				throw new EndOfStreamException();
+			case 10:
+				instance.weaponName = ProtocolParser.ReadString(stream);
+				continue;
+			case 16:
+				instance.shotsFired = ProtocolParser.ReadUInt64(stream);
+				continue;
+			case 24:
+				instance.shotsHit = ProtocolParser.ReadUInt64(stream);
+				continue;
+			}
+			Key key = ProtocolParser.ReadKey((byte)num2, stream);
+			_ = key.Field;
+			ProtocolParser.SkipKey(stream, key);
+		}
+		if (stream.Position != num)
+		{
+			throw new ProtocolBufferException("Read past max limit");
+		}
+		return instance;
+	}
+
+	public static WeaponStats DeserializeLength(BufferStream stream, int length, WeaponStats instance, bool isDelta)
+	{
+		long num = stream.Position + length;
+		while (stream.Position < num)
+		{
+			int num2 = stream.ReadByte();
+			switch (num2)
+			{
+			case -1:
+				throw new EndOfStreamException();
+			case 10:
+				instance.weaponName = ProtocolParser.ReadString(stream);
+				continue;
+			case 16:
+				instance.shotsFired = ProtocolParser.ReadUInt64(stream);
+				continue;
+			case 24:
+				instance.shotsHit = ProtocolParser.ReadUInt64(stream);
+				continue;
+			}
+			Key key = ProtocolParser.ReadKey((byte)num2, stream);
+			_ = key.Field;
+			ProtocolParser.SkipKey(stream, key);
+		}
+		if (stream.Position != num)
+		{
+			throw new ProtocolBufferException("Read past max limit");
+		}
+		return instance;
+	}
+
+	public static void SerializeDelta(BufferStream stream, WeaponStats instance, WeaponStats previous)
+	{
+		if (instance.weaponName != previous.weaponName)
+		{
+			if (instance.weaponName == null)
+			{
+				throw new ArgumentNullException("weaponName", "Required by proto specification.");
+			}
+			stream.WriteByte(10);
+			ProtocolParser.WriteString(stream, instance.weaponName);
+		}
+		if (instance.shotsFired != previous.shotsFired)
+		{
+			stream.WriteByte(16);
+			ProtocolParser.WriteUInt64(stream, instance.shotsFired);
+		}
+		if (instance.shotsHit != previous.shotsHit)
+		{
+			stream.WriteByte(24);
+			ProtocolParser.WriteUInt64(stream, instance.shotsHit);
+		}
+	}
+
+	public static void Serialize(BufferStream stream, WeaponStats instance)
+	{
+		if (instance.weaponName == null)
+		{
+			throw new ArgumentNullException("weaponName", "Required by proto specification.");
+		}
+		stream.WriteByte(10);
+		ProtocolParser.WriteString(stream, instance.weaponName);
+		if (instance.shotsFired != 0L)
+		{
+			stream.WriteByte(16);
+			ProtocolParser.WriteUInt64(stream, instance.shotsFired);
+		}
+		if (instance.shotsHit != 0L)
+		{
+			stream.WriteByte(24);
+			ProtocolParser.WriteUInt64(stream, instance.shotsHit);
+		}
+	}
+
+	public void ToProto(BufferStream stream)
+	{
+		Serialize(stream, this);
+	}
+
+	public void InspectUids(UidInspector<ulong> action)
+	{
+	}
+}
+
+
+using System;
+using System.IO;
+using Facepunch;
+using SilentOrbit.ProtocolBuffers;
+
+public class GenericStat : IDisposable, IPooled, IProto<GenericStat>, IProto
+{
+	[NonSerialized]
+	public string key;
+
+	[NonSerialized]
+	public int value;
+
+	public bool ShouldPool = true;
+
+	private bool _disposed;
+
+	public static void ResetToPool(GenericStat instance)
+	{
+		if (instance.ShouldPool)
+		{
+			instance.key = string.Empty;
+			instance.value = 0;
+			Pool.Free<GenericStat>(ref instance);
+		}
+	}
+
+	public void ResetToPool()
+	{
+		ResetToPool(this);
+	}
+
+	public virtual void Dispose()
+	{
+		if (!ShouldPool)
+		{
+			throw new Exception("Trying to dispose GenericStat with ShouldPool set to false!");
+		}
+		if (!_disposed)
+		{
+			ResetToPool();
+			_disposed = true;
+		}
+	}
+
+	public virtual void EnterPool()
+	{
+		_disposed = true;
+	}
+
+	public virtual void LeavePool()
+	{
+		_disposed = false;
+	}
+
+	public void CopyTo(GenericStat instance)
+	{
+		instance.key = key;
+		instance.value = value;
+	}
+
+	public GenericStat Copy()
+	{
+		GenericStat genericStat = Pool.Get<GenericStat>();
+		CopyTo(genericStat);
+		return genericStat;
+	}
+
+	public static GenericStat Deserialize(BufferStream stream)
+	{
+		GenericStat genericStat = Pool.Get<GenericStat>();
+		Deserialize(stream, genericStat, isDelta: false);
+		return genericStat;
+	}
+
+	public static GenericStat DeserializeLengthDelimited(BufferStream stream)
+	{
+		GenericStat genericStat = Pool.Get<GenericStat>();
+		DeserializeLengthDelimited(stream, genericStat, isDelta: false);
+		return genericStat;
+	}
+
+	public static GenericStat DeserializeLength(BufferStream stream, int length)
+	{
+		GenericStat genericStat = Pool.Get<GenericStat>();
+		DeserializeLength(stream, length, genericStat, isDelta: false);
+		return genericStat;
+	}
+
+	public static GenericStat Deserialize(byte[] buffer)
+	{
+		GenericStat genericStat = Pool.Get<GenericStat>();
+		using BufferStream stream = Pool.Get<BufferStream>().Initialize(buffer);
+		Deserialize(stream, genericStat, isDelta: false);
+		return genericStat;
+	}
+
+	public void FromProto(BufferStream stream, bool isDelta = false)
+	{
+		Deserialize(stream, this, isDelta);
+	}
+
+	public virtual void WriteToStream(BufferStream stream)
+	{
+		Serialize(stream, this);
+	}
+
+	public virtual void WriteToStreamDelta(BufferStream stream, GenericStat previous)
+	{
+		if (previous == null)
+		{
+			Serialize(stream, this);
+		}
+		else
+		{
+			SerializeDelta(stream, this, previous);
+		}
+	}
+
+	public virtual void ReadFromStream(BufferStream stream, bool isDelta = false)
+	{
+		Deserialize(stream, this, isDelta);
+	}
+
+	public virtual void ReadFromStream(BufferStream stream, int size, bool isDelta = false)
+	{
+		DeserializeLength(stream, size, this, isDelta);
+	}
+
+	public static GenericStat Deserialize(BufferStream stream, GenericStat instance, bool isDelta)
+	{
+		while (true)
+		{
+			int num = stream.ReadByte();
+			switch (num)
+			{
+			case 10:
+				instance.key = ProtocolParser.ReadString(stream);
+				continue;
+			case 16:
+				instance.value = (int)ProtocolParser.ReadUInt64(stream);
+				continue;
+			case -1:
+				return instance;
+			}
+			Key key = ProtocolParser.ReadKey((byte)num, stream);
+			_ = key.Field;
+			ProtocolParser.SkipKey(stream, key);
+		}
+	}
+
+	public static GenericStat DeserializeLengthDelimited(BufferStream stream, GenericStat instance, bool isDelta)
+	{
+		long num = ProtocolParser.ReadUInt32(stream);
+		num += stream.Position;
+		while (stream.Position < num)
+		{
+			int num2 = stream.ReadByte();
+			switch (num2)
+			{
+			case -1:
+				throw new EndOfStreamException();
+			case 10:
+				instance.key = ProtocolParser.ReadString(stream);
+				continue;
+			case 16:
+				instance.value = (int)ProtocolParser.ReadUInt64(stream);
+				continue;
+			}
+			Key key = ProtocolParser.ReadKey((byte)num2, stream);
+			_ = key.Field;
+			ProtocolParser.SkipKey(stream, key);
+		}
+		if (stream.Position != num)
+		{
+			throw new ProtocolBufferException("Read past max limit");
+		}
+		return instance;
+	}
+
+	public static GenericStat DeserializeLength(BufferStream stream, int length, GenericStat instance, bool isDelta)
+	{
+		long num = stream.Position + length;
+		while (stream.Position < num)
+		{
+			int num2 = stream.ReadByte();
+			switch (num2)
+			{
+			case -1:
+				throw new EndOfStreamException();
+			case 10:
+				instance.key = ProtocolParser.ReadString(stream);
+				continue;
+			case 16:
+				instance.value = (int)ProtocolParser.ReadUInt64(stream);
+				continue;
+			}
+			Key key = ProtocolParser.ReadKey((byte)num2, stream);
+			_ = key.Field;
+			ProtocolParser.SkipKey(stream, key);
+		}
+		if (stream.Position != num)
+		{
+			throw new ProtocolBufferException("Read past max limit");
+		}
+		return instance;
+	}
+
+	public static void SerializeDelta(BufferStream stream, GenericStat instance, GenericStat previous)
+	{
+		if (instance.key != previous.key)
+		{
+			if (instance.key == null)
+			{
+				throw new ArgumentNullException("key", "Required by proto specification.");
+			}
+			stream.WriteByte(10);
+			ProtocolParser.WriteString(stream, instance.key);
+		}
+		if (instance.value != previous.value)
+		{
+			stream.WriteByte(16);
+			ProtocolParser.WriteUInt64(stream, (ulong)instance.value);
+		}
+	}
+
+	public static void Serialize(BufferStream stream, GenericStat instance)
+	{
+		if (instance.key == null)
+		{
+			throw new ArgumentNullException("key", "Required by proto specification.");
+		}
+		stream.WriteByte(10);
+		ProtocolParser.WriteString(stream, instance.key);
+		if (instance.value != 0)
+		{
+			stream.WriteByte(16);
+			ProtocolParser.WriteUInt64(stream, (ulong)instance.value);
+		}
+	}
+
+	public void ToProto(BufferStream stream)
+	{
+		Serialize(stream, this);
+	}
+
+	public void InspectUids(UidInspector<ulong> action)
+	{
+	}
+}
+
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using Facepunch;
+using SilentOrbit.ProtocolBuffers;
+
+public class Task : IDisposable, IPooled, IProto<Task>, IProto
+{
+	[NonSerialized]
+	public int itemID;
+
+	[NonSerialized]
+	public float remainingTime;
+
+	[NonSerialized]
+	public int taskUID;
+
+	[NonSerialized]
+	public bool cancelled;
+
+	[NonSerialized]
+	public Item.InstanceData instanceData;
+
+	[NonSerialized]
+	public int amount;
+
+	[NonSerialized]
+	public int skinID;
+
+	[NonSerialized]
+	public List<Item> takenItems;
+
+	[NonSerialized]
+	public int numCrafted;
+
+	[NonSerialized]
+	public float conditionScale;
+
+	[NonSerialized]
+	public NetworkableId workbenchEntity;
+
+	public bool ShouldPool = true;
+
+	private bool _disposed;
+
+	public static void ResetToPool(Task instance)
+	{
+		if (!instance.ShouldPool)
+		{
+			return;
+		}
+		instance.itemID = 0;
+		instance.remainingTime = 0f;
+		instance.taskUID = 0;
+		instance.cancelled = false;
+		if (instance.instanceData != null)
+		{
+			instance.instanceData.ResetToPool();
+			instance.instanceData = null;
+		}
+		instance.amount = 0;
+		instance.skinID = 0;
+		if (instance.takenItems != null)
+		{
+			for (int i = 0; i < instance.takenItems.Count; i++)
+			{
+				if (instance.takenItems[i] != null)
+				{
+					instance.takenItems[i].ResetToPool();
+					instance.takenItems[i] = null;
+				}
+			}
+			List<Item> list = instance.takenItems;
+			Pool.Free<Item>(ref list, false);
+			instance.takenItems = list;
+		}
+		instance.numCrafted = 0;
+		instance.conditionScale = 0f;
+		instance.workbenchEntity = default(NetworkableId);
+		Pool.Free<Task>(ref instance);
+	}
+
+	public void ResetToPool()
+	{
+		ResetToPool(this);
+	}
+
+	public virtual void Dispose()
+	{
+		if (!ShouldPool)
+		{
+			throw new Exception("Trying to dispose Task with ShouldPool set to false!");
+		}
+		if (!_disposed)
+		{
+			ResetToPool();
+			_disposed = true;
+		}
+	}
+
+	public virtual void EnterPool()
+	{
+		_disposed = true;
+	}
+
+	public virtual void LeavePool()
+	{
+		_disposed = false;
+	}
+
+	public void CopyTo(Task instance)
+	{
+		instance.itemID = itemID;
+		instance.remainingTime = remainingTime;
+		instance.taskUID = taskUID;
+		instance.cancelled = cancelled;
+		if (instanceData != null)
+		{
+			if (instance.instanceData == null)
+			{
+				instance.instanceData = instanceData.Copy();
+			}
+			else
+			{
+				instanceData.CopyTo(instance.instanceData);
+			}
+		}
+		else
+		{
+			instance.instanceData = null;
+		}
+		instance.amount = amount;
+		instance.skinID = skinID;
+		if (takenItems != null)
+		{
+			instance.takenItems = Pool.Get<List<Item>>();
+			for (int i = 0; i < takenItems.Count; i++)
+			{
+				Item item = takenItems[i].Copy();
+				instance.takenItems.Add(item);
+			}
+		}
+		else
+		{
+			instance.takenItems = null;
+		}
+		instance.numCrafted = numCrafted;
+		instance.conditionScale = conditionScale;
+		instance.workbenchEntity = workbenchEntity;
+	}
+
+	public Task Copy()
+	{
+		Task task = Pool.Get<Task>();
+		CopyTo(task);
+		return task;
+	}
+
+	public static Task Deserialize(BufferStream stream)
+	{
+		Task task = Pool.Get<Task>();
+		Deserialize(stream, task, isDelta: false);
+		return task;
+	}
+
+	public static Task DeserializeLengthDelimited(BufferStream stream)
+	{
+		Task task = Pool.Get<Task>();
+		DeserializeLengthDelimited(stream, task, isDelta: false);
+		return task;
+	}
+
+	public static Task DeserializeLength(BufferStream stream, int length)
+	{
+		Task task = Pool.Get<Task>();
+		DeserializeLength(stream, length, task, isDelta: false);
+		return task;
+	}
+
+	public static Task Deserialize(byte[] buffer)
+	{
+		Task task = Pool.Get<Task>();
+		using BufferStream stream = Pool.Get<BufferStream>().Initialize(buffer);
+		Deserialize(stream, task, isDelta: false);
+		return task;
+	}
+
+	public void FromProto(BufferStream stream, bool isDelta = false)
+	{
+		Deserialize(stream, this, isDelta);
+	}
+
+	public virtual void WriteToStream(BufferStream stream)
+	{
+		Serialize(stream, this);
+	}
+
+	public virtual void WriteToStreamDelta(BufferStream stream, Task previous)
+	{
+		if (previous == null)
+		{
+			Serialize(stream, this);
+		}
+		else
+		{
+			SerializeDelta(stream, this, previous);
+		}
+	}
+
+	public virtual void ReadFromStream(BufferStream stream, bool isDelta = false)
+	{
+		Deserialize(stream, this, isDelta);
+	}
+
+	public virtual void ReadFromStream(BufferStream stream, int size, bool isDelta = false)
+	{
+		DeserializeLength(stream, size, this, isDelta);
+	}
+
+	public static Task Deserialize(BufferStream stream, Task instance, bool isDelta)
+	{
+		if (!isDelta && instance.takenItems == null)
+		{
+			instance.takenItems = Pool.Get<List<Item>>();
+		}
+		while (true)
+		{
+			int num = stream.ReadByte();
+			switch (num)
+			{
+			case 8:
+				instance.itemID = (int)ProtocolParser.ReadUInt64(stream);
+				break;
+			case 21:
+				instance.remainingTime = ProtocolParser.ReadSingle(stream);
+				break;
+			case 24:
+				instance.taskUID = (int)ProtocolParser.ReadUInt64(stream);
+				break;
+			case 32:
+				instance.cancelled = ProtocolParser.ReadBool(stream);
+				break;
+			case 42:
+				if (instance.instanceData == null)
+				{
+					instance.instanceData = Item.InstanceData.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					Item.InstanceData.DeserializeLengthDelimited(stream, instance.instanceData, isDelta);
+				}
+				break;
+			case 48:
+				instance.amount = (int)ProtocolParser.ReadUInt64(stream);
+				break;
+			case 56:
+				instance.skinID = (int)ProtocolParser.ReadUInt64(stream);
+				break;
+			case 66:
+				instance.takenItems.Add(Item.DeserializeLengthDelimited(stream));
+				break;
+			case 72:
+				instance.numCrafted = (int)ProtocolParser.ReadUInt64(stream);
+				break;
+			case 85:
+				instance.conditionScale = ProtocolParser.ReadSingle(stream);
+				break;
+			case 88:
+				instance.workbenchEntity = new NetworkableId(ProtocolParser.ReadUInt64(stream));
+				break;
+			default:
+			{
+				Key key = ProtocolParser.ReadKey((byte)num, stream);
+				_ = key.Field;
+				ProtocolParser.SkipKey(stream, key);
+				break;
+			}
+			case -1:
+				return instance;
+			}
+		}
+	}
+
+	public static Task DeserializeLengthDelimited(BufferStream stream, Task instance, bool isDelta)
+	{
+		if (!isDelta && instance.takenItems == null)
+		{
+			instance.takenItems = Pool.Get<List<Item>>();
+		}
+		long num = ProtocolParser.ReadUInt32(stream);
+		num += stream.Position;
+		while (stream.Position < num)
+		{
+			int num2 = stream.ReadByte();
+			switch (num2)
+			{
+			case -1:
+				throw new EndOfStreamException();
+			case 8:
+				instance.itemID = (int)ProtocolParser.ReadUInt64(stream);
+				break;
+			case 21:
+				instance.remainingTime = ProtocolParser.ReadSingle(stream);
+				break;
+			case 24:
+				instance.taskUID = (int)ProtocolParser.ReadUInt64(stream);
+				break;
+			case 32:
+				instance.cancelled = ProtocolParser.ReadBool(stream);
+				break;
+			case 42:
+				if (instance.instanceData == null)
+				{
+					instance.instanceData = Item.InstanceData.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					Item.InstanceData.DeserializeLengthDelimited(stream, instance.instanceData, isDelta);
+				}
+				break;
+			case 48:
+				instance.amount = (int)ProtocolParser.ReadUInt64(stream);
+				break;
+			case 56:
+				instance.skinID = (int)ProtocolParser.ReadUInt64(stream);
+				break;
+			case 66:
+				instance.takenItems.Add(Item.DeserializeLengthDelimited(stream));
+				break;
+			case 72:
+				instance.numCrafted = (int)ProtocolParser.ReadUInt64(stream);
+				break;
+			case 85:
+				instance.conditionScale = ProtocolParser.ReadSingle(stream);
+				break;
+			case 88:
+				instance.workbenchEntity = new NetworkableId(ProtocolParser.ReadUInt64(stream));
+				break;
+			default:
+			{
+				Key key = ProtocolParser.ReadKey((byte)num2, stream);
+				_ = key.Field;
+				ProtocolParser.SkipKey(stream, key);
+				break;
+			}
+			}
+		}
+		if (stream.Position != num)
+		{
+			throw new ProtocolBufferException("Read past max limit");
+		}
+		return instance;
+	}
+
+	public static Task DeserializeLength(BufferStream stream, int length, Task instance, bool isDelta)
+	{
+		if (!isDelta && instance.takenItems == null)
+		{
+			instance.takenItems = Pool.Get<List<Item>>();
+		}
+		long num = stream.Position + length;
+		while (stream.Position < num)
+		{
+			int num2 = stream.ReadByte();
+			switch (num2)
+			{
+			case -1:
+				throw new EndOfStreamException();
+			case 8:
+				instance.itemID = (int)ProtocolParser.ReadUInt64(stream);
+				break;
+			case 21:
+				instance.remainingTime = ProtocolParser.ReadSingle(stream);
+				break;
+			case 24:
+				instance.taskUID = (int)ProtocolParser.ReadUInt64(stream);
+				break;
+			case 32:
+				instance.cancelled = ProtocolParser.ReadBool(stream);
+				break;
+			case 42:
+				if (instance.instanceData == null)
+				{
+					instance.instanceData = Item.InstanceData.DeserializeLengthDelimited(stream);
+				}
+				else
+				{
+					Item.InstanceData.DeserializeLengthDelimited(stream, instance.instanceData, isDelta);
+				}
+				break;
+			case 48:
+				instance.amount = (int)ProtocolParser.ReadUInt64(stream);
+				break;
+			case 56:
+				instance.skinID = (int)ProtocolParser.ReadUInt64(stream);
+				break;
+			case 66:
+				instance.takenItems.Add(Item.DeserializeLengthDelimited(stream));
+				break;
+			case 72:
+				instance.numCrafted = (int)ProtocolParser.ReadUInt64(stream);
+				break;
+			case 85:
+				instance.conditionScale = ProtocolParser.ReadSingle(stream);
+				break;
+			case 88:
+				instance.workbenchEntity = new NetworkableId(ProtocolParser.ReadUInt64(stream));
+				break;
+			default:
+			{
+				Key key = ProtocolParser.ReadKey((byte)num2, stream);
+				_ = key.Field;
+				ProtocolParser.SkipKey(stream, key);
+				break;
+			}
+			}
+		}
+		if (stream.Position != num)
+		{
+			throw new ProtocolBufferException("Read past max limit");
+		}
+		return instance;
+	}
+
+	public static void SerializeDelta(BufferStream stream, Task instance, Task previous)
+	{
+		if (instance.itemID != previous.itemID)
+		{
+			stream.WriteByte(8);
+			ProtocolParser.WriteUInt64(stream, (ulong)instance.itemID);
+		}
+		if (instance.remainingTime != previous.remainingTime)
+		{
+			stream.WriteByte(21);
+			ProtocolParser.WriteSingle(stream, instance.remainingTime);
+		}
+		if (instance.taskUID != previous.taskUID)
+		{
+			stream.WriteByte(24);
+			ProtocolParser.WriteUInt64(stream, (ulong)instance.taskUID);
+		}
+		stream.WriteByte(32);
+		ProtocolParser.WriteBool(stream, instance.cancelled);
+		if (instance.instanceData != null)
+		{
+			stream.WriteByte(42);
+			BufferStream.RangeHandle range = stream.GetRange(1);
+			int position = stream.Position;
+			Item.InstanceData.SerializeDelta(stream, instance.instanceData, previous.instanceData);
+			int num = stream.Position - position;
+			if (num > 127)
+			{
+				throw new InvalidOperationException("Not enough space was reserved for the length prefix of field instanceData (ProtoBuf.Item.InstanceData)");
+			}
+			Span<byte> span = range.GetSpan();
+			ProtocolParser.WriteUInt32((uint)num, span, 0);
+		}
+		if (instance.amount != previous.amount)
+		{
+			stream.WriteByte(48);
+			ProtocolParser.WriteUInt64(stream, (ulong)instance.amount);
+		}
+		if (instance.skinID != previous.skinID)
+		{
+			stream.WriteByte(56);
+			ProtocolParser.WriteUInt64(stream, (ulong)instance.skinID);
+		}
+		if (instance.takenItems != null)
+		{
+			for (int i = 0; i < instance.takenItems.Count; i++)
+			{
+				Item item = instance.takenItems[i];
+				stream.WriteByte(66);
+				BufferStream.RangeHandle range2 = stream.GetRange(5);
+				int position2 = stream.Position;
+				Item.SerializeDelta(stream, item, item);
+				int val = stream.Position - position2;
+				Span<byte> span2 = range2.GetSpan();
+				int num2 = ProtocolParser.WriteUInt32((uint)val, span2, 0);
+				if (num2 < 5)
+				{
+					span2[num2 - 1] |= 128;
+					while (num2 < 4)
+					{
+						span2[num2++] = 128;
+					}
+					span2[4] = 0;
+				}
+			}
+		}
+		if (instance.numCrafted != previous.numCrafted)
+		{
+			stream.WriteByte(72);
+			ProtocolParser.WriteUInt64(stream, (ulong)instance.numCrafted);
+		}
+		if (instance.conditionScale != previous.conditionScale)
+		{
+			stream.WriteByte(85);
+			ProtocolParser.WriteSingle(stream, instance.conditionScale);
+		}
+		stream.WriteByte(88);
+		ProtocolParser.WriteUInt64(stream, instance.workbenchEntity.Value);
+	}
+
+	public static void Serialize(BufferStream stream, Task instance)
+	{
+		if (instance.itemID != 0)
+		{
+			stream.WriteByte(8);
+			ProtocolParser.WriteUInt64(stream, (ulong)instance.itemID);
+		}
+		if (instance.remainingTime != 0f)
+		{
+			stream.WriteByte(21);
+			ProtocolParser.WriteSingle(stream, instance.remainingTime);
+		}
+		if (instance.taskUID != 0)
+		{
+			stream.WriteByte(24);
+			ProtocolParser.WriteUInt64(stream, (ulong)instance.taskUID);
+		}
+		if (instance.cancelled)
+		{
+			stream.WriteByte(32);
+			ProtocolParser.WriteBool(stream, instance.cancelled);
+		}
+		if (instance.instanceData != null)
+		{
+			stream.WriteByte(42);
+			BufferStream.RangeHandle range = stream.GetRange(1);
+			int position = stream.Position;
+			Item.InstanceData.Serialize(stream, instance.instanceData);
+			int num = stream.Position - position;
+			if (num > 127)
+			{
+				throw new InvalidOperationException("Not enough space was reserved for the length prefix of field instanceData (ProtoBuf.Item.InstanceData)");
+			}
+			Span<byte> span = range.GetSpan();
+			ProtocolParser.WriteUInt32((uint)num, span, 0);
+		}
+		if (instance.amount != 0)
+		{
+			stream.WriteByte(48);
+			ProtocolParser.WriteUInt64(stream, (ulong)instance.amount);
+		}
+		if (instance.skinID != 0)
+		{
+			stream.WriteByte(56);
+			ProtocolParser.WriteUInt64(stream, (ulong)instance.skinID);
+		}
+		if (instance.takenItems != null)
+		{
+			for (int i = 0; i < instance.takenItems.Count; i++)
+			{
+				Item instance2 = instance.takenItems[i];
+				stream.WriteByte(66);
+				BufferStream.RangeHandle range2 = stream.GetRange(5);
+				int position2 = stream.Position;
+				Item.Serialize(stream, instance2);
+				int val = stream.Position - position2;
+				Span<byte> span2 = range2.GetSpan();
+				int num2 = ProtocolParser.WriteUInt32((uint)val, span2, 0);
+				if (num2 < 5)
+				{
+					span2[num2 - 1] |= 128;
+					while (num2 < 4)
+					{
+						span2[num2++] = 128;
+					}
+					span2[4] = 0;
+				}
+			}
+		}
+		if (instance.numCrafted != 0)
+		{
+			stream.WriteByte(72);
+			ProtocolParser.WriteUInt64(stream, (ulong)instance.numCrafted);
+		}
+		if (instance.conditionScale != 0f)
+		{
+			stream.WriteByte(85);
+			ProtocolParser.WriteSingle(stream, instance.conditionScale);
+		}
+		if (instance.workbenchEntity != default(NetworkableId))
+		{
+			stream.WriteByte(88);
+			ProtocolParser.WriteUInt64(stream, instance.workbenchEntity.Value);
+		}
+	}
+
+	public void ToProto(BufferStream stream)
+	{
+		Serialize(stream, this);
+	}
+
+	public void InspectUids(UidInspector<ulong> action)
+	{
+		instanceData?.InspectUids(action);
+		if (takenItems != null)
+		{
+			for (int i = 0; i < takenItems.Count; i++)
+			{
+				takenItems[i]?.InspectUids(action);
+			}
+		}
+		action(UidType.Clear, ref workbenchEntity.Value);
+	}
+}
+
+
+using System;
+using System.IO;
+using Facepunch;
+using SilentOrbit.ProtocolBuffers;
+using UnityEngine;
+
+public class Projectile : IDisposable, IPooled, IProto<Projectile>, IProto
+{
+	[NonSerialized]
+	public int projectileID;
+
+	[NonSerialized]
+	public Vector3 startPos;
+
+	[NonSerialized]
+	public Vector3 startVel;
+
+	[NonSerialized]
+	public int seed;
+
+	public bool ShouldPool = true;
+
+	private bool _disposed;
+
+	public static void ResetToPool(Projectile instance)
+	{
+		//IL_0016: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0022: Unknown result type (might be due to invalid IL or missing references)
+		if (instance.ShouldPool)
+		{
+			instance.projectileID = 0;
+			instance.startPos = default(Vector3);
+			instance.startVel = default(Vector3);
+			instance.seed = 0;
+			Pool.Free<Projectile>(ref instance);
+		}
+	}
+
+	public void ResetToPool()
+	{
+		ResetToPool(this);
+	}
+
+	public virtual void Dispose()
+	{
+		if (!ShouldPool)
+		{
+			throw new Exception("Trying to dispose Projectile with ShouldPool set to false!");
+		}
+		if (!_disposed)
+		{
+			ResetToPool();
+			_disposed = true;
+		}
+	}
+
+	public virtual void EnterPool()
+	{
+		_disposed = true;
+	}
+
+	public virtual void LeavePool()
+	{
+		_disposed = false;
+	}
+
+	public void CopyTo(Projectile instance)
+	{
+		//IL_000e: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0013: Unknown result type (might be due to invalid IL or missing references)
+		//IL_001a: Unknown result type (might be due to invalid IL or missing references)
+		//IL_001f: Unknown result type (might be due to invalid IL or missing references)
+		instance.projectileID = projectileID;
+		instance.startPos = startPos;
+		instance.startVel = startVel;
+		instance.seed = seed;
+	}
+
+	public Projectile Copy()
+	{
+		Projectile projectile = Pool.Get<Projectile>();
+		CopyTo(projectile);
+		return projectile;
+	}
+
+	public static Projectile Deserialize(BufferStream stream)
+	{
+		Projectile projectile = Pool.Get<Projectile>();
+		Deserialize(stream, projectile, isDelta: false);
+		return projectile;
+	}
+
+	public static Projectile DeserializeLengthDelimited(BufferStream stream)
+	{
+		Projectile projectile = Pool.Get<Projectile>();
+		DeserializeLengthDelimited(stream, projectile, isDelta: false);
+		return projectile;
+	}
+
+	public static Projectile DeserializeLength(BufferStream stream, int length)
+	{
+		Projectile projectile = Pool.Get<Projectile>();
+		DeserializeLength(stream, length, projectile, isDelta: false);
+		return projectile;
+	}
+
+	public static Projectile Deserialize(byte[] buffer)
+	{
+		Projectile projectile = Pool.Get<Projectile>();
+		using BufferStream stream = Pool.Get<BufferStream>().Initialize(buffer);
+		Deserialize(stream, projectile, isDelta: false);
+		return projectile;
+	}
+
+	public void FromProto(BufferStream stream, bool isDelta = false)
+	{
+		Deserialize(stream, this, isDelta);
+	}
+
+	public virtual void WriteToStream(BufferStream stream)
+	{
+		Serialize(stream, this);
+	}
+
+	public virtual void WriteToStreamDelta(BufferStream stream, Projectile previous)
+	{
+		if (previous == null)
+		{
+			Serialize(stream, this);
+		}
+		else
+		{
+			SerializeDelta(stream, this, previous);
+		}
+	}
+
+	public virtual void ReadFromStream(BufferStream stream, bool isDelta = false)
+	{
+		Deserialize(stream, this, isDelta);
+	}
+
+	public virtual void ReadFromStream(BufferStream stream, int size, bool isDelta = false)
+	{
+		DeserializeLength(stream, size, this, isDelta);
+	}
+
+	public static Projectile Deserialize(BufferStream stream, Projectile instance, bool isDelta)
+	{
+		//IL_0050: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0040: Unknown result type (might be due to invalid IL or missing references)
+		while (true)
+		{
+			int num = stream.ReadByte();
+			switch (num)
+			{
+			case 8:
+				instance.projectileID = (int)ProtocolParser.ReadUInt64(stream);
+				continue;
+			case 18:
+				Vector3Serialized.DeserializeLengthDelimited(stream, ref instance.startPos, isDelta);
+				continue;
+			case 26:
+				Vector3Serialized.DeserializeLengthDelimited(stream, ref instance.startVel, isDelta);
+				continue;
+			case 32:
+				instance.seed = (int)ProtocolParser.ReadUInt64(stream);
+				continue;
+			case -1:
+				return instance;
+			}
+			Key key = ProtocolParser.ReadKey((byte)num, stream);
+			_ = key.Field;
+			ProtocolParser.SkipKey(stream, key);
+		}
+	}
+
+	public static Projectile DeserializeLengthDelimited(BufferStream stream, Projectile instance, bool isDelta)
+	{
+		//IL_008a: Unknown result type (might be due to invalid IL or missing references)
+		//IL_007a: Unknown result type (might be due to invalid IL or missing references)
+		long num = ProtocolParser.ReadUInt32(stream);
+		num += stream.Position;
+		while (stream.Position < num)
+		{
+			int num2 = stream.ReadByte();
+			switch (num2)
+			{
+			case -1:
+				throw new EndOfStreamException();
+			case 8:
+				instance.projectileID = (int)ProtocolParser.ReadUInt64(stream);
+				continue;
+			case 18:
+				Vector3Serialized.DeserializeLengthDelimited(stream, ref instance.startPos, isDelta);
+				continue;
+			case 26:
+				Vector3Serialized.DeserializeLengthDelimited(stream, ref instance.startVel, isDelta);
+				continue;
+			case 32:
+				instance.seed = (int)ProtocolParser.ReadUInt64(stream);
+				continue;
+			}
+			Key key = ProtocolParser.ReadKey((byte)num2, stream);
+			_ = key.Field;
+			ProtocolParser.SkipKey(stream, key);
+		}
+		if (stream.Position != num)
+		{
+			throw new ProtocolBufferException("Read past max limit");
+		}
+		return instance;
+	}
+
+	public static Projectile DeserializeLength(BufferStream stream, int length, Projectile instance, bool isDelta)
+	{
+		//IL_0082: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0072: Unknown result type (might be due to invalid IL or missing references)
+		long num = stream.Position + length;
+		while (stream.Position < num)
+		{
+			int num2 = stream.ReadByte();
+			switch (num2)
+			{
+			case -1:
+				throw new EndOfStreamException();
+			case 8:
+				instance.projectileID = (int)ProtocolParser.ReadUInt64(stream);
+				continue;
+			case 18:
+				Vector3Serialized.DeserializeLengthDelimited(stream, ref instance.startPos, isDelta);
+				continue;
+			case 26:
+				Vector3Serialized.DeserializeLengthDelimited(stream, ref instance.startVel, isDelta);
+				continue;
+			case 32:
+				instance.seed = (int)ProtocolParser.ReadUInt64(stream);
+				continue;
+			}
+			Key key = ProtocolParser.ReadKey((byte)num2, stream);
+			_ = key.Field;
+			ProtocolParser.SkipKey(stream, key);
+		}
+		if (stream.Position != num)
+		{
+			throw new ProtocolBufferException("Read past max limit");
+		}
+		return instance;
+	}
+
+	public static void SerializeDelta(BufferStream stream, Projectile instance, Projectile previous)
+	{
+		//IL_0023: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0029: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0087: Unknown result type (might be due to invalid IL or missing references)
+		//IL_008d: Unknown result type (might be due to invalid IL or missing references)
+		//IL_004e: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0054: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00b3: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00b9: Unknown result type (might be due to invalid IL or missing references)
+		if (instance.projectileID != previous.projectileID)
+		{
+			stream.WriteByte(8);
+			ProtocolParser.WriteUInt64(stream, (ulong)instance.projectileID);
+		}
+		if (instance.startPos != previous.startPos)
+		{
+			stream.WriteByte(18);
+			BufferStream.RangeHandle range = stream.GetRange(1);
+			int position = stream.Position;
+			Vector3Serialized.SerializeDelta(stream, instance.startPos, previous.startPos);
+			int num = stream.Position - position;
+			if (num > 127)
+			{
+				throw new InvalidOperationException("Not enough space was reserved for the length prefix of field startPos (UnityEngine.Vector3)");
+			}
+			Span<byte> span = range.GetSpan();
+			ProtocolParser.WriteUInt32((uint)num, span, 0);
+		}
+		if (instance.startVel != previous.startVel)
+		{
+			stream.WriteByte(26);
+			BufferStream.RangeHandle range2 = stream.GetRange(1);
+			int position2 = stream.Position;
+			Vector3Serialized.SerializeDelta(stream, instance.startVel, previous.startVel);
+			int num2 = stream.Position - position2;
+			if (num2 > 127)
+			{
+				throw new InvalidOperationException("Not enough space was reserved for the length prefix of field startVel (UnityEngine.Vector3)");
+			}
+			Span<byte> span2 = range2.GetSpan();
+			ProtocolParser.WriteUInt32((uint)num2, span2, 0);
+		}
+		if (instance.seed != previous.seed)
+		{
+			stream.WriteByte(32);
+			ProtocolParser.WriteUInt64(stream, (ulong)instance.seed);
+		}
+	}
+
+	public static void Serialize(BufferStream stream, Projectile instance)
+	{
+		//IL_001d: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0024: Unknown result type (might be due to invalid IL or missing references)
+		//IL_002a: Unknown result type (might be due to invalid IL or missing references)
+		//IL_007e: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0085: Unknown result type (might be due to invalid IL or missing references)
+		//IL_008b: Unknown result type (might be due to invalid IL or missing references)
+		//IL_004b: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00ae: Unknown result type (might be due to invalid IL or missing references)
+		if (instance.projectileID != 0)
+		{
+			stream.WriteByte(8);
+			ProtocolParser.WriteUInt64(stream, (ulong)instance.projectileID);
+		}
+		if (instance.startPos != default(Vector3))
+		{
+			stream.WriteByte(18);
+			BufferStream.RangeHandle range = stream.GetRange(1);
+			int position = stream.Position;
+			Vector3Serialized.Serialize(stream, instance.startPos);
+			int num = stream.Position - position;
+			if (num > 127)
+			{
+				throw new InvalidOperationException("Not enough space was reserved for the length prefix of field startPos (UnityEngine.Vector3)");
+			}
+			Span<byte> span = range.GetSpan();
+			ProtocolParser.WriteUInt32((uint)num, span, 0);
+		}
+		if (instance.startVel != default(Vector3))
+		{
+			stream.WriteByte(26);
+			BufferStream.RangeHandle range2 = stream.GetRange(1);
+			int position2 = stream.Position;
+			Vector3Serialized.Serialize(stream, instance.startVel);
+			int num2 = stream.Position - position2;
+			if (num2 > 127)
+			{
+				throw new InvalidOperationException("Not enough space was reserved for the length prefix of field startVel (UnityEngine.Vector3)");
+			}
+			Span<byte> span2 = range2.GetSpan();
+			ProtocolParser.WriteUInt32((uint)num2, span2, 0);
+		}
+		if (instance.seed != 0)
+		{
+			stream.WriteByte(32);
+			ProtocolParser.WriteUInt64(stream, (ulong)instance.seed);
+		}
+	}
+
+	public void ToProto(BufferStream stream)
+	{
+		Serialize(stream, this);
+	}
+
+	public void InspectUids(UidInspector<ulong> action)
+	{
+	}
+}
+
+
+using System;
+using System.IO;
+using Facepunch;
+using SilentOrbit.ProtocolBuffers;
+using UnityEngine;
+
 public class SpawnOptions : IDisposable, IPooled, IProto<SpawnOptions>, IProto
 {
 	public enum RespawnType

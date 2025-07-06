@@ -1530,8 +1530,8 @@ public class MapEntity : HeldEntity
 		info.msg.mapEntity.paintImages.AddRange(paintImages);
 	}
 
-	[RPC_Server.CallsPerSecond(1uL)]
 	[RPC_Server.FromOwner(false)]
+	[RPC_Server.CallsPerSecond(1uL)]
 	[RPC_Server]
 	public void ImageUpdate(RPCMessage msg)
 	{
@@ -1606,7 +1606,7 @@ public class MapMarkerGenericRadius : MapMarker
 		((Vector3)(ref arg))..ctor(color1.r, color1.g, color1.b);
 		Vector3 arg2 = default(Vector3);
 		((Vector3)(ref arg2))..ctor(color2.r, color2.g, color2.b);
-		ClientRPC<Vector3, float, Vector3, float, float>(RpcTarget.NetworkGroup("MarkerUpdate"), arg, a, arg2, alpha, radius);
+		ClientRPC(RpcTarget.NetworkGroup("MarkerUpdate"), arg, a, arg2, alpha, radius);
 	}
 
 	public override AppMarker GetAppMarkerData()
@@ -2045,8 +2045,8 @@ public class MarketTerminal : StorageContainer
 	}
 
 	[RPC_Server]
-	[RPC_Server.CallsPerSecond(3uL)]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server.CallsPerSecond(3uL)]
 	public void Server_TryOpenMarket(RPCMessage msg)
 	{
 		if (!CanPlayerInteract(msg.player))
@@ -2063,7 +2063,7 @@ public class MarketTerminal : StorageContainer
 		{
 			val.entityIds = Pool.Get<List<NetworkableId>>();
 			GetDeliveryEligibleVendingMachines(val.entityIds);
-			ClientRPC<EntityIdList>(RpcTarget.Player("Client_OpenMarket", msg.player), val);
+			ClientRPC(RpcTarget.Player("Client_OpenMarket", msg.player), val);
 		}
 		finally
 		{
@@ -2465,8 +2465,8 @@ public class MedicalTool : AttackEntity
 		return base.OnRpcMessage(player, rpc, msg);
 	}
 
-	[RPC_Server.IsActiveItem]
 	[RPC_Server]
+	[RPC_Server.IsActiveItem]
 	private void UseOther(RPCMessage msg)
 	{
 		//IL_003d: Unknown result type (might be due to invalid IL or missing references)
@@ -2490,8 +2490,8 @@ public class MedicalTool : AttackEntity
 		}
 	}
 
-	[RPC_Server.IsActiveItem]
 	[RPC_Server]
+	[RPC_Server.IsActiveItem]
 	private void UseSelf(RPCMessage msg)
 	{
 		BasePlayer player = msg.player;
@@ -2508,7 +2508,7 @@ public class MedicalTool : AttackEntity
 		}
 	}
 
-	public override void ServerUse(float damageModifier = 1f, float speedModifier = 1f, Transform originOverride = null, bool useBulletThickness = true)
+	public override void ServerUse(float damageModifier = 1f, float speedModifier = 1f, Matrix4x4? originOverride = null, bool useBulletThickness = true)
 	{
 		if (base.isClient)
 		{
@@ -2910,6 +2910,111 @@ public enum SpeechMode
 
 
 using System;
+using ConVar;
+using Network;
+using UnityEngine;
+using UnityEngine.Assertions;
+
+public class MissionSlowUseObject : BaseEntity
+{
+	public float InteractTime = 5f;
+
+	public override bool OnRpcMessage(BasePlayer player, uint rpc, Message msg)
+	{
+		TimeWarning val = TimeWarning.New("MissionSlowUseObject.OnRpcMessage", 0);
+		try
+		{
+			if (rpc == 2005407348 && (Object)(object)player != (Object)null)
+			{
+				Assert.IsTrue(player.isServer, "SV_RPC Message is using a clientside player!");
+				if (Global.developer > 2)
+				{
+					Debug.Log((object)("SV_RPCMessage: " + ((object)player)?.ToString() + " - ServerUse "));
+				}
+				TimeWarning val2 = TimeWarning.New("ServerUse", 0);
+				try
+				{
+					TimeWarning val3 = TimeWarning.New("Conditions", 0);
+					try
+					{
+						if (!RPC_Server.IsVisible.Test(2005407348u, "ServerUse", this, player, 3f))
+						{
+							return true;
+						}
+					}
+					finally
+					{
+						((IDisposable)val3)?.Dispose();
+					}
+					try
+					{
+						val3 = TimeWarning.New("Call", 0);
+						try
+						{
+							RPCMessage rPCMessage = default(RPCMessage);
+							rPCMessage.connection = msg.connection;
+							rPCMessage.player = player;
+							rPCMessage.read = msg.read;
+							RPCMessage msg2 = rPCMessage;
+							ServerUse(msg2);
+						}
+						finally
+						{
+							((IDisposable)val3)?.Dispose();
+						}
+					}
+					catch (Exception ex)
+					{
+						Debug.LogException(ex);
+						player.Kick("RPC Error in ServerUse");
+					}
+				}
+				finally
+				{
+					((IDisposable)val2)?.Dispose();
+				}
+				return true;
+			}
+		}
+		finally
+		{
+			((IDisposable)val)?.Dispose();
+		}
+		return base.OnRpcMessage(player, rpc, msg);
+	}
+
+	public bool CanPlayerUse(BasePlayer bp)
+	{
+		BaseMission.MissionInstance activeMissionInstance = bp.GetActiveMissionInstance();
+		if (activeMissionInstance != null)
+		{
+			BaseMission.MissionObjectiveEntry[] objectives = activeMissionInstance.GetMission().objectives;
+			for (int i = 0; i < objectives.Length; i++)
+			{
+				if (objectives[i].objective is MissionObjective_ActivateLongUseObject missionObjective_ActivateLongUseObject && missionObjective_ActivateLongUseObject.RequiredEntity.prefabID == prefabID)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	[RPC_Server]
+	[RPC_Server.IsVisible(3f)]
+	private void ServerUse(RPCMessage msg)
+	{
+		//IL_0023: Unknown result type (might be due to invalid IL or missing references)
+		BasePlayer basePlayer = BasePlayer.FindByID(msg.read.UInt64());
+		if (CanPlayerUse(basePlayer))
+		{
+			basePlayer.ProcessMissionEvent(BaseMission.MissionEventType.LONG_USE_OBJECT, net.ID, 1f);
+		}
+	}
+}
+
+
+using System;
 using System.Collections.Generic;
 using ConVar;
 using Facepunch;
@@ -3124,9 +3229,9 @@ public class MixingTable : StorageContainer
 		}
 	}
 
-	[RPC_Server.CallsPerSecond(5uL)]
 	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server.CallsPerSecond(5uL)]
 	[RPC_Server]
 	private void SV_FillInventoryForRecipe(RPCMessage msg)
 	{
@@ -3197,7 +3302,10 @@ public class MixingTable : StorageContainer
 				{
 					foreach (Item item in (List<Item>)(object)val)
 					{
-						item.MoveToContainer(base.inventory, num);
+						if (!item.MoveToContainer(base.inventory, num))
+						{
+							player.inventory.GiveItem(item);
+						}
 					}
 				}
 				num++;
@@ -3231,8 +3339,8 @@ public class MixingTable : StorageContainer
 		ItemManager.DoRemoves();
 	}
 
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server]
+	[RPC_Server.MaxDistance(3f)]
 	private void SVSwitch(RPCMessage msg)
 	{
 		if (Interface.CallHook("OnMixingTableToggle", (object)this, (object)msg.player) != null)
@@ -3628,8 +3736,8 @@ public class MLRS : BaseMountable
 		public Renderer rocket;
 	}
 
-	[Header("MLRS Components")]
 	[SerializeField]
+	[Header("MLRS Components")]
 	private GameObjectRef rocketStoragePrefab;
 
 	[SerializeField]
@@ -3648,16 +3756,16 @@ public class MLRS : BaseMountable
 	[SerializeField]
 	public float vRotSpeed = 10f;
 
-	[SerializeField]
 	[Range(50f, 90f)]
+	[SerializeField]
 	public float vRotMax = 85f;
 
 	[SerializeField]
 	private Transform hydraulics;
 
-	[Header("MLRS Weaponry")]
-	[Tooltip("Minimum distance from the MLRS to a targeted hit point. In metres.")]
 	[SerializeField]
+	[Tooltip("Minimum distance from the MLRS to a targeted hit point. In metres.")]
+	[Header("MLRS Weaponry")]
 	public float minRange = 200f;
 
 	[SerializeField]
@@ -5426,15 +5534,15 @@ public class MobilePhone : HeldEntity
 		Controller.OnParentChanged(newParent);
 	}
 
-	[RPC_Server]
 	[RPC_Server.FromOwner(false)]
+	[RPC_Server]
 	public void ClearCurrentUser(RPCMessage msg)
 	{
 		Controller.ClearCurrentUser(msg);
 	}
 
-	[RPC_Server]
 	[RPC_Server.FromOwner(false)]
+	[RPC_Server]
 	public void SetCurrentUser(RPCMessage msg)
 	{
 		Controller.SetCurrentUser(msg);
@@ -5454,8 +5562,8 @@ public class MobilePhone : HeldEntity
 		Controller.AnswerPhone(msg);
 	}
 
-	[RPC_Server]
 	[RPC_Server.FromOwner(false)]
+	[RPC_Server]
 	private void ServerHangUp(RPCMessage msg)
 	{
 		Controller.ServerHangUp(msg);
@@ -5475,17 +5583,17 @@ public class MobilePhone : HeldEntity
 		Controller.UpdatePhoneName(msg);
 	}
 
-	[RPC_Server]
-	[RPC_Server.FromOwner(false)]
 	[RPC_Server.CallsPerSecond(5uL)]
+	[RPC_Server.FromOwner(false)]
+	[RPC_Server]
 	public void Server_RequestPhoneDirectory(RPCMessage msg)
 	{
 		Controller.Server_RequestPhoneDirectory(msg);
 	}
 
+	[RPC_Server]
 	[RPC_Server.CallsPerSecond(5uL)]
 	[RPC_Server.FromOwner(false)]
-	[RPC_Server]
 	public void Server_AddSavedNumber(RPCMessage msg)
 	{
 		Controller.Server_AddSavedNumber(msg);
@@ -5499,8 +5607,8 @@ public class MobilePhone : HeldEntity
 		Controller.Server_RemoveSavedNumber(msg);
 	}
 
-	[RPC_Server.FromOwner(false)]
 	[RPC_Server]
+	[RPC_Server.FromOwner(false)]
 	public void Server_RequestCurrentState(RPCMessage msg)
 	{
 		Controller.SetPhoneStateWithPlayer(Controller.serverState);
@@ -5513,9 +5621,9 @@ public class MobilePhone : HeldEntity
 		Controller.ServerSendVoicemail(msg);
 	}
 
-	[RPC_Server.FromOwner(false)]
-	[RPC_Server.CallsPerSecond(5uL)]
 	[RPC_Server]
+	[RPC_Server.CallsPerSecond(5uL)]
+	[RPC_Server.FromOwner(false)]
 	public void ServerPlayVoicemail(RPCMessage msg)
 	{
 		Controller.ServerPlayVoicemail(msg);
@@ -5529,9 +5637,9 @@ public class MobilePhone : HeldEntity
 		Controller.ServerStopVoicemail(msg);
 	}
 
-	[RPC_Server]
 	[RPC_Server.FromOwner(false)]
 	[RPC_Server.CallsPerSecond(5uL)]
+	[RPC_Server]
 	public void ServerDeleteVoicemail(RPCMessage msg)
 	{
 		Controller.ServerDeleteVoicemail(msg);
@@ -5675,8 +5783,8 @@ public class ModularCar : BaseModularVehicle, IVehicleLockUser, VehicleChassisVi
 	[SerializeField]
 	private BoxCollider mainChassisCollider;
 
-	[Header("Towing")]
 	[SerializeField]
+	[Header("Towing")]
 	private TriggerTowing towingTrigger;
 
 	[SerializeField]
@@ -5685,8 +5793,8 @@ public class ModularCar : BaseModularVehicle, IVehicleLockUser, VehicleChassisVi
 	[SerializeField]
 	public SpawnSettings spawnSettings;
 
-	[SerializeField]
 	[HideInInspector]
+	[SerializeField]
 	public MeshRenderer[] damageShowingRenderers;
 
 	[ServerVar(Help = "Population active on the server", ShowInAdminUI = true)]
@@ -6860,8 +6968,8 @@ public class ModularCar : BaseModularVehicle, IVehicleLockUser, VehicleChassisVi
 		}
 	}
 
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server]
+	[RPC_Server.MaxDistance(3f)]
 	public void RPC_TryMountWithKeycode(RPCMessage msg)
 	{
 		BasePlayer player = msg.player;
@@ -7001,8 +7109,8 @@ public class ModularCarGarage : ContainerIOEntity
 	[SerializeField]
 	public Transform vehicleLiftPos;
 
-	[Range(0f, 1f)]
 	[SerializeField]
+	[Range(0f, 1f)]
 	public float recycleEfficiency = 0.5f;
 
 	[SerializeField]
@@ -8079,9 +8187,9 @@ public class ModularCarGarage : ContainerIOEntity
 		SetFlag(Flags.Reserved6, b: false);
 	}
 
+	[RPC_Server.IsVisible(3f)]
 	[RPC_Server]
 	[RPC_Server.MaxDistance(3f)]
-	[RPC_Server.IsVisible(3f)]
 	public void RPC_RepairItem(RPCMessage msg)
 	{
 		//IL_000d: Unknown result type (might be due to invalid IL or missing references)
@@ -8110,9 +8218,9 @@ public class ModularCarGarage : ContainerIOEntity
 		}
 	}
 
-	[RPC_Server]
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server]
 	public void RPC_OpenEditing(RPCMessage msg)
 	{
 		BasePlayer player = msg.player;
@@ -8122,9 +8230,9 @@ public class ModularCarGarage : ContainerIOEntity
 		}
 	}
 
-	[RPC_Server]
 	[RPC_Server.IsVisible(3f)]
 	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server]
 	public void RPC_DiedWithKeypadOpen(RPCMessage msg)
 	{
 		SetFlag(Flags.Reserved7, b: false);
@@ -8179,8 +8287,8 @@ public class ModularCarGarage : ContainerIOEntity
 		Interface.CallHook("OnVehicleModuleSelected", (object)vehicleItem, (object)this, (object)player);
 	}
 
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server]
+	[RPC_Server.MaxDistance(3f)]
 	public void RPC_DeselectedLootItem(RPCMessage msg)
 	{
 		BasePlayer player = msg.player;
@@ -8201,9 +8309,9 @@ public class ModularCarGarage : ContainerIOEntity
 		SetFlag(Flags.Reserved7, b: true);
 	}
 
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server.IsVisible(3f)]
 	[RPC_Server]
+	[RPC_Server.MaxDistance(3f)]
 	public void RPC_RequestAddLock(RPCMessage msg)
 	{
 		//IL_00c4: Unknown result type (might be due to invalid IL or missing references)
@@ -8229,9 +8337,9 @@ public class ModularCarGarage : ContainerIOEntity
 		}
 	}
 
-	[RPC_Server]
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server]
 	public void RPC_RequestRemoveLock(RPCMessage msg)
 	{
 		//IL_0053: Unknown result type (might be due to invalid IL or missing references)
@@ -8243,8 +8351,8 @@ public class ModularCarGarage : ContainerIOEntity
 		}
 	}
 
-	[RPC_Server]
 	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server]
 	[RPC_Server.IsVisible(3f)]
 	public void RPC_RequestNewCode(RPCMessage msg)
 	{
@@ -8265,9 +8373,9 @@ public class ModularCarGarage : ContainerIOEntity
 		}
 	}
 
-	[RPC_Server]
-	[RPC_Server.IsVisible(3f)]
 	[RPC_Server.CallsPerSecond(1uL)]
+	[RPC_Server.IsVisible(3f)]
+	[RPC_Server]
 	[RPC_Server.MaxDistance(3f)]
 	public void RPC_StartDestroyingChassis(RPCMessage msg)
 	{
@@ -8278,10 +8386,10 @@ public class ModularCarGarage : ContainerIOEntity
 		}
 	}
 
-	[RPC_Server]
-	[RPC_Server.MaxDistance(3f)]
-	[RPC_Server.IsVisible(3f)]
 	[RPC_Server.CallsPerSecond(1uL)]
+	[RPC_Server.IsVisible(3f)]
+	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server]
 	public void RPC_StopDestroyingChassis(RPCMessage msg)
 	{
 		StopChassisDestroy();
@@ -8628,8 +8736,8 @@ public class ModularCarRadio : BaseCombatEntity
 		return false;
 	}
 
-	[RPC_Server.IsVisible(3f)]
 	[RPC_Server]
+	[RPC_Server.IsVisible(3f)]
 	public void ServerTogglePlay(RPCMessage msg)
 	{
 		CarRadio.ServerTogglePlay(msg, bypassPower: true);
@@ -9835,8 +9943,8 @@ public class NeonSign : Signage
 	}
 
 	[RPC_Server]
-	[RPC_Server.CallsPerSecond(5uL)]
 	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server.CallsPerSecond(5uL)]
 	public void SetAnimationSpeed(RPCMessage msg)
 	{
 		float num = Mathf.Clamp(msg.read.Float(), 0.5f, 5f);
@@ -9852,8 +9960,8 @@ public class NeonSign : Signage
 		}
 	}
 
-	[RPC_Server]
 	[RPC_Server.CallsPerSecond(5uL)]
+	[RPC_Server]
 	[RPC_Server.MaxDistance(3f)]
 	public void UpdateNeonColors(RPCMessage msg)
 	{
@@ -10014,6 +10122,10 @@ public class NPCTalking : NPCShopKeeper, IConversationProvider
 
 		public float broadcastRange;
 	}
+
+	public const string Generic_Mission_Provider_List_ID = "generic_mission_provider_list";
+
+	public const string Generic_Mission_Provider_Preview_ID = "generic_mission_provider_list_mission_preview";
 
 	public ConversationData[] conversations;
 
@@ -10296,6 +10408,25 @@ public class NPCTalking : NPCShopKeeper, IConversationProvider
 		return HasFlag(Flags.Reserved1);
 	}
 
+	public BaseMission GetGenericMissionById(uint id)
+	{
+		ScriptableObjectRef[] missionList = MissionManifest.Get().missionList;
+		NPCSimpleMissionProvider nPCSimpleMissionProvider = default(NPCSimpleMissionProvider);
+		for (int i = 0; i < missionList.Length; i++)
+		{
+			BaseMission baseMission = missionList[i].Get() as BaseMission;
+			if (baseMission != null && baseMission.id == id && baseMission.genericMissionProvider.isValid && baseMission.genericMissionProvider.Get().TryGetComponent<NPCSimpleMissionProvider>(ref nPCSimpleMissionProvider) && nPCSimpleMissionProvider.prefabID == prefabID)
+			{
+				return baseMission;
+			}
+		}
+		return null;
+	}
+
+	public virtual void GetGenericMissionList(List<BaseMission> foundMissions)
+	{
+	}
+
 	public void ForceEndConversation(BasePlayer player)
 	{
 		ClientRPC(RpcTarget.Player("Client_EndConversation", player));
@@ -10331,9 +10462,9 @@ public class NPCTalking : NPCShopKeeper, IConversationProvider
 		}
 	}
 
-	[RPC_Server]
 	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server.CallsPerSecond(1uL)]
+	[RPC_Server]
 	public void Server_BeginTalking(RPCMessage msg)
 	{
 		BasePlayer player = msg.player;
@@ -10385,17 +10516,17 @@ public class NPCTalking : NPCShopKeeper, IConversationProvider
 	{
 	}
 
-	[RPC_Server]
-	[RPC_Server.CallsPerSecond(1uL)]
 	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server.CallsPerSecond(1uL)]
+	[RPC_Server]
 	public void Server_EndTalking(RPCMessage msg)
 	{
 		OnConversationEnded(msg.player);
 	}
 
+	[RPC_Server]
 	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server.CallsPerSecond(5uL)]
-	[RPC_Server]
 	public void ConversationAction(RPCMessage msg)
 	{
 		BasePlayer player = msg.player;
@@ -10418,18 +10549,31 @@ public class NPCTalking : NPCShopKeeper, IConversationProvider
 		return true;
 	}
 
-	[RPC_Server]
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server.CallsPerSecond(5uL)]
+	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server]
 	public void Server_ResponsePressed(RPCMessage msg)
 	{
 		BasePlayer player = msg.player;
 		int num = msg.read.Int32();
 		int num2 = msg.read.Int32();
+		uint id = msg.read.UInt32();
 		ConversationData conversationFor = GetConversationFor(player);
 		if ((Object)(object)conversationFor == (Object)null)
 		{
 			return;
+		}
+		if (conversationFor.speeches[num].shortname == "generic_mission_provider_list")
+		{
+			num2 = 0;
+		}
+		if (conversationFor.speeches[num].shortname == "generic_mission_provider_list_mission_preview" && num2 == 0)
+		{
+			BaseMission genericMissionById = GetGenericMissionById(id);
+			if (genericMissionById != null && player.CanAcceptMission(genericMissionById))
+			{
+				TryAssignMissionToPlayer(genericMissionById, player);
+			}
 		}
 		ConversationData.ResponseNode responseNode = conversationFor.speeches[num].responses[num2];
 		if (responseNode == null || Interface.CallHook("OnNpcConversationRespond", (object)this, (object)player, (object)conversationFor, (object)responseNode) != null)
@@ -10528,6 +10672,10 @@ public class NPCTalking : NPCShopKeeper, IConversationProvider
 			lastActionPlayer = null;
 			break;
 		}
+	}
+
+	protected virtual void TryAssignMissionToPlayer(BaseMission mission, BasePlayer player)
+	{
 	}
 }
 
@@ -11355,8 +11503,8 @@ public class PaintedItemStorageEntity : BaseEntity, IServerFileReceiver, IUGCBro
 		info.msg.paintedItem.editedBy = lastEditedBy;
 	}
 
-	[RPC_Server.CallsPerSecond(3uL)]
 	[RPC_Server]
+	[RPC_Server.CallsPerSecond(3uL)]
 	private void Server_UpdateImage(RPCMessage msg)
 	{
 		//IL_005a: Unknown result type (might be due to invalid IL or missing references)
@@ -11438,6 +11586,8 @@ public class PaintedItemStorageEntity : BaseEntity, IServerFileReceiver, IUGCBro
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using ConVar;
 using Facepunch;
 using Network;
 using Oxide.Core;
@@ -11611,13 +11761,48 @@ public class PatrolHelicopter : BaseCombatEntity, SeekerTarget.ISeekerTargetOwne
 
 	public GameObjectRef mapMarkerEntityPrefab;
 
+	public GameObjectRef fleeMapMarkerEntityPrefab;
+
+	public static PatrolHelicopter Instance;
+
+	public static BaseEntity ClientFleeMapMarker;
+
 	public float lastNetworkUpdate = float.NegativeInfinity;
 
 	private const float networkUpdateRate = 0.25f;
 
 	private BaseEntity mapMarkerInstance;
 
+	private BaseEntity fleeMapMarkerInstance;
+
 	public weakspot[] weakspots;
+
+	private NetworkableId __sync_FleeMarkerId;
+
+	[Sync(Autosave = true)]
+	public NetworkableId FleeMarkerId
+	{
+		[CompilerGenerated]
+		get
+		{
+			//IL_0001: Unknown result type (might be due to invalid IL or missing references)
+			return __sync_FleeMarkerId;
+		}
+		[CompilerGenerated]
+		set
+		{
+			//IL_0002: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0007: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0015: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0016: Unknown result type (might be due to invalid IL or missing references)
+			if (!IsSyncVarEqual<NetworkableId>(__sync_FleeMarkerId, value))
+			{
+				__sync_FleeMarkerId = value;
+				byte nameID = __GetWeaverID("FleeMarkerId");
+				QueueSyncVar(nameID);
+			}
+		}
+	}
 
 	public override bool OnRpcMessage(BasePlayer player, uint rpc, Message msg)
 	{
@@ -11641,6 +11826,7 @@ public class PatrolHelicopter : BaseCombatEntity, SeekerTarget.ISeekerTargetOwne
 	{
 		base.InitShared();
 		InitalizeWeakspots();
+		Instance = this;
 	}
 
 	public override void Load(LoadInfo info)
@@ -11711,6 +11897,11 @@ public class PatrolHelicopter : BaseCombatEntity, SeekerTarget.ISeekerTargetOwne
 		{
 			SeekerTarget.SetSeekerTarget(this, SeekerTarget.SeekerStrength.OFF);
 		}
+		if ((Object)(object)fleeMapMarkerInstance != (Object)null)
+		{
+			DestroyFleeMarker();
+		}
+		Instance = null;
 		base.DestroyShared();
 	}
 
@@ -11726,6 +11917,42 @@ public class PatrolHelicopter : BaseCombatEntity, SeekerTarget.ISeekerTargetOwne
 		baseEntity.SetParent(this);
 		baseEntity.Spawn();
 		mapMarkerInstance = baseEntity;
+	}
+
+	public bool HasFleeMarker()
+	{
+		if ((Object)(object)fleeMapMarkerInstance != (Object)null)
+		{
+			return fleeMapMarkerInstance.IsValid();
+		}
+		return false;
+	}
+
+	public void CreateFleeMarker(Vector3 fleePosition)
+	{
+		//IL_0029: Unknown result type (might be due to invalid IL or missing references)
+		//IL_002a: Unknown result type (might be due to invalid IL or missing references)
+		//IL_004f: Unknown result type (might be due to invalid IL or missing references)
+		if (Object.op_Implicit((Object)(object)fleeMapMarkerInstance))
+		{
+			fleeMapMarkerInstance.Kill();
+		}
+		BaseEntity baseEntity = GameManager.server.CreateEntity(fleeMapMarkerEntityPrefab.resourcePath, fleePosition, Quaternion.identity);
+		baseEntity.Spawn();
+		fleeMapMarkerInstance = baseEntity;
+		FleeMarkerId = fleeMapMarkerInstance.net.ID;
+	}
+
+	public void DestroyFleeMarker()
+	{
+		//IL_001f: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0025: Unknown result type (might be due to invalid IL or missing references)
+		if (HasFleeMarker())
+		{
+			fleeMapMarkerInstance.Kill();
+			fleeMapMarkerInstance = null;
+			FleeMarkerId = default(NetworkableId);
+		}
 	}
 
 	public override void OnPositionalNetworkUpdate()
@@ -11952,6 +12179,66 @@ public class PatrolHelicopter : BaseCombatEntity, SeekerTarget.ISeekerTargetOwne
 				}
 			}
 		}
+	}
+
+	protected override bool WriteSyncVar(byte id, NetWrite writer)
+	{
+		//IL_0037: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0017: Unknown result type (might be due to invalid IL or missing references)
+		//IL_001c: Unknown result type (might be due to invalid IL or missing references)
+		if (id == 0)
+		{
+			if (Global.developer > 2)
+			{
+				NetworkableId iD = net.ID;
+				Debug.Log((object)("SyncVar Writing: FleeMarkerId for " + ((object)(NetworkableId)(ref iD)/*cast due to .constrained prefix*/).ToString()));
+			}
+			SyncVarNetWrite<NetworkableId>(writer, __sync_FleeMarkerId);
+			return true;
+		}
+		return false;
+	}
+
+	protected override bool OnSyncVar(byte id, NetRead reader, bool fromAutoSave = false)
+	{
+		return false;
+	}
+
+	private byte __GetWeaverID(string propertyName)
+	{
+		_ = propertyName == "FleeMarkerId";
+		return 0;
+	}
+
+	protected override bool AutoSaveSyncVars(SaveInfo save)
+	{
+		NetWrite val = ((BaseNetwork)Net.sv).StartWrite();
+		WriteSyncVar(0, val);
+		var (src, num) = val.GetBuffer();
+		if (_autosaveBuffer == null)
+		{
+			_autosaveBuffer = BaseEntity._autosaveBufferPool.Rent(num);
+		}
+		if (_autosaveBuffer.Length < num)
+		{
+			BaseEntity._autosaveBufferPool.Return(_autosaveBuffer);
+			_autosaveBuffer = BaseEntity._autosaveBufferPool.Rent(num);
+		}
+		Buffer.BlockCopy(src, 0, _autosaveBuffer, 0, num);
+		save.msg.baseEntity.syncVars = _autosaveBuffer;
+		Pool.Free<NetWrite>(ref val);
+		return true;
+	}
+
+	protected override bool AutoLoadSyncVars(LoadInfo load)
+	{
+		return true;
+	}
+
+	protected override void ResetSyncVars()
+	{
+		//IL_0006: Unknown result type (might be due to invalid IL or missing references)
+		__sync_FleeMarkerId = default(NetworkableId);
 	}
 }
 
@@ -12542,8 +12829,8 @@ public class PhotoFrame : StorageContainer, ILOD, IImageReceiver, ISignage, IUGC
 	}
 
 	[RPC_Server]
-	[RPC_Server.MaxDistance(5f)]
 	[RPC_Server.CallsPerSecond(3uL)]
+	[RPC_Server.MaxDistance(5f)]
 	public void UpdateSign(RPCMessage msg)
 	{
 		//IL_0052: Unknown result type (might be due to invalid IL or missing references)
@@ -12575,8 +12862,8 @@ public class PhotoFrame : StorageContainer, ILOD, IImageReceiver, ISignage, IUGC
 		}
 	}
 
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server]
+	[RPC_Server.MaxDistance(3f)]
 	public void UnLockSign(RPCMessage msg)
 	{
 		if (msg.player.CanInteract() && CanUnlockSign(msg.player))
@@ -12784,8 +13071,8 @@ public class Planner : HeldEntity
 		return GetDeployable();
 	}
 
-	[RPC_Server.IsActiveItem]
 	[RPC_Server]
+	[RPC_Server.IsActiveItem]
 	private void DoPlace(RPCMessage msg)
 	{
 		if (!msg.player.CanInteract())
@@ -12803,8 +13090,8 @@ public class Planner : HeldEntity
 		}
 	}
 
-	[RPC_Server.IsActiveItem]
 	[RPC_Server]
+	[RPC_Server.IsActiveItem]
 	[RPC_Server.CallsPerSecond(10uL)]
 	private void StartDurationPlace(RPCMessage msg)
 	{
@@ -12880,7 +13167,7 @@ public class Planner : HeldEntity
 				val.amount = Pool.Get<List<float>>();
 				val.itemID = Pool.Get<List<int>>();
 				GetConstructionCost(val, construction);
-				ownerPlayer.ClientRPC<ItemAmountList>(RpcTarget.Player("Client_OnRepairFailedResources", ownerPlayer), val);
+				ownerPlayer.ClientRPC(RpcTarget.Player("Client_OnRepairFailedResources", ownerPlayer), val);
 				return;
 			}
 			finally
@@ -13968,8 +14255,8 @@ public class PlanterBox : StorageContainer, ISplashable
 		Pool.FreeUnmanaged<uint>(ref list);
 	}
 
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server]
+	[RPC_Server.MaxDistance(3f)]
 	private void RPC_RequestSaturationUpdate(RPCMessage msg)
 	{
 		if ((Object)(object)msg.player != (Object)null)
@@ -14102,8 +14389,8 @@ public class PlayerHelicopter : BaseHelicopter, IEngineControllerUser, IEntity, 
 	[SerializeField]
 	public float maxYawAnim = 1f;
 
-	[SerializeField]
 	[Header("Fuel")]
+	[SerializeField]
 	public GameObjectRef fuelStoragePrefab;
 
 	[SerializeField]
@@ -14761,8 +15048,8 @@ public class PlayerHelicopter : BaseHelicopter, IEngineControllerUser, IEntity, 
 		return IsOn();
 	}
 
-	[RPC_Server]
 	[RPC_Server.IsVisible(6f)]
+	[RPC_Server]
 	public void RPC_OpenFuel(RPCMessage msg)
 	{
 		BasePlayer player = msg.player;
@@ -15420,8 +15707,8 @@ public class PlayerInventory : EntityComponent<BasePlayer>, IAmmoContainer
 		return true;
 	}
 
-	[BaseEntity.RPC_Server]
 	[BaseEntity.RPC_Server.FromOwner(false)]
+	[BaseEntity.RPC_Server]
 	private void ItemCmd(BaseEntity.RPCMessage msg)
 	{
 		//IL_0030: Unknown result type (might be due to invalid IL or missing references)
@@ -15713,7 +16000,8 @@ public class PlayerInventory : EntityComponent<BasePlayer>, IAmmoContainer
 			{
 				((IDisposable)val3)?.Dispose();
 			}
-			if (item.MoveToContainer(itemContainer, num, allowStack: true, ignoreStackLimit: false, base.baseEntity))
+			bool allowSwap = !itemContainer.PlayerItemInputBlocked() && item.parent != null && !item.parent.PlayerItemInputBlocked();
+			if (item.MoveToContainer(itemContainer, num, allowStack: true, ignoreStackLimit: false, base.baseEntity, allowSwap))
 			{
 				ItemManager.DoRemoves();
 				ServerUpdate(0f);
@@ -15952,10 +16240,10 @@ public class PlayerInventory : EntityComponent<BasePlayer>, IAmmoContainer
 			switch (mode)
 			{
 			case NetworkInventoryMode.Everyone:
-				base.baseEntity.ClientRPC<UpdateItemContainer>(RpcTarget.NetworkGroup("UpdatedItemContainer"), val);
+				base.baseEntity.ClientRPC(RpcTarget.NetworkGroup("UpdatedItemContainer"), val);
 				break;
 			case NetworkInventoryMode.LocalPlayer:
-				base.baseEntity.ClientRPC<UpdateItemContainer>(RpcTarget.Player("UpdatedItemContainer", base.baseEntity), val);
+				base.baseEntity.ClientRPC(RpcTarget.Player("UpdatedItemContainer", base.baseEntity), val);
 				break;
 			case NetworkInventoryMode.EveryoneButLocal:
 				if (base.baseEntity.net?.group?.subscribers == null)
@@ -15967,7 +16255,7 @@ public class PlayerInventory : EntityComponent<BasePlayer>, IAmmoContainer
 					{
 						if (subscriber.player is BasePlayer basePlayer && (Object)(object)basePlayer != (Object)(object)base.baseEntity)
 						{
-							base.baseEntity.ClientRPC<UpdateItemContainer>(RpcTarget.Player("UpdatedItemContainer", basePlayer), val);
+							base.baseEntity.ClientRPC(RpcTarget.Player("UpdatedItemContainer", basePlayer), val);
 						}
 					}
 					break;
@@ -17084,7 +17372,7 @@ public class PlayerLoot : EntityComponent<BasePlayer>
 					val.containers.Add(container.Save());
 				}
 			}
-			base.baseEntity.ClientRPC<PlayerUpdateLoot>(RpcTarget.Player("UpdateLoot", base.baseEntity), val);
+			base.baseEntity.ClientRPC(RpcTarget.Player("UpdateLoot", base.baseEntity), val);
 		}
 		finally
 		{
@@ -17263,7 +17551,10 @@ public class PlayerMetabolism : BaseMetabolism<BasePlayer>
 	{
 		base.ServerUpdate(ownerEntity, delta);
 		Interface.CallHook("OnPlayerMetabolize", (object)this, (object)ownerEntity, (object)delta);
-		SendChangesToClient();
+		if (owner.IsConnected)
+		{
+			SendChangesToClient();
+		}
 	}
 
 	internal bool HasChanged()
@@ -17284,42 +17575,46 @@ public class PlayerMetabolism : BaseMetabolism<BasePlayer>
 
 	protected override void DoMetabolismDamage(BaseCombatEntity ownerEntity, float delta)
 	{
-		base.DoMetabolismDamage(ownerEntity, delta);
-		if (temperature.value < -20f)
+		if (owner.IsConnected)
 		{
-			owner.Hurt(Mathf.InverseLerp(1f, -50f, temperature.value) * delta * 1f, DamageType.Cold);
-		}
-		else if (temperature.value < -10f)
-		{
-			owner.Hurt(Mathf.InverseLerp(1f, -50f, temperature.value) * delta * 0.3f, DamageType.Cold);
-		}
-		else if (temperature.value < 1f)
-		{
-			owner.Hurt(Mathf.InverseLerp(1f, -50f, temperature.value) * delta * 0.1f, DamageType.Cold);
-		}
-		if (temperature.value > 60f)
-		{
-			owner.Hurt(Mathf.InverseLerp(60f, 200f, temperature.value) * delta * 5f, DamageType.Heat);
+			base.DoMetabolismDamage(ownerEntity, delta);
+			if (temperature.value < -20f)
+			{
+				owner.Hurt(Mathf.InverseLerp(1f, -50f, temperature.value) * delta * 1f, DamageType.Cold);
+			}
+			else if (temperature.value < -10f)
+			{
+				owner.Hurt(Mathf.InverseLerp(1f, -50f, temperature.value) * delta * 0.3f, DamageType.Cold);
+			}
+			else if (temperature.value < 1f)
+			{
+				owner.Hurt(Mathf.InverseLerp(1f, -50f, temperature.value) * delta * 0.1f, DamageType.Cold);
+			}
+			if (temperature.value > 60f)
+			{
+				owner.Hurt(Mathf.InverseLerp(60f, 200f, temperature.value) * delta * 5f, DamageType.Heat);
+			}
+			if (!owner.IsGod() && bleeding.value > 0f)
+			{
+				float num = delta * (1f / 3f);
+				owner.Hurt(num, DamageType.Bleeding);
+				bleeding.Subtract(num);
+			}
+			if (!owner.IsGod() && poison.value > 0f)
+			{
+				owner.Hurt(poison.value * delta * 0.1f, DamageType.Poison);
+			}
+			if (ConVar.Server.radiation && radiation_poison.value > 0f)
+			{
+				float num2 = (1f + Mathf.Clamp01(radiation_poison.value / 25f) * 5f) * (delta / 5f);
+				owner.Hurt(num2, DamageType.Radiation);
+				radiation_poison.Subtract(num2);
+			}
 		}
 		if (oxygen.value < 0.5f)
 		{
-			owner.Hurt(Mathf.InverseLerp(0.5f, 0f, oxygen.value) * delta * 20f, DamageType.Drowned, null, useProtection: false);
-		}
-		if (!owner.IsGod() && bleeding.value > 0f)
-		{
-			float num = delta * (1f / 3f);
-			owner.Hurt(num, DamageType.Bleeding);
-			bleeding.Subtract(num);
-		}
-		if (!owner.IsGod() && poison.value > 0f)
-		{
-			owner.Hurt(poison.value * delta * 0.1f, DamageType.Poison);
-		}
-		if (ConVar.Server.radiation && radiation_poison.value > 0f)
-		{
-			float num2 = (1f + Mathf.Clamp01(radiation_poison.value / 25f) * 5f) * (delta / 5f);
-			owner.Hurt(num2, DamageType.Radiation);
-			radiation_poison.Subtract(num2);
+			float num3 = (owner.IsConnected ? 1f : 0.01f);
+			owner.Hurt(Mathf.InverseLerp(0.5f, 0f, oxygen.value) * delta * 20f * num3, DamageType.Drowned, null, useProtection: false);
 		}
 	}
 
@@ -17344,140 +17639,143 @@ public class PlayerMetabolism : BaseMetabolism<BasePlayer>
 
 	protected override void RunMetabolism(BaseCombatEntity ownerEntity, float delta)
 	{
-		//IL_04f0: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0507: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0524: Unknown result type (might be due to invalid IL or missing references)
+		//IL_04ca: Unknown result type (might be due to invalid IL or missing references)
+		//IL_04e1: Unknown result type (might be due to invalid IL or missing references)
+		//IL_04fe: Unknown result type (might be due to invalid IL or missing references)
 		if (Interface.CallHook("OnRunPlayerMetabolism", (object)this, (object)ownerEntity, (object)delta) != null)
 		{
 			return;
 		}
-		BaseGameMode activeGameMode = BaseGameMode.GetActiveGameMode(serverside: true);
-		float num = owner.currentTemperature;
-		float fTarget = owner.currentComfort;
-		UpdateWorkbenchFlags();
-		owner.SetPlayerFlag(BasePlayer.PlayerFlags.SafeZone, owner.InSafeZone());
-		owner.SetPlayerFlag(BasePlayer.PlayerFlags.NoRespawnZone, owner.InNoRespawnZone());
-		owner.SetPlayerFlag(BasePlayer.PlayerFlags.ModifyClan, Clan.editsRequireClanTable && owner.CanModifyClan());
-		bool num2 = (Object)(object)activeGameMode == (Object)null || activeGameMode.allowTemperature;
-		if (owner.IsInTutorial)
+		if (owner.IsConnected)
 		{
-			num = 25f;
-		}
-		if (num2)
-		{
-			float num3 = num + GetCoreTempAdjustment() - DeltaWet() * 34f;
-			float num4 = Mathf.Clamp(owner.baseProtection.amounts[18] * 1.5f, -1f, 1f);
-			float num5 = Mathf.InverseLerp(20f, -50f, num);
-			float num6 = Mathf.InverseLerp(20f, 30f, num);
-			float fTarget2 = Mathf.Clamp(num3 + num5 * 70f * num4 + num6 * 10f * Mathf.Abs(num4) + heartrate.value * 5f, GetCoreTempMin(), GetCoreTempMax());
-			temperature.MoveTowards(fTarget2, delta * 5f);
-		}
-		else
-		{
-			temperature.value = 25f;
-		}
-		if (temperature.value >= 40f)
-		{
-			fTarget = 0f;
-		}
-		comfort.MoveTowards(fTarget, delta / 5f);
-		float num7 = 0.6f + 0.4f * comfort.value;
-		if (calories.value > 100f && owner.healthFraction < num7 && radiation_poison.Fraction() < 0.25f && owner.SecondsSinceAttacked > 10f && !SignificantBleeding() && temperature.value >= 10f && hydration.value > 40f)
-		{
-			float num8 = Mathf.InverseLerp(calories.min, calories.max, calories.value);
-			float num9 = 5f;
-			float num10 = num9 * owner.MaxHealth() * 0.8f / 600f;
-			num10 += num10 * num8 * 0.5f;
-			float num11 = num10 / num9;
-			num11 += num11 * comfort.value * 6f;
-			ownerEntity.Heal(num11 * delta);
-			calories.Subtract(num10 * delta);
-			hydration.Subtract(num10 * delta * 0.2f);
-		}
-		float num12 = owner.estimatedSpeed2D / owner.GetMaxSpeed() * 0.75f;
-		float fTarget3 = Mathf.Clamp(0.05f + num12, 0f, 1f);
-		heartrate.MoveTowards(fTarget3, delta * 0.1f);
-		if (!owner.IsGod())
-		{
-			float num13 = heartrate.Fraction() * 0.375f;
-			calories.MoveTowards(0f, delta * num13);
-			float num14 = 1f / 120f;
-			num14 += Mathf.InverseLerp(40f, 60f, temperature.value) * (1f / 12f);
-			num14 += heartrate.value * (1f / 15f);
-			hydration.MoveTowards(0f, delta * num14);
-		}
-		bool b = hydration.Fraction() <= 0f || radiation_poison.value >= 100f;
-		owner.SetPlayerFlag(BasePlayer.PlayerFlags.NoSprint, b);
-		if (temperature.value > 40f)
-		{
-			hydration.Add(Mathf.InverseLerp(40f, 200f, temperature.value) * delta * -1f);
-		}
-		if (temperature.value < 10f)
-		{
-			float num15 = Mathf.InverseLerp(20f, -100f, temperature.value);
-			heartrate.MoveTowards(Mathf.Lerp(0.2f, 1f, num15), delta * 2f * num15);
-		}
-		float num16 = owner.AirFactor();
-		float num17 = ((num16 > oxygen.value) ? 1f : 0.1f);
-		oxygen.MoveTowards(num16, delta * num17);
-		float num18 = 0f;
-		float num19 = 0f;
-		if (owner.IsOutside(owner.eyes.position))
-		{
-			num18 = Climate.GetRain(owner.eyes.position) * Weather.wetness_rain;
-			num19 = Climate.GetSnow(owner.eyes.position) * Weather.wetness_snow;
-		}
-		bool flag = owner.baseProtection.amounts[4] > 0f;
-		float currentEnvironmentalWetness = owner.currentEnvironmentalWetness;
-		currentEnvironmentalWetness = Mathf.Clamp(currentEnvironmentalWetness, 0f, 0.8f);
-		float num20 = owner.WaterFactor();
-		if (!flag && num20 > 0f)
-		{
-			wetness.value = Mathf.Max(wetness.value, Mathf.Clamp(num20, wetness.min, wetness.max));
-		}
-		float num21 = Mathx.Max(wetness.value, num18, num19, currentEnvironmentalWetness);
-		num21 = Mathf.Min(num21, flag ? 0f : num21);
-		wetness.MoveTowards(num21, delta * 0.05f);
-		if (num20 < wetness.value && currentEnvironmentalWetness <= 0f)
-		{
-			wetness.MoveTowards(0f, delta * 0.2f * Mathf.InverseLerp(0f, 100f, num));
-		}
-		poison.MoveTowards(0f, delta * (5f / 9f));
-		if (wetness.Fraction() > 0.4f && owner.estimatedSpeed > 0.25f && radiation_level.Fraction() == 0f)
-		{
-			radiation_poison.Subtract(radiation_poison.value * 0.2f * wetness.Fraction() * delta * 0.2f);
-		}
-		if (ConVar.Server.radiation)
-		{
-			if (!owner.IsGod())
+			BaseGameMode activeGameMode = BaseGameMode.GetActiveGameMode(serverside: true);
+			float num = owner.currentTemperature;
+			float fTarget = owner.currentComfort;
+			UpdateWorkbenchFlags();
+			owner.SetPlayerFlag(BasePlayer.PlayerFlags.SafeZone, owner.InSafeZone());
+			owner.SetPlayerFlag(BasePlayer.PlayerFlags.NoRespawnZone, owner.InNoRespawnZone());
+			owner.SetPlayerFlag(BasePlayer.PlayerFlags.ModifyClan, Clan.editsRequireClanTable && owner.CanModifyClan());
+			bool num2 = (Object)(object)activeGameMode == (Object)null || activeGameMode.allowTemperature;
+			if (owner.IsInTutorial)
 			{
-				float radiationAfterProtection = Radiation.GetRadiationAfterProtection(owner.modifiers.GetValue(Modifier.ModifierType.Radiation), ownerEntity.RadiationProtection());
-				radiation_level.value = owner.radiationLevel + radiationAfterProtection;
-				if (radiation_level.value > 0f)
-				{
-					radiation_poison.Add(radiation_level.value * delta);
-				}
+				num = 25f;
 			}
-			else if (radiation_level.value > 0f)
+			if (num2)
 			{
-				radiation_level.value = 0f;
-				radiation_poison.value = 0f;
-			}
-		}
-		if (pending_health.value > 0f)
-		{
-			float num22 = 1f + owner.modifiers.GetValue(Modifier.ModifierType.MetabolismBooster);
-			float num23 = Mathf.Min(1f * delta * num22, pending_health.value);
-			ownerEntity.Heal(num23);
-			if (ownerEntity.healthFraction == 1f)
-			{
-				pending_health.value = 0f;
+				float num3 = num + GetCoreTempAdjustment() - DeltaWet() * 34f;
+				float num4 = Mathf.Clamp(owner.baseProtection.amounts[18] * 1.5f, -1f, 1f);
+				float num5 = Mathf.InverseLerp(20f, -50f, num);
+				float num6 = Mathf.InverseLerp(20f, 30f, num);
+				float fTarget2 = Mathf.Clamp(num3 + num5 * 70f * num4 + num6 * 10f * Mathf.Abs(num4) + heartrate.value * 5f, GetCoreTempMin(), GetCoreTempMax());
+				temperature.MoveTowards(fTarget2, delta * 5f);
 			}
 			else
 			{
-				pending_health.Subtract(num23);
+				temperature.value = 25f;
+			}
+			if (temperature.value >= 40f)
+			{
+				fTarget = 0f;
+			}
+			comfort.MoveTowards(fTarget, delta / 5f);
+			float num7 = 0.6f + 0.4f * comfort.value;
+			if (calories.value > 100f && owner.healthFraction < num7 && radiation_poison.Fraction() < 0.25f && owner.SecondsSinceAttacked > 10f && !SignificantBleeding() && temperature.value >= 10f && hydration.value > 40f)
+			{
+				float num8 = Mathf.InverseLerp(calories.min, calories.max, calories.value);
+				float num9 = 5f;
+				float num10 = num9 * owner.MaxHealth() * 0.8f / 600f;
+				num10 += num10 * num8 * 0.5f;
+				float num11 = num10 / num9;
+				num11 += num11 * comfort.value * 6f;
+				ownerEntity.Heal(num11 * delta);
+				calories.Subtract(num10 * delta);
+				hydration.Subtract(num10 * delta * 0.2f);
+			}
+			float num12 = owner.estimatedSpeed2D / owner.GetMaxSpeed() * 0.75f;
+			float fTarget3 = Mathf.Clamp(0.05f + num12, 0f, 1f);
+			heartrate.MoveTowards(fTarget3, delta * 0.1f);
+			if (!owner.IsGod())
+			{
+				float num13 = heartrate.Fraction() * 0.375f;
+				calories.MoveTowards(0f, delta * num13);
+				float num14 = 1f / 120f;
+				num14 += Mathf.InverseLerp(40f, 60f, temperature.value) * (1f / 12f);
+				num14 += heartrate.value * (1f / 15f);
+				hydration.MoveTowards(0f, delta * num14);
+			}
+			bool b = hydration.Fraction() <= 0f || radiation_poison.value >= 100f;
+			owner.SetPlayerFlag(BasePlayer.PlayerFlags.NoSprint, b);
+			if (temperature.value > 40f)
+			{
+				hydration.Add(Mathf.InverseLerp(40f, 200f, temperature.value) * delta * -1f);
+			}
+			if (temperature.value < 10f)
+			{
+				float num15 = Mathf.InverseLerp(20f, -100f, temperature.value);
+				heartrate.MoveTowards(Mathf.Lerp(0.2f, 1f, num15), delta * 2f * num15);
+			}
+			float num16 = 0f;
+			float num17 = 0f;
+			if (owner.IsOutside(owner.eyes.position))
+			{
+				num16 = Climate.GetRain(owner.eyes.position) * Weather.wetness_rain;
+				num17 = Climate.GetSnow(owner.eyes.position) * Weather.wetness_snow;
+			}
+			bool flag = owner.baseProtection.amounts[4] > 0f;
+			float currentEnvironmentalWetness = owner.currentEnvironmentalWetness;
+			currentEnvironmentalWetness = Mathf.Clamp(currentEnvironmentalWetness, 0f, 0.8f);
+			float num18 = owner.WaterFactor();
+			if (!flag && num18 > 0f)
+			{
+				wetness.value = Mathf.Max(wetness.value, Mathf.Clamp(num18, wetness.min, wetness.max));
+			}
+			float num19 = Mathx.Max(wetness.value, num16, num17, currentEnvironmentalWetness);
+			num19 = Mathf.Min(num19, flag ? 0f : num19);
+			wetness.MoveTowards(num19, delta * 0.05f);
+			if (num18 < wetness.value && currentEnvironmentalWetness <= 0f)
+			{
+				wetness.MoveTowards(0f, delta * 0.2f * Mathf.InverseLerp(0f, 100f, num));
+			}
+			poison.MoveTowards(0f, delta * (5f / 9f));
+			if (wetness.Fraction() > 0.4f && owner.estimatedSpeed > 0.25f && radiation_level.Fraction() == 0f)
+			{
+				radiation_poison.Subtract(radiation_poison.value * 0.2f * wetness.Fraction() * delta * 0.2f);
+			}
+			if (ConVar.Server.radiation)
+			{
+				if (!owner.IsGod())
+				{
+					float radiationAfterProtection = Radiation.GetRadiationAfterProtection(owner.modifiers.GetValue(Modifier.ModifierType.Radiation), ownerEntity.RadiationProtection());
+					radiation_level.value = owner.radiationLevel + radiationAfterProtection;
+					if (radiation_level.value > 0f)
+					{
+						radiation_poison.Add(radiation_level.value * delta);
+					}
+				}
+				else if (radiation_level.value > 0f)
+				{
+					radiation_level.value = 0f;
+					radiation_poison.value = 0f;
+				}
+			}
+			if (pending_health.value > 0f)
+			{
+				float num20 = 1f + owner.modifiers.GetValue(Modifier.ModifierType.MetabolismBooster);
+				float num21 = Mathf.Min(1f * delta * num20, pending_health.value);
+				ownerEntity.Heal(num21);
+				if (ownerEntity.healthFraction == 1f)
+				{
+					pending_health.value = 0f;
+				}
+				else
+				{
+					pending_health.Subtract(num21);
+				}
 			}
 		}
+		float num22 = owner.AirFactor();
+		float num23 = ((num22 > oxygen.value) ? 1f : 0.1f);
+		oxygen.MoveTowards(num22, delta * num23);
 	}
 
 	private float GetCoreTempAdjustment()
@@ -17559,7 +17857,7 @@ public class PlayerMetabolism : BaseMetabolism<BasePlayer>
 		PlayerMetabolism val = Save();
 		try
 		{
-			base.baseEntity.ClientRPC<PlayerMetabolism>(RpcTarget.PlayerAndSpectators("UpdateMetabolism", base.baseEntity), val);
+			base.baseEntity.ClientRPC(RpcTarget.PlayerAndSpectators("UpdateMetabolism", base.baseEntity), val);
 		}
 		finally
 		{
@@ -17803,7 +18101,7 @@ public class PlayerModifiers : BaseModifiers<BasePlayer>
 		PlayerModifiers val = Save(forDisk: false);
 		try
 		{
-			base.baseEntity.ClientRPC<PlayerModifiers>(RpcTarget.Player("UpdateModifiers", base.baseEntity), val);
+			base.baseEntity.ClientRPC(RpcTarget.Player("UpdateModifiers", base.baseEntity), val);
 		}
 		finally
 		{
@@ -18005,8 +18303,8 @@ public class PowerCounter : IOEntity
 		}
 	}
 
-	[RPC_Server.IsVisible(3f)]
 	[RPC_Server]
+	[RPC_Server.IsVisible(3f)]
 	public void ToggleDisplayMode(RPCMessage msg)
 	{
 		bool flag = msg.read.Bit();
@@ -18742,10 +19040,10 @@ public class PoweredRemoteControlEntity : IOEntity, IRemoteControllable
 		}
 	}
 
-	[RPC_Server]
-	[RPC_Server.CallsPerSecond(3uL)]
 	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server]
+	[RPC_Server.CallsPerSecond(3uL)]
 	public void SERVER_RequestOpenRCPanel(RPCMessage msg)
 	{
 		BasePlayer player = msg.player;
@@ -19553,8 +19851,8 @@ using UnityEngine;
 
 public class Ragdoll : EntityComponent<BaseEntity>, IPrefabPreProcess
 {
-	[Header("Ragdoll")]
 	[Tooltip("If true, ragdoll physics are simulated on the server instead of the client")]
+	[Header("Ragdoll")]
 	public bool simOnServer;
 
 	public float lerpToServerSimTime = 0.5f;
@@ -19594,12 +19892,12 @@ public class Ragdoll : EntityComponent<BaseEntity>, IPrefabPreProcess
 	[SerializeField]
 	private List<ConfigurableJoint> configurableJoints = new List<ConfigurableJoint>();
 
-	[ReadOnly]
 	[SerializeField]
+	[ReadOnly]
 	private List<Collider> colliders = new List<Collider>();
 
-	[ReadOnly]
 	[SerializeField]
+	[ReadOnly]
 	private int[] boneIndex;
 
 	[ReadOnly]
@@ -19936,7 +20234,7 @@ public class Ragdoll : EntityComponent<BaseEntity>, IPrefabPreProcess
 		try
 		{
 			SetRagdollMessageVals(val);
-			base.baseEntity.ClientRPC<Ragdoll>(RpcTarget.NetworkGroup("RPCSyncJoints"), val);
+			base.baseEntity.ClientRPC(RpcTarget.NetworkGroup("RPCSyncJoints"), val);
 		}
 		finally
 		{
@@ -20176,7 +20474,7 @@ public class ReactiveTarget : IOEntity
 			}
 			else
 			{
-				ClientRPC<NetworkableId>(RpcTarget.NetworkGroup("HitEffect"), info.Initiator.net.ID);
+				ClientRPC(RpcTarget.NetworkGroup("HitEffect"), info.Initiator.net.ID);
 			}
 			Hurt(1f, DamageType.Suicide, info.Initiator, useProtection: false);
 		}
@@ -20414,8 +20712,8 @@ public class ReclaimTerminal : StorageContainer
 	}
 
 	[RPC_Server]
-	[RPC_Server.CallsPerSecond(1uL)]
 	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server.CallsPerSecond(1uL)]
 	public void RPC_ReloadLoot(RPCMessage msg)
 	{
 		BasePlayer player = msg.player;
@@ -20671,7 +20969,7 @@ public class RecorderTool : ThrownWeapon, ICassettePlayer
 	{
 		//IL_0018: Unknown result type (might be due to invalid IL or missing references)
 		cachedCassette = c;
-		ClientRPC<NetworkableId>(RpcTarget.NetworkGroup("Client_OnCassetteInserted"), c.net.ID);
+		ClientRPC(RpcTarget.NetworkGroup("Client_OnCassetteInserted"), c.net.ID);
 	}
 
 	public void OnCassetteRemoved(Cassette c)
@@ -20866,8 +21164,8 @@ public class Recycler : StorageContainer
 		return true;
 	}
 
-	[RPC_Server]
 	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server]
 	private void SVSwitch(RPCMessage msg)
 	{
 		bool flag = msg.read.Bit();
@@ -21166,6 +21464,7 @@ public class Recycler : StorageContainer
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using CompanionServer;
 using ConVar;
 using Facepunch;
@@ -21347,9 +21646,15 @@ public class RelationshipManager : BaseEntity
 	{
 		public ulong teamID;
 
+		public string joinKey;
+
 		public string teamName;
 
 		public ulong teamLeader;
+
+		public Vector3 firstSpawnLocation;
+
+		public bool usePartySpawn;
 
 		public List<ulong> members = new List<ulong>();
 
@@ -21375,8 +21680,32 @@ public class RelationshipManager : BaseEntity
 			BasePlayer basePlayer = FindByID(teamLeader);
 			if (!((Object)(object)basePlayer == (Object)null))
 			{
-				invites.Add(player.userID);
+				ulong item = player.userID.Get();
+				if (!invites.Contains(item))
+				{
+					invites.Add(item);
+				}
 				player.ClientRPC(RpcTarget.Player("CLIENT_PendingInvite", player), basePlayer.displayName, teamLeader, teamID);
+			}
+		}
+
+		public void SendInvite(BasePlayer player, ulong id)
+		{
+			if (invites.Count > 8)
+			{
+				invites.RemoveRange(0, 1);
+			}
+			BasePlayer basePlayer = FindByID(teamLeader);
+			if (!((Object)(object)basePlayer == (Object)null))
+			{
+				if (!invites.Contains(id))
+				{
+					invites.Add(id);
+				}
+				if ((Object)(object)player != (Object)null)
+				{
+					player.ClientRPC(RpcTarget.Player("CLIENT_PendingInvite", player), basePlayer.displayName, teamLeader, teamID);
+				}
 			}
 		}
 
@@ -21398,12 +21727,22 @@ public class RelationshipManager : BaseEntity
 
 		public bool AddPlayer(BasePlayer player, bool skipDirtyUpdate = false)
 		{
-			ulong num = player.userID.Get();
-			if (members.Contains(num))
+			if (player.currentTeam != 0L)
 			{
 				return false;
 			}
-			if (player.currentTeam != 0L)
+			if (!AddPlayer(player.userID, skipDirtyUpdate))
+			{
+				return false;
+			}
+			player.currentTeam = teamID;
+			player.SendNetworkUpdate();
+			return true;
+		}
+
+		public bool AddPlayer(ulong playerId, bool skipDirtyUpdate = false)
+		{
+			if (members.Contains(playerId))
 			{
 				return false;
 			}
@@ -21411,18 +21750,16 @@ public class RelationshipManager : BaseEntity
 			{
 				return false;
 			}
-			player.currentTeam = teamID;
-			bool num2 = members.Count == 0;
-			members.Add(num);
-			ServerInstance.playerToTeam.Add(num, this);
+			bool num = members.Count == 0;
+			members.Add(playerId);
+			ServerInstance.playerToTeam.Add(playerId, this);
 			if (!skipDirtyUpdate)
 			{
 				MarkDirty();
 			}
-			player.SendNetworkUpdate();
-			if (!num2)
+			if (!num)
 			{
-				Analytics.Azure.OnTeamChanged("added", teamID, teamLeader, num, members);
+				Analytics.Azure.OnTeamChanged("added", teamID, teamLeader, playerId, members);
 			}
 			return true;
 		}
@@ -21509,6 +21846,7 @@ public class RelationshipManager : BaseEntity
 			teamName = string.Empty;
 			teamLeader = 0uL;
 			teamStartTime = 0f;
+			joinKey = null;
 			members.Clear();
 			invites.Clear();
 			onlineMemberConnections.Clear();
@@ -21551,6 +21889,8 @@ public class RelationshipManager : BaseEntity
 	public static float mugshotUpdateInterval = 300f;
 
 	private static List<BasePlayer> _dirtyRelationshipPlayers = new List<BasePlayer>();
+
+	private static Phrase RemoteInvitesBlocked = new Phrase("remote.invites.blocked", "That player has remote invites turned off");
 
 	public static int maxTeamSize_Internal = 8;
 
@@ -21844,8 +22184,8 @@ public class RelationshipManager : BaseEntity
 		return base.OnRpcMessage(player, rpc, msg);
 	}
 
-	[RPC_Server]
 	[RPC_Server.CallsPerSecond(2uL)]
+	[RPC_Server]
 	public void BagQuotaRequest_SERVER()
 	{
 	}
@@ -22203,7 +22543,7 @@ public class RelationshipManager : BaseEntity
 		PlayerRelationships relationshipSaveByID = GetRelationshipSaveByID(playerID);
 		try
 		{
-			ClientRPC<PlayerRelationships>(RpcTarget.Player("CLIENT_RecieveLocalRelationships", player), relationshipSaveByID);
+			ClientRPC(RpcTarget.Player("CLIENT_RecieveLocalRelationships", player), relationshipSaveByID);
 		}
 		finally
 		{
@@ -22268,8 +22608,8 @@ public class RelationshipManager : BaseEntity
 		}
 	}
 
-	[RPC_Server]
 	[RPC_Server.CallsPerSecond(2uL)]
+	[RPC_Server]
 	public void SERVER_ChangeRelationship(RPCMessage msg)
 	{
 		EncryptedValue<ulong> userID = msg.player.userID;
@@ -22407,7 +22747,13 @@ public class RelationshipManager : BaseEntity
 			val.teamLeader = value.teamLeader;
 			val.teamID = value.teamID;
 			val.teamName = value.teamName;
+			val.joinKey = value.joinKey;
 			val.members = Pool.Get<List<TeamMember>>();
+			val.invites = Pool.Get<List<ulong>>();
+			foreach (ulong invite in value.invites)
+			{
+				val.invites.Add(invite);
+			}
 			foreach (ulong member in value.members)
 			{
 				TeamMember val2 = Pool.Get<TeamMember>();
@@ -22476,6 +22822,28 @@ public class RelationshipManager : BaseEntity
 			return value;
 		}
 		return null;
+	}
+
+	public bool IsPlayerInTeam(ulong userId)
+	{
+		return playerToTeam.ContainsKey(userId);
+	}
+
+	public PlayerTeam FindByJoinKey(string key)
+	{
+		if (string.IsNullOrEmpty(key))
+		{
+			return null;
+		}
+		return teams.Values.FirstOrDefault((PlayerTeam x) => x.joinKey == key);
+	}
+
+	public PlayerTeam CreatePartyTeam(string joinKey)
+	{
+		PlayerTeam playerTeam = CreateTeam();
+		playerTeam.usePartySpawn = true;
+		playerTeam.joinKey = joinKey;
+		return playerTeam;
 	}
 
 	public PlayerTeam CreateTeam()
@@ -22702,6 +23070,61 @@ public class RelationshipManager : BaseEntity
 		}
 	}
 
+	public bool HasPendingInvite(ulong forPlayer, out ulong foundTeamID)
+	{
+		foundTeamID = 0uL;
+		foreach (KeyValuePair<ulong, PlayerTeam> team in teams)
+		{
+			if (team.Value.invites.Contains(forPlayer))
+			{
+				foundTeamID = team.Key;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public bool GetTeamLeaderInfo(ulong teamID, out string leaderDisplayName, out ulong leaderID)
+	{
+		leaderDisplayName = string.Empty;
+		leaderID = 0uL;
+		if (teams.TryGetValue(teamID, out var value))
+		{
+			BasePlayer basePlayer = BasePlayer.FindAwakeOrSleepingByID(value.teamLeader);
+			if ((Object)(object)basePlayer != (Object)null)
+			{
+				leaderDisplayName = basePlayer.displayName;
+				leaderID = basePlayer.userID;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	[ServerUserVar]
+	public static void sendofflineinvite(Arg arg)
+	{
+		BasePlayer basePlayer = arg.Player();
+		PlayerTeam playerTeam = ServerInstance.FindTeam(basePlayer.currentTeam);
+		if (playerTeam == null || (Object)(object)playerTeam.GetLeader() == (Object)null || (Object)(object)playerTeam.GetLeader() != (Object)(object)basePlayer)
+		{
+			return;
+		}
+		ulong uLong = arg.GetULong(0, 0uL);
+		if (uLong != 0L)
+		{
+			BasePlayer basePlayer2 = BasePlayer.FindAwakeOrSleepingByID(uLong);
+			if ((Object)(object)basePlayer2 != (Object)null && !basePlayer2.GetInfoBool("client.allowteaminvitesremoteplayers", defaultVal: true))
+			{
+				basePlayer.ShowToast(GameTip.Styles.Error, RemoteInvitesBlocked, false);
+			}
+			else if ((Object)(object)basePlayer2 == (Object)null || (!basePlayer2.IsNpc && basePlayer2.currentTeam == 0L))
+			{
+				playerTeam.SendInvite(basePlayer2, uLong);
+			}
+		}
+	}
+
 	[ServerVar]
 	public static void fakeinvite(Arg arg)
 	{
@@ -22798,7 +23221,13 @@ public class RelationshipManager : BaseEntity
 			playerTeam.teamLeader = team.teamLeader;
 			playerTeam.teamID = team.teamID;
 			playerTeam.teamName = team.teamName;
+			playerTeam.joinKey = team.joinKey;
 			playerTeam.members = new List<ulong>();
+			playerTeam.invites = new List<ulong>();
+			foreach (ulong invite in team.invites)
+			{
+				playerTeam.invites.Add(invite);
+			}
 			foreach (TeamMember member in team.members)
 			{
 				playerTeam.members.Add(member.userID);
@@ -23021,9 +23450,15 @@ public class PlayerTeam : IPooled
 {
 	public ulong teamID;
 
+	public string joinKey;
+
 	public string teamName;
 
 	public ulong teamLeader;
+
+	public Vector3 firstSpawnLocation;
+
+	public bool usePartySpawn;
 
 	public List<ulong> members = new List<ulong>();
 
@@ -23049,8 +23484,32 @@ public class PlayerTeam : IPooled
 		BasePlayer basePlayer = FindByID(teamLeader);
 		if (!((Object)(object)basePlayer == (Object)null))
 		{
-			invites.Add(player.userID);
+			ulong item = player.userID.Get();
+			if (!invites.Contains(item))
+			{
+				invites.Add(item);
+			}
 			player.ClientRPC(RpcTarget.Player("CLIENT_PendingInvite", player), basePlayer.displayName, teamLeader, teamID);
+		}
+	}
+
+	public void SendInvite(BasePlayer player, ulong id)
+	{
+		if (invites.Count > 8)
+		{
+			invites.RemoveRange(0, 1);
+		}
+		BasePlayer basePlayer = FindByID(teamLeader);
+		if (!((Object)(object)basePlayer == (Object)null))
+		{
+			if (!invites.Contains(id))
+			{
+				invites.Add(id);
+			}
+			if ((Object)(object)player != (Object)null)
+			{
+				player.ClientRPC(RpcTarget.Player("CLIENT_PendingInvite", player), basePlayer.displayName, teamLeader, teamID);
+			}
 		}
 	}
 
@@ -23072,12 +23531,22 @@ public class PlayerTeam : IPooled
 
 	public bool AddPlayer(BasePlayer player, bool skipDirtyUpdate = false)
 	{
-		ulong num = player.userID.Get();
-		if (members.Contains(num))
+		if (player.currentTeam != 0L)
 		{
 			return false;
 		}
-		if (player.currentTeam != 0L)
+		if (!AddPlayer(player.userID, skipDirtyUpdate))
+		{
+			return false;
+		}
+		player.currentTeam = teamID;
+		player.SendNetworkUpdate();
+		return true;
+	}
+
+	public bool AddPlayer(ulong playerId, bool skipDirtyUpdate = false)
+	{
+		if (members.Contains(playerId))
 		{
 			return false;
 		}
@@ -23085,18 +23554,16 @@ public class PlayerTeam : IPooled
 		{
 			return false;
 		}
-		player.currentTeam = teamID;
-		bool num2 = members.Count == 0;
-		members.Add(num);
-		ServerInstance.playerToTeam.Add(num, this);
+		bool num = members.Count == 0;
+		members.Add(playerId);
+		ServerInstance.playerToTeam.Add(playerId, this);
 		if (!skipDirtyUpdate)
 		{
 			MarkDirty();
 		}
-		player.SendNetworkUpdate();
-		if (!num2)
+		if (!num)
 		{
-			Analytics.Azure.OnTeamChanged("added", teamID, teamLeader, num, members);
+			Analytics.Azure.OnTeamChanged("added", teamID, teamLeader, playerId, members);
 		}
 		return true;
 	}
@@ -23183,6 +23650,7 @@ public class PlayerTeam : IPooled
 		teamName = string.Empty;
 		teamLeader = 0uL;
 		teamStartTime = 0f;
+		joinKey = null;
 		members.Clear();
 		invites.Clear();
 		onlineMemberConnections.Clear();
@@ -23481,9 +23949,9 @@ public class RemoteControlEntity : BaseCombatEntity, IRemoteControllable
 		}
 	}
 
+	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server]
 	[RPC_Server.IsVisible(3f)]
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server.CallsPerSecond(3uL)]
 	public void SERVER_RequestOpenRCPanel(RPCMessage msg)
 	{
@@ -24573,8 +25041,8 @@ public class ResourceContainer : EntityComponent<BaseEntity>
 		return base.OnRpcMessage(player, rpc, msg);
 	}
 
-	[BaseEntity.RPC_Server.IsVisible(3f)]
 	[BaseEntity.RPC_Server]
+	[BaseEntity.RPC_Server.IsVisible(3f)]
 	private void StartLootingContainer(BaseEntity.RPCMessage msg)
 	{
 		BasePlayer player = msg.player;
@@ -24759,9 +25227,9 @@ public class RFBroadcaster : IOEntity, IRFObject
 	{
 	}
 
-	[RPC_Server.CallsPerSecond(3uL)]
-	[RPC_Server.IsVisible(3f)]
 	[RPC_Server]
+	[RPC_Server.IsVisible(3f)]
+	[RPC_Server.CallsPerSecond(3uL)]
 	public void ServerSetFrequency(RPCMessage msg)
 	{
 		if (!CanChangeFrequency(msg.player) || Time.time < nextChangeTime)
@@ -24833,10 +25301,10 @@ public class RFBroadcaster : IOEntity, IRFObject
 		base.DoServerDestroy();
 	}
 
+	[RPC_Server.CallsPerSecond(3uL)]
 	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server.IsVisible(3f)]
 	[RPC_Server]
-	[RPC_Server.CallsPerSecond(3uL)]
 	public void SERVER_RequestOpenPanel(RPCMessage msg)
 	{
 		BasePlayer player = msg.player;
@@ -25059,9 +25527,9 @@ public class RFReceiver : IOEntity, IRFObject
 		}
 	}
 
+	[RPC_Server.CallsPerSecond(3uL)]
 	[RPC_Server.IsVisible(3f)]
 	[RPC_Server]
-	[RPC_Server.CallsPerSecond(3uL)]
 	public void ServerSetFrequency(RPCMessage msg)
 	{
 		if (!((Object)(object)msg.player == (Object)null) && msg.player.CanBuild())
@@ -25079,8 +25547,8 @@ public class RFReceiver : IOEntity, IRFObject
 		}
 	}
 
-	[RPC_Server]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server]
 	[RPC_Server.CallsPerSecond(3uL)]
 	public void SERVER_RequestOpenPanel(RPCMessage msg)
 	{
@@ -25695,6 +26163,10 @@ public class RidableHorse : BaseVehicle, IInventoryProvider, IDetector, HitchTro
 
 	public HorseBreed currentBreed;
 
+	public FakePhysicsRope leadingRope;
+
+	public FakePhysicsRope leadingRope2;
+
 	[Header("Container")]
 	public ItemDefinition onlyAllowedItem;
 
@@ -25725,8 +26197,8 @@ public class RidableHorse : BaseVehicle, IInventoryProvider, IDetector, HitchTro
 
 	public float equipmentSpeedMod;
 
-	[Header("Horse")]
 	[SerializeField]
+	[Header("Horse")]
 	private Animator animator;
 
 	[SerializeField]
@@ -25786,8 +26258,8 @@ public class RidableHorse : BaseVehicle, IInventoryProvider, IDetector, HitchTro
 
 	public AnimationCurve slopeAngleSpeedFactor;
 
-	[SerializeField]
 	[Space]
+	[SerializeField]
 	[Header("Collision Damage")]
 	private GameObjectRef collisionEffect;
 
@@ -25882,8 +26354,8 @@ public class RidableHorse : BaseVehicle, IInventoryProvider, IDetector, HitchTro
 
 	public GameObjectRef ragdollPrefab;
 
-	[SerializeField]
 	[Header("Pulling")]
+	[SerializeField]
 	private List<ModifierDefintion> pullingPlayerModifiers;
 
 	[Header("Avoidance")]
@@ -25971,8 +26443,8 @@ public class RidableHorse : BaseVehicle, IInventoryProvider, IDetector, HitchTro
 	[NonSerialized]
 	public HorseModifiers modifiers;
 
-	[ServerVar]
 	[Help("Scale all rideable animal dung production rates by this value. 0 will disable dung production.")]
+	[ServerVar]
 	public static float dungTimeScale = 1f;
 
 	private float nextEatTime;
@@ -26730,8 +27202,8 @@ public class RidableHorse : BaseVehicle, IInventoryProvider, IDetector, HitchTro
 		SendNetworkUpdate();
 	}
 
-	[RPC_Server.IsVisible(3f)]
 	[RPC_Server]
+	[RPC_Server.IsVisible(3f)]
 	private void SERVER_OpenLoot(RPCMessage rpc)
 	{
 		if (storageInventory == null)
@@ -28895,9 +29367,9 @@ public class RidableHorse : BaseVehicle, IInventoryProvider, IDetector, HitchTro
 		}
 	}
 
+	[RPC_Server]
 	[RPC_Server.IsVisible(3f)]
 	[RPC_Server.CallsPerSecond(1uL)]
-	[RPC_Server]
 	public void SERVER_Lead(RPCMessage msg)
 	{
 		BasePlayer player = msg.player;
@@ -29337,8 +29809,8 @@ public class RidableHorse : BaseVehicle, IInventoryProvider, IDetector, HitchTro
 
 	[RPC_Server]
 	[RPC_Server.IsVisible(3f)]
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server.CallsPerSecond(1uL)]
+	[RPC_Server.MaxDistance(3f)]
 	public void SERVER_RequestTow(RPCMessage msg)
 	{
 		//IL_0039: Unknown result type (might be due to invalid IL or missing references)
@@ -29350,9 +29822,9 @@ public class RidableHorse : BaseVehicle, IInventoryProvider, IDetector, HitchTro
 		}
 	}
 
-	[RPC_Server]
-	[RPC_Server.IsVisible(3f)]
 	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server.IsVisible(3f)]
+	[RPC_Server]
 	[RPC_Server.CallsPerSecond(1uL)]
 	public void SERVER_RequestDetach(RPCMessage msg)
 	{
@@ -29389,7 +29861,7 @@ public class RidableHorse : BaseVehicle, IInventoryProvider, IDetector, HitchTro
 			return;
 		}
 		towingEntityId = towableEntity.TowEntity.net.ID;
-		ClientRPC<NetworkableId>(RpcTarget.NetworkGroup("CLIENT_SetTowId"), towableEntity.TowEntity.net.ID);
+		ClientRPC(RpcTarget.NetworkGroup("CLIENT_SetTowId"), towableEntity.TowEntity.net.ID);
 		towingAttachment.AttachTo(towableEntity);
 		((FacepunchBehaviour)this).Invoke((Action)delegate
 		{
@@ -29405,7 +29877,7 @@ public class RidableHorse : BaseVehicle, IInventoryProvider, IDetector, HitchTro
 		if (IsTowing)
 		{
 			towingEntityId = default(NetworkableId);
-			ClientRPC<NetworkableId>(RpcTarget.NetworkGroup("CLIENT_SetTowId"), default(NetworkableId));
+			((BaseEntity)this).ClientRPC(RpcTarget.NetworkGroup("CLIENT_SetTowId"), default(NetworkableId));
 			ClientRPC(RpcTarget.NetworkGroup("CLIENT_CanTow"), arg1: false);
 			towableEntity = null;
 			towingAttachment.Detach();
@@ -29720,8 +30192,8 @@ public class RustigeEgg : BaseCombatEntity
 		return HasFlag(Flags.Reserved1);
 	}
 
-	[RPC_Server.IsVisible(3f)]
 	[RPC_Server]
+	[RPC_Server.IsVisible(3f)]
 	public void RPC_Spin(RPCMessage msg)
 	{
 	}
@@ -29740,7 +30212,7 @@ public class RustigeEgg : BaseCombatEntity
 		{
 			if (flag)
 			{
-				ClientRPC<Vector3>(RpcTarget.NetworkGroup("FaceEggPosition"), msg.player.eyes.position);
+				ClientRPC(RpcTarget.NetworkGroup("FaceEggPosition"), msg.player.eyes.position);
 				((FacepunchBehaviour)this).Invoke((Action)CloseEgg, 60f);
 			}
 			else
@@ -30465,9 +30937,9 @@ public class SamSite : ContainerIOEntity
 		}
 	}
 
-	[RPC_Server.CallsPerSecond(1uL)]
 	[RPC_Server.IsVisible(3f)]
 	[RPC_Server]
+	[RPC_Server.CallsPerSecond(1uL)]
 	private void ToggleDefenderMode(RPCMessage msg)
 	{
 		if (staticRespawn)
@@ -31231,9 +31703,9 @@ public class SeismicSensor : IOEntity
 		SendNetworkUpdate();
 	}
 
+	[RPC_Server.IsVisible(3f)]
 	[RPC_Server]
 	[RPC_Server.CallsPerSecond(5uL)]
-	[RPC_Server.IsVisible(3f)]
 	public void RPC_SetRange(RPCMessage msg)
 	{
 		BasePlayer player = msg.player;
@@ -31483,8 +31955,8 @@ public class Shield : HeldEntity
 		return ShieldCollider.sharedMaterial.GetName();
 	}
 
-	[RPC_Server.CallsPerSecond(10uL)]
 	[RPC_Server]
+	[RPC_Server.CallsPerSecond(10uL)]
 	[RPC_Server.FromOwner(false)]
 	private void ServerToggleBlock(RPCMessage msg)
 	{
@@ -32154,7 +32626,7 @@ public class ShopFront : StorageContainer
 		//IL_0056: Unknown result type (might be due to invalid IL or missing references)
 		//IL_005c: Unknown result type (might be due to invalid IL or missing references)
 		//IL_004d: Unknown result type (might be due to invalid IL or missing references)
-		ClientRPC<NetworkableId, NetworkableId>(RpcTarget.NetworkGroup("CLIENT_ReceivePlayers"), (NetworkableId)(((Object)(object)vendorPlayer == (Object)null) ? default(NetworkableId) : vendorPlayer.net.ID), (NetworkableId)(((Object)(object)customerPlayer == (Object)null) ? default(NetworkableId) : customerPlayer.net.ID));
+		ClientRPC(RpcTarget.NetworkGroup("CLIENT_ReceivePlayers"), (NetworkableId)(((Object)(object)vendorPlayer == (Object)null) ? default(NetworkableId) : vendorPlayer.net.ID), (NetworkableId)(((Object)(object)customerPlayer == (Object)null) ? default(NetworkableId) : customerPlayer.net.ID));
 	}
 
 	public override void GetAllInventories(List<ItemContainer> list)
@@ -32187,8 +32659,8 @@ using UnityEngine.Assertions;
 
 public class SiegeTower : BaseSiegeWeapon
 {
-	[SerializeField]
 	[Header("Siege Tower")]
+	[SerializeField]
 	private SiegeTowerDoor drawBridgePrefab;
 
 	[SerializeField]
@@ -33170,9 +33642,9 @@ public class Signage : IOEntity, ILOD, ISignage, IUGCBrowserEntity
 		}
 	}
 
-	[RPC_Server]
-	[RPC_Server.MaxDistance(5f)]
 	[RPC_Server.CallsPerSecond(5uL)]
+	[RPC_Server.MaxDistance(5f)]
+	[RPC_Server]
 	public void UpdateSign(RPCMessage msg)
 	{
 		//IL_00b4: Unknown result type (might be due to invalid IL or missing references)
@@ -33362,9 +33834,9 @@ public class SimpleBuildingBlock : StabilityEntity, ISimpleUpgradable, ISprayCal
 		return true;
 	}
 
-	[RPC_Server.IsVisible(3f)]
-	[RPC_Server.CallsPerSecond(5uL)]
 	[RPC_Server]
+	[RPC_Server.CallsPerSecond(5uL)]
+	[RPC_Server.IsVisible(3f)]
 	public void DoSimpleUpgrade(RPCMessage msg)
 	{
 		if (base.SecondsSinceAttacked < 30f)

@@ -383,7 +383,12 @@ internal enum MessageType : byte
 	VoiceData = 21,
 	EAC = 22,
 	EntityFlags = 23,
-	Last = 23
+	World = 24,
+	ConsoleReplicatedVars = 25,
+	QueueUpdate = 26,
+	SyncVar = 27,
+	PackedSyncVar = 28,
+	Last = 28
 }
 
 

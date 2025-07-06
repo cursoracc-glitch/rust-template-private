@@ -7907,7 +7907,7 @@ public static class KeyCombos
 {
 	public static bool TryParse(ref string name, out List<KeyCode> keys)
 	{
-		//IL_00b0: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00e2: Unknown result type (might be due to invalid IL or missing references)
 		if (string.IsNullOrWhiteSpace(name) || name.Length < 5 || !name.StartsWith("[") || !name.EndsWith("]") || !name.Contains("+"))
 		{
 			keys = null;
@@ -7915,42 +7915,53 @@ public static class KeyCombos
 		}
 		string[] array = name.Substring(1, name.Length - 2).ToLowerInvariant().Split('+');
 		List<KeyCode> list = new List<KeyCode>(array.Length);
+		List<string> list2 = new List<string>(array.Length);
 		string[] array2 = array;
 		foreach (string text in array2)
 		{
-			string value = text;
+			string text2 = text;
 			if (text.Length == 1 && char.IsDigit(text[0]))
 			{
-				value = "alpha" + text;
+				text2 = "alpha" + text;
 			}
-			if (!Enum.TryParse<KeyCode>(value, ignoreCase: true, out KeyCode result))
+			if (text2 == "mousewheelup" || text2 == "mousewheeldown")
+			{
+				list2.Add(text2);
+				continue;
+			}
+			if (!Enum.TryParse<KeyCode>(text2, ignoreCase: true, out KeyCode result))
 			{
 				keys = null;
 				return false;
 			}
 			list.Add(result);
+			string text3 = ((object)(KeyCode)(ref result)/*cast due to .constrained prefix*/).ToString().ToLowerInvariant();
+			list2.Add(text3.StartsWith("alpha") ? text3.Replace("alpha", "") : text3);
 		}
-		IEnumerable<string> values = from k in list
-			select ((object)(KeyCode)(ref k)/*cast due to .constrained prefix*/).ToString().ToLowerInvariant() into s
-			select (!s.StartsWith("alpha")) ? s : s.Replace("alpha", "");
-		name = "[" + string.Join("+", values) + "]";
+		name = "[" + string.Join("+", list2) + "]";
 		keys = list;
 		return true;
 	}
 
 	public static void RegisterButton(string name, List<KeyCode> keys)
 	{
-		if (string.IsNullOrWhiteSpace(name) || keys == null || keys.Count <= 1 || Input.HasButton(name))
+		if (string.IsNullOrWhiteSpace(name) || keys == null)
+		{
+			return;
+		}
+		bool usesMouseWheelUp = name.Contains("mousewheelup");
+		bool usesMouseWheelDown = name.Contains("mousewheeldown");
+		if ((keys.Count <= 1 && !usesMouseWheelUp && !usesMouseWheelDown) || Input.HasButton(name))
 		{
 			return;
 		}
 		Input.AddButton(name, (KeyCode)0, (Func<bool>)delegate
 		{
-			//IL_0010: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0015: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0016: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0022: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0045: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0013: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0018: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0019: Unknown result type (might be due to invalid IL or missing references)
+			//IL_0028: Unknown result type (might be due to invalid IL or missing references)
+			//IL_004b: Unknown result type (might be due to invalid IL or missing references)
 			foreach (KeyCode key in keys)
 			{
 				if (!Input.GetKey(key))
@@ -7962,6 +7973,14 @@ public static class KeyCombos
 					return false;
 				}
 				if (IsMouseButton(key) && NeedsMouseButtons.AnyActive())
+				{
+					return false;
+				}
+				if (usesMouseWheelUp && Input.GetAxis("Mouse ScrollWheel") <= 0f)
+				{
+					return false;
+				}
+				if (usesMouseWheelDown && Input.GetAxis("Mouse ScrollWheel") >= 0f)
 				{
 					return false;
 				}
@@ -33995,22 +34014,5 @@ using Epic.OnlineServices.RTCAdmin;
 
 [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 internal delegate void OnKickCompleteCallbackInternal(ref KickCompleteCallbackInfoInternal data);
-
-
-using Epic.OnlineServices.RTCAdmin;
-
-public delegate void OnQueryJoinRoomTokenCompleteCallback(ref QueryJoinRoomTokenCompleteCallbackInfo data);
-
-
-using System.Runtime.InteropServices;
-using Epic.OnlineServices.RTCAdmin;
-
-[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-internal delegate void OnQueryJoinRoomTokenCompleteCallbackInternal(ref QueryJoinRoomTokenCompleteCallbackInfoInternal data);
-
-
-using Epic.OnlineServices.RTCAdmin;
-
-public delegate void OnSetParticipantHardMuteCompleteCallback(ref SetParticipantHardMuteCompleteCallbackInfo data);
 
 

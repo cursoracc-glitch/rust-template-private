@@ -75,6 +75,8 @@ public class BuildingBlock : StabilityEntity
 
 	public OBBComponent AlternativePipeBounds;
 
+	public bool useCastNoClipChecks;
+
 	public const int WALLPAPER_MAXHEALTH = 100;
 
 	[HideInInspector]
@@ -511,8 +513,8 @@ public class BuildingBlock : StabilityEntity
 		base.health = MaxHealth();
 	}
 
-	[RPC_Server]
 	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server]
 	public void DoUpgradeToGrade(RPCMessage msg)
 	{
 		//IL_02a9: Unknown result type (might be due to invalid IL or missing references)
@@ -932,8 +934,8 @@ public class BuildingBlock : StabilityEntity
 		return !player.IsBuildingBlocked(((Component)this).transform.position, ((Component)this).transform.rotation, bounds);
 	}
 
-	[RPC_Server]
 	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server]
 	public void DoRotation(RPCMessage msg)
 	{
 		//IL_0047: Unknown result type (might be due to invalid IL or missing references)
@@ -1117,6 +1119,15 @@ public class BuildingBlock : StabilityEntity
 		}
 	}
 
+	public override bool ShouldUseCastNoClipChecks()
+	{
+		if (!useCastNoClipChecks)
+		{
+			return base.ShouldUseCastNoClipChecks();
+		}
+		return true;
+	}
+
 	public bool HasWallpaper()
 	{
 		if (!(wallpaperHealth > 0f))
@@ -1213,8 +1224,8 @@ public class BuildingBlock : StabilityEntity
 		}
 	}
 
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server]
+	[RPC_Server.MaxDistance(3f)]
 	private void RPC_PickupWallpaperStart(RPCMessage msg)
 	{
 		if (msg.player.CanInteract() && CanPickup(msg.player))
@@ -2007,8 +2018,8 @@ public class BuildingPrivlidge : StorageContainer
 		return baseLock.OnTryToOpen(player);
 	}
 
-	[RPC_Server.IsVisible(3f)]
 	[RPC_Server]
+	[RPC_Server.IsVisible(3f)]
 	private void AddAuthorize(RPCMessage rpc)
 	{
 		if (rpc.player.CanInteract() && CanAdministrate(rpc.player))
@@ -2785,8 +2796,8 @@ public class Candle : BaseCombatEntity, ISplashable, IIgniteable, IAlwaysOn
 		return base.OnRpcMessage(player, rpc, msg);
 	}
 
-	[RPC_Server]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server]
 	public void SetWantsOn(RPCMessage msg)
 	{
 		bool b = msg.read.Bit();
@@ -3040,8 +3051,8 @@ public class CardReader : IOEntity
 		Effect.server.Run(accessGrantedEffect.resourcePath, audioPosition.position, Vector3.up);
 	}
 
-	[RPC_Server]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server]
 	public void ServerCardSwiped(RPCMessage msg)
 	{
 		//IL_0014: Unknown result type (might be due to invalid IL or missing references)
@@ -3454,8 +3465,8 @@ public class CarvablePumpkin : BaseOven, ILOD, ISignage, IUGCBrowserEntity
 		}
 	}
 
-	[RPC_Server]
 	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server]
 	public void LockSign(RPCMessage msg)
 	{
 		if (msg.player.CanInteract() && CanUpdateSign(msg.player))
@@ -3466,8 +3477,8 @@ public class CarvablePumpkin : BaseOven, ILOD, ISignage, IUGCBrowserEntity
 		}
 	}
 
-	[RPC_Server]
 	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server]
 	public void UnLockSign(RPCMessage msg)
 	{
 		if (msg.player.CanInteract() && CanUnlockSign(msg.player))
@@ -3600,9 +3611,9 @@ public class CarvablePumpkin : BaseOven, ILOD, ISignage, IUGCBrowserEntity
 		}
 	}
 
-	[RPC_Server.MaxDistance(5f)]
-	[RPC_Server.CallsPerSecond(5uL)]
 	[RPC_Server]
+	[RPC_Server.CallsPerSecond(5uL)]
+	[RPC_Server.MaxDistance(5f)]
 	public void UpdateSign(RPCMessage msg)
 	{
 		//IL_00b4: Unknown result type (might be due to invalid IL or missing references)
@@ -4626,8 +4637,8 @@ public class Catapult : BaseSiegeWeapon
 		}
 	}
 
-	[RPC_Server]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server]
 	public void SERVER_OpenAmmo(RPCMessage msg)
 	{
 		BasePlayer player = msg.player;
@@ -4668,9 +4679,9 @@ public class Catapult : BaseSiegeWeapon
 		}
 	}
 
-	[RPC_Server]
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server]
 	private void SERVER_ReloadStart(RPCMessage msg)
 	{
 		if (msg.player.CanInteract() && CanReload())
@@ -4683,8 +4694,8 @@ public class Catapult : BaseSiegeWeapon
 	}
 
 	[RPC_Server]
-	[RPC_Server.IsVisible(3f)]
 	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server.IsVisible(3f)]
 	public void SERVER_CancelReload(RPCMessage msg)
 	{
 		if ((Object)(object)msg.player == (Object)(object)reloadingPlayer)
@@ -5308,7 +5319,7 @@ public class CeilingLight : IOEntity
 		{
 			if (info.damageTypes.Has(DamageType.Explosion))
 			{
-				ClientRPC<NetworkableId, Vector3, Vector3>(RpcTarget.NetworkGroup("ClientPhysPush"), default(NetworkableId), info.attackNormal * 3f * (info.damageTypes.Total() / 50f), info.HitPositionWorld);
+				ClientRPC(RpcTarget.NetworkGroup("ClientPhysPush"), default(NetworkableId), info.attackNormal * 3f * (info.damageTypes.Total() / 50f), info.HitPositionWorld);
 			}
 			base.Hurt(info);
 		}
@@ -5388,7 +5399,7 @@ public class CeilingLight : IOEntity
 		//IL_0051: Unknown result type (might be due to invalid IL or missing references)
 		float num = 3f * (info.damageTypes.Total() / 50f);
 		NetworkableId arg = (NetworkableId)(((Object)(object)info.Initiator != (Object)null && info.Initiator is BasePlayer && !info.IsPredicting) ? info.Initiator.net.ID : default(NetworkableId));
-		ClientRPC<NetworkableId, Vector3, Vector3>(RpcTarget.NetworkGroup("ClientPhysPush"), arg, info.attackNormal * num, info.HitPositionWorld);
+		ClientRPC(RpcTarget.NetworkGroup("ClientPhysPush"), arg, info.attackNormal * num, info.HitPositionWorld);
 		base.OnAttacked(info);
 	}
 }
@@ -5711,7 +5722,7 @@ public class Chainsaw : BaseMelee
 		}
 	}
 
-	public override void ServerUse(float damageModifier = 1f, float speedModifier = 1f, Transform originOverride = null, bool useBulletThickness = true)
+	public override void ServerUse(float damageModifier = 1f, float speedModifier = 1f, Matrix4x4? originOverride = null, bool useBulletThickness = true)
 	{
 		base.ServerUse(damageModifier, speedModifier, originOverride, useBulletThickness);
 		SetAttackStatus(status: true);
@@ -5862,8 +5873,8 @@ public class Chainsaw : BaseMelee
 		ReduceAmmo(fuelPerSec);
 	}
 
-	[RPC_Server]
 	[RPC_Server.IsActiveItem]
+	[RPC_Server]
 	public void Server_StartEngine(RPCMessage msg)
 	{
 		if (ammo > 0 && !EngineOn())
@@ -6411,8 +6422,8 @@ public class ChickenCoop : StorageContainer
 		SetFlag(Flags.Reserved3, b: true);
 	}
 
-	[RPC_Server.CallsPerSecond(1uL)]
 	[RPC_Server]
+	[RPC_Server.CallsPerSecond(1uL)]
 	[RPC_Server.IsVisible(3f)]
 	private void RequestAnimalStats(RPCMessage msg)
 	{
@@ -6437,7 +6448,7 @@ public class ChickenCoop : StorageContainer
 					val.animals.Add(val2);
 				}
 			}
-			ClientRPC<ChickenCoopStatusUpdate>(RpcTarget.Player("OnReceivedChickenStats", player), val);
+			ClientRPC(RpcTarget.Player("OnReceivedChickenStats", player), val);
 		}
 		finally
 		{
@@ -7683,26 +7694,26 @@ public class ClanManager : BaseEntity
 		return base.OnRpcMessage(player, rpc, msg);
 	}
 
-	[RPC_Server.CallsPerSecond(3uL)]
 	[RPC_Server]
+	[RPC_Server.CallsPerSecond(3uL)]
 	public async void Server_CreateClan(RPCMessage msg)
 	{
 		int requestId = msg.read.Int32();
 		string text = default(string);
 		if (!ClanValidator.ValidateClanName(msg.read.String(256, false), ref text))
 		{
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)6, null, hasClanInfo: false));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)6, null, hasClanInfo: false));
 			return;
 		}
 		ClanValueResult<IClan> result = await Backend.Create((ulong)msg.player.userID, text);
 		if (CheckClanResult(requestId, msg.player, result, out var clan))
 		{
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)1, clan));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)1, clan));
 		}
 	}
 
-	[RPC_Server.CallsPerSecond(3uL)]
 	[RPC_Server]
+	[RPC_Server.CallsPerSecond(3uL)]
 	public async void Server_GetClan(RPCMessage msg)
 	{
 		int requestId = msg.read.Int32();
@@ -7710,12 +7721,12 @@ public class ClanManager : BaseEntity
 		if (CheckClanResult(requestId, msg.player, result, out var clan))
 		{
 			await clan.RefreshIfStale();
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)1, clan));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)1, clan));
 		}
 	}
 
-	[RPC_Server]
 	[RPC_Server.CallsPerSecond(3uL)]
+	[RPC_Server]
 	public async void Server_GetLogs(RPCMessage msg)
 	{
 		int requestId = msg.read.Int32();
@@ -7725,14 +7736,14 @@ public class ClanManager : BaseEntity
 			ClanValueResult<ClanLogs> val = await clan.GetLogs(100, (ulong)msg.player.userID);
 			if (val.IsSuccess)
 			{
-				ClientRPC<ClanLog>(RpcTarget.Player("Client_ReceiveClanLogs", msg.player), val.Value.ToProto());
+				ClientRPC(RpcTarget.Player("Client_ReceiveClanLogs", msg.player), val.Value.ToProto());
 			}
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, val.Result, clan));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, val.Result, clan));
 		}
 	}
 
-	[RPC_Server]
 	[RPC_Server.CallsPerSecond(3uL)]
+	[RPC_Server]
 	public async void Server_GetScoreEvents(RPCMessage msg)
 	{
 		int requestId = msg.read.Int32();
@@ -7756,9 +7767,9 @@ public class ClanManager : BaseEntity
 		ClanValueResult<List<ClanInvitation>> val = await Backend.ListInvitations((ulong)msg.player.userID);
 		if (val.IsSuccess)
 		{
-			ClientRPC<ClanInvitations>(RpcTarget.Player("Client_ReceiveClanInvitations", msg.player), val.Value.ToProto());
+			ClientRPC(RpcTarget.Player("Client_ReceiveClanInvitations", msg.player), val.Value.ToProto());
 		}
-		ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, val.Result, null, hasClanInfo: false));
+		ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, val.Result, null, hasClanInfo: false));
 	}
 
 	[RPC_Server.CallsPerSecond(3uL)]
@@ -7787,27 +7798,27 @@ public class ClanManager : BaseEntity
 		ClientRPCPlayer<ClanActionResult>(null, msg.player, "Client_ReceiveActionResult", BuildActionResult(requestId, result, null, hasClanInfo: false));
 	}
 
-	[RPC_Server.CallsPerSecond(3uL)]
 	[RPC_Server]
+	[RPC_Server.CallsPerSecond(3uL)]
 	public async void Server_SetLogo(RPCMessage msg)
 	{
 		int requestId = msg.read.Int32();
 		byte[] newLogo = msg.read.BytesWithSize(10485760u, false);
 		if (!msg.player.CanModifyClan())
 		{
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
 			return;
 		}
 		if (!ImageProcessing.IsValidPNG(newLogo, 512, 512))
 		{
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)7, null, hasClanInfo: false));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)7, null, hasClanInfo: false));
 			return;
 		}
 		ClanValueResult<IClan> result = await Backend.Get(msg.player.clanId);
 		if (CheckClanResult(requestId, msg.player, result, out var clan))
 		{
 			ClanResult result2 = await clan.SetLogo(newLogo, (ulong)msg.player.userID);
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, clan));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, clan));
 		}
 	}
 
@@ -7819,19 +7830,19 @@ public class ClanManager : BaseEntity
 		Color32 newColor = msg.read.Color32();
 		if (!msg.player.CanModifyClan())
 		{
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
 			return;
 		}
 		if (newColor.a != byte.MaxValue)
 		{
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)8, null, hasClanInfo: false));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)8, null, hasClanInfo: false));
 			return;
 		}
 		ClanValueResult<IClan> result = await Backend.Get(msg.player.clanId);
 		if (CheckClanResult(requestId, msg.player, result, out var clan))
 		{
 			ClanResult result2 = await clan.SetColor(newColor, (ulong)msg.player.userID);
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, clan));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, clan));
 		}
 	}
 
@@ -7843,13 +7854,13 @@ public class ClanManager : BaseEntity
 		string text = msg.read.StringMultiLine(2048, false);
 		if (!msg.player.CanModifyClan())
 		{
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
 			return;
 		}
 		string validatedMotd = default(string);
 		if (!ClanValidator.ValidateMotd(text, ref validatedMotd))
 		{
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)6, null, hasClanInfo: false));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)6, null, hasClanInfo: false));
 			return;
 		}
 		ClanValueResult<IClan> result = await Backend.Get(msg.player.clanId);
@@ -7857,7 +7868,7 @@ public class ClanManager : BaseEntity
 		{
 			long previousTimestamp = clan.MotdTimestamp;
 			ClanResult val = await clan.SetMotd(validatedMotd, (ulong)msg.player.userID);
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, val, clan));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, val, clan));
 			if ((int)val == 1)
 			{
 				ClanPushNotifications.SendClanAnnouncement(clan, previousTimestamp, msg.player.userID);
@@ -7873,33 +7884,33 @@ public class ClanManager : BaseEntity
 		ulong steamId = msg.read.UInt64();
 		if (!msg.player.CanModifyClan())
 		{
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
 			return;
 		}
 		ClanValueResult<IClan> result = await Backend.Get(msg.player.clanId);
 		if (CheckClanResult(requestId, msg.player, result, out var clan))
 		{
 			ClanResult result2 = await clan.Invite(steamId, (ulong)msg.player.userID);
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, clan));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, clan));
 		}
 	}
 
-	[RPC_Server]
 	[RPC_Server.CallsPerSecond(3uL)]
+	[RPC_Server]
 	public async void Server_CancelInvite(RPCMessage msg)
 	{
 		int requestId = msg.read.Int32();
 		ulong steamId = msg.read.UInt64();
 		if (!msg.player.CanModifyClan())
 		{
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
 			return;
 		}
 		ClanValueResult<IClan> result = await Backend.Get(msg.player.clanId);
 		if (CheckClanResult(requestId, msg.player, result, out var clan))
 		{
 			ClanResult result2 = await clan.CancelInvite(steamId, (ulong)msg.player.userID);
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, clan));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, clan));
 		}
 	}
 
@@ -7911,14 +7922,14 @@ public class ClanManager : BaseEntity
 		long num = msg.read.Int64();
 		if (!msg.player.CanModifyClan())
 		{
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
 			return;
 		}
 		ClanValueResult<IClan> result = await Backend.Get(num);
 		if (CheckClanResult(requestId, msg.player, result, out var clan))
 		{
 			ClanResult result2 = await clan.AcceptInvite((ulong)msg.player.userID);
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, null));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, null));
 		}
 	}
 
@@ -7930,38 +7941,38 @@ public class ClanManager : BaseEntity
 		long num = msg.read.Int64();
 		if (!msg.player.CanModifyClan())
 		{
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
 			return;
 		}
 		ClanValueResult<IClan> result = await Backend.Get(num);
 		if (CheckClanResult(requestId, msg.player, result, out var clan))
 		{
 			ClanResult result2 = await clan.CancelInvite((ulong)msg.player.userID, (ulong)msg.player.userID);
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, null));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, null));
 		}
 	}
 
-	[RPC_Server]
 	[RPC_Server.CallsPerSecond(3uL)]
+	[RPC_Server]
 	public async void Server_Kick(RPCMessage msg)
 	{
 		int requestId = msg.read.Int32();
 		ulong steamId = msg.read.UInt64();
 		if ((ulong)msg.player.userID != steamId && !msg.player.CanModifyClan())
 		{
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
 			return;
 		}
 		ClanValueResult<IClan> result = await Backend.Get(msg.player.clanId);
 		if (CheckClanResult(requestId, msg.player, result, out var clan))
 		{
 			ClanResult result2 = await clan.Kick(steamId, (ulong)msg.player.userID);
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, clan));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, clan));
 		}
 	}
 
-	[RPC_Server]
 	[RPC_Server.CallsPerSecond(3uL)]
+	[RPC_Server]
 	public async void Server_SetPlayerRole(RPCMessage msg)
 	{
 		int requestId = msg.read.Int32();
@@ -7969,19 +7980,19 @@ public class ClanManager : BaseEntity
 		int newRoleId = msg.read.Int32();
 		if (!msg.player.CanModifyClan())
 		{
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
 			return;
 		}
 		ClanValueResult<IClan> result = await Backend.Get(msg.player.clanId);
 		if (CheckClanResult(requestId, msg.player, result, out var clan))
 		{
 			ClanResult result2 = await clan.SetPlayerRole(steamId, newRoleId, (ulong)msg.player.userID);
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, clan));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, clan));
 		}
 	}
 
-	[RPC_Server]
 	[RPC_Server.CallsPerSecond(3uL)]
+	[RPC_Server]
 	public async void Server_SetPlayerNotes(RPCMessage msg)
 	{
 		int requestId = msg.read.Int32();
@@ -7989,38 +8000,38 @@ public class ClanManager : BaseEntity
 		string text = msg.read.StringMultiLine(1024, false);
 		if (!msg.player.CanModifyClan())
 		{
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
 			return;
 		}
 		string validatedNotes = default(string);
 		if (!ClanValidator.ValidatePlayerNote(text, ref validatedNotes))
 		{
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)6, null, hasClanInfo: false));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)6, null, hasClanInfo: false));
 			return;
 		}
 		ClanValueResult<IClan> result = await Backend.Get(msg.player.clanId);
 		if (CheckClanResult(requestId, msg.player, result, out var clan))
 		{
 			ClanResult result2 = await clan.SetPlayerNotes(steamId, validatedNotes, (ulong)msg.player.userID);
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, clan));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, clan));
 		}
 	}
 
-	[RPC_Server.CallsPerSecond(3uL)]
 	[RPC_Server]
+	[RPC_Server.CallsPerSecond(3uL)]
 	public async void Server_CreateRole(RPCMessage msg)
 	{
 		int requestId = msg.read.Int32();
 		string text = msg.read.String(128, false);
 		if (!msg.player.CanModifyClan())
 		{
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
 			return;
 		}
 		string name = default(string);
 		if (!ClanValidator.ValidateRoleName(text, ref name))
 		{
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)6, null, hasClanInfo: false));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)6, null, hasClanInfo: false));
 			return;
 		}
 		ClanRole role = new ClanRole
@@ -8031,7 +8042,7 @@ public class ClanManager : BaseEntity
 		if (CheckClanResult(requestId, msg.player, result, out var clan))
 		{
 			ClanResult result2 = await clan.CreateRole(role, (ulong)msg.player.userID);
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, clan));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, clan));
 		}
 	}
 
@@ -8042,7 +8053,7 @@ public class ClanManager : BaseEntity
 		int requestId = msg.read.Int32();
 		if (!msg.player.CanModifyClan())
 		{
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
 			return;
 		}
 		Role role = msg.read.Proto<Role>((Role)null);
@@ -8051,7 +8062,7 @@ public class ClanManager : BaseEntity
 			string name = default(string);
 			if (!ClanValidator.ValidateRoleName(role.name, ref name))
 			{
-				ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)6, null, hasClanInfo: false));
+				ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)6, null, hasClanInfo: false));
 				return;
 			}
 			role.name = name;
@@ -8059,7 +8070,7 @@ public class ClanManager : BaseEntity
 			if (CheckClanResult(requestId, msg.player, result, out var clan))
 			{
 				ClanResult result2 = await clan.UpdateRole(role.FromProto(), (ulong)msg.player.userID);
-				ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, clan));
+				ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, clan));
 			}
 		}
 		finally
@@ -8076,14 +8087,14 @@ public class ClanManager : BaseEntity
 		int roleId = msg.read.Int32();
 		if (!msg.player.CanModifyClan())
 		{
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
 			return;
 		}
 		ClanValueResult<IClan> result = await Backend.Get(msg.player.clanId);
 		if (CheckClanResult(requestId, msg.player, result, out var clan))
 		{
 			ClanResult result2 = await clan.DeleteRole(roleId, (ulong)msg.player.userID);
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, clan));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, clan));
 		}
 	}
 
@@ -8096,14 +8107,14 @@ public class ClanManager : BaseEntity
 		int roleIdB = msg.read.Int32();
 		if (!msg.player.CanModifyClan())
 		{
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, (ClanResult)16, null, hasClanInfo: false));
 			return;
 		}
 		ClanValueResult<IClan> result = await Backend.Get(msg.player.clanId);
 		if (CheckClanResult(requestId, msg.player, result, out var clan))
 		{
 			ClanResult result2 = await clan.SwapRoleRanks(roleIdA, roleIdB, (ulong)msg.player.userID);
-			ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, clan));
+			ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", msg.player), BuildActionResult(requestId, result2, clan));
 		}
 	}
 
@@ -8116,7 +8127,7 @@ public class ClanManager : BaseEntity
 			clan = result.Value;
 			return true;
 		}
-		ClientRPC<ClanActionResult>(RpcTarget.Player("Client_ReceiveActionResult", player), BuildActionResult(requestId, result.Result, null));
+		ClientRPC(RpcTarget.Player("Client_ReceiveActionResult", player), BuildActionResult(requestId, result.Result, null));
 		clan = null;
 		return false;
 	}
@@ -8281,8 +8292,8 @@ public class ClanManager : BaseEntity
 		}
 	}
 
-	[RPC_Server.CallsPerSecond(3uL)]
 	[RPC_Server]
+	[RPC_Server.CallsPerSecond(3uL)]
 	public async void Server_GetClanMetadata(RPCMessage msg)
 	{
 		long clanId = msg.read.Int64();
@@ -8290,11 +8301,11 @@ public class ClanManager : BaseEntity
 		if (val.IsSuccess)
 		{
 			IClan value = val.Value;
-			ClientRPC<long, string, int, Color32>(RpcTarget.Player("Client_GetClanMetadataResponse", msg.player), clanId, value.Name ?? "", value.Members?.Count ?? 0, value.Color);
+			ClientRPC(RpcTarget.Player("Client_GetClanMetadataResponse", msg.player), clanId, value.Name ?? "", value.Members?.Count ?? 0, value.Color);
 		}
 		else
 		{
-			ClientRPC<long, string, int, Color32>(RpcTarget.Player("Client_GetClanMetadataResponse", msg.player), clanId, "[unknown]", 0, Color32.op_Implicit(Color.white));
+			ClientRPC(RpcTarget.Player("Client_GetClanMetadataResponse", msg.player), clanId, "[unknown]", 0, Color32.op_Implicit(Color.white));
 		}
 	}
 
@@ -8852,8 +8863,8 @@ public class CodeLock : BaseLock
 		}
 	}
 
-	[RPC_Server.MaxDistance(3f, CheckParent = true)]
 	[RPC_Server]
+	[RPC_Server.MaxDistance(3f, CheckParent = true)]
 	private void RPC_ChangeCode(RPCMessage rpc)
 	{
 		if (!rpc.player.CanInteract())
@@ -8901,8 +8912,8 @@ public class CodeLock : BaseLock
 		}
 	}
 
-	[RPC_Server.MaxDistance(3f, CheckParent = true)]
 	[RPC_Server]
+	[RPC_Server.MaxDistance(3f, CheckParent = true)]
 	private void TryLock(RPCMessage rpc)
 	{
 		if (rpc.player.CanInteract() && !IsLocked() && code.Length == 4 && Interface.CallHook("CanLock", (object)rpc.player, (object)this) == null && whitelistPlayers.Contains(rpc.player.userID))
@@ -9388,8 +9399,8 @@ public class CollectibleEntity : BaseEntity, IPrefabPreProcess
 		Kill();
 	}
 
-	[RPC_Server]
 	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server]
 	public void Pickup(RPCMessage msg)
 	{
 		if (msg.player.CanInteract())
@@ -9398,8 +9409,8 @@ public class CollectibleEntity : BaseEntity, IPrefabPreProcess
 		}
 	}
 
-	[RPC_Server]
 	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server]
 	public void PickupEat(RPCMessage msg)
 	{
 		if (msg.player.CanInteract())
@@ -9659,10 +9670,10 @@ public class CommandBlock : IOEntity
 		return 0;
 	}
 
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server.CallsPerSecond(3uL)]
-	[RPC_Server]
+	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server]
 	public void SERVER_RequestOpenPanel(RPCMessage msg)
 	{
 		BasePlayer player = msg.player;
@@ -9676,9 +9687,9 @@ public class CommandBlock : IOEntity
 		}
 	}
 
+	[RPC_Server.CallsPerSecond(5uL)]
 	[RPC_Server.IsVisible(3f)]
 	[RPC_Server]
-	[RPC_Server.CallsPerSecond(5uL)]
 	public void RPC_SetCommand(RPCMessage msg)
 	{
 		BasePlayer player = msg.player;
@@ -9698,6 +9709,45 @@ using UnityEngine;
 
 public class CommunityEntity : PointEntity
 {
+	private class Countdown : MonoBehaviour
+	{
+		public enum TimerFormat
+		{
+			None,
+			SecondsHundreth,
+			MinutesSeconds,
+			MinutesSecondsHundreth,
+			HoursMinutes,
+			HoursMinutesSeconds,
+			HoursMinutesSecondsMilliseconds,
+			HoursMinutesSecondsTenths,
+			DaysHoursMinutes,
+			DaysHoursMinutesSeconds,
+			Custom
+		}
+
+		public string command = "";
+
+		public float endTime;
+
+		public float startTime;
+
+		public float step = 1f;
+
+		public float interval = 1f;
+
+		public TimerFormat timerFormat;
+
+		public string numberFormat = "0.####";
+
+		public bool destroyIfDone = true;
+	}
+
+	private class FadeOut : MonoBehaviour
+	{
+		public float duration;
+	}
+
 	public static CommunityEntity ServerInstance;
 
 	public static CommunityEntity ClientInstance;
@@ -9742,6 +9792,67 @@ public class CommunityEntity : PointEntity
 			ClientInstance = null;
 		}
 	}
+}
+
+
+using UnityEngine;
+
+private class Countdown : MonoBehaviour
+{
+	public enum TimerFormat
+	{
+		None,
+		SecondsHundreth,
+		MinutesSeconds,
+		MinutesSecondsHundreth,
+		HoursMinutes,
+		HoursMinutesSeconds,
+		HoursMinutesSecondsMilliseconds,
+		HoursMinutesSecondsTenths,
+		DaysHoursMinutes,
+		DaysHoursMinutesSeconds,
+		Custom
+	}
+
+	public string command = "";
+
+	public float endTime;
+
+	public float startTime;
+
+	public float step = 1f;
+
+	public float interval = 1f;
+
+	public TimerFormat timerFormat;
+
+	public string numberFormat = "0.####";
+
+	public bool destroyIfDone = true;
+}
+
+
+public enum TimerFormat
+{
+	None,
+	SecondsHundreth,
+	MinutesSeconds,
+	MinutesSecondsHundreth,
+	HoursMinutes,
+	HoursMinutesSeconds,
+	HoursMinutesSecondsMilliseconds,
+	HoursMinutesSecondsTenths,
+	DaysHoursMinutes,
+	DaysHoursMinutesSeconds,
+	Custom
+}
+
+
+using UnityEngine;
+
+private class FadeOut : MonoBehaviour
+{
+	public float duration;
 }
 
 
@@ -10777,13 +10888,13 @@ public class ConnectedSpeaker : IOEntity
 			IAudioConnectionSource connectionSource = GetConnectionSource(this, BoomBox.BacktrackLength);
 			if (connectionSource != null)
 			{
-				ClientRPC<NetworkableId>(RpcTarget.NetworkGroup("Client_PlayAudioFrom"), connectionSource.ToEntity().net.ID);
+				ClientRPC(RpcTarget.NetworkGroup("Client_PlayAudioFrom"), connectionSource.ToEntity().net.ID);
 				connectedTo.Set(connectionSource.ToEntity());
 			}
 		}
 		else if (connectedTo.IsSet)
 		{
-			ClientRPC<NetworkableId>(RpcTarget.NetworkGroup("Client_StopPlayingAudio"), connectedTo.uid);
+			ClientRPC(RpcTarget.NetworkGroup("Client_StopPlayingAudio"), connectedTo.uid);
 			connectedTo.Set(null);
 		}
 	}
@@ -11215,8 +11326,8 @@ public class ContainerCorpse : ConstructableEntity
 	}
 
 	[RPC_Server.CallsPerSecond(3uL)]
-	[RPC_Server.IsVisible(3f)]
 	[RPC_Server]
+	[RPC_Server.IsVisible(3f)]
 	private void SERVER_RequestOwnerData(RPCMessage msg)
 	{
 		BasePlayer player = msg.player;
@@ -11540,8 +11651,8 @@ public class ContainerIOEntity : IOEntity, IItemContainerEntity, IIdealSlotEntit
 		StorageContainer.DropItems(this, initiator);
 	}
 
-	[RPC_Server.IsVisible(3f)]
 	[RPC_Server]
+	[RPC_Server.IsVisible(3f)]
 	private void RPC_OpenLoot(RPCMessage rpc)
 	{
 		if (_inventory != null)
@@ -11988,8 +12099,8 @@ public class CustomDoorManipulator : DoorManipulator
 		return null;
 	}
 
-	[RPC_Server]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server]
 	public void RPC_DoPair(RPCMessage msg)
 	{
 		Door door = targetDoor;
@@ -12801,8 +12912,8 @@ public class DecayEntity : BaseCombatEntity
 		return player.IsBuildingAuthed(((Component)this).transform.position, ((Component)this).transform.rotation, bounds);
 	}
 
-	[RPC_Server]
 	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server]
 	public void DoDemolish(RPCMessage msg)
 	{
 		if (msg.player.CanInteract() && CanDemolish(msg.player) && Interface.CallHook("OnStructureDemolish", (object)this, (object)msg.player, (object)false) == null)
@@ -12816,8 +12927,8 @@ public class DecayEntity : BaseCombatEntity
 		}
 	}
 
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server]
+	[RPC_Server.MaxDistance(3f)]
 	public void DoImmediateDemolish(RPCMessage msg)
 	{
 		if (msg.player.CanInteract() && msg.player.IsAdmin && Interface.CallHook("OnStructureDemolish", (object)this, (object)msg.player, (object)true) == null)
@@ -13240,8 +13351,8 @@ public class DeployedFigurine : BaseCombatEntity
 		return base.OnRpcMessage(player, rpc, msg);
 	}
 
-	[RPC_Server]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server]
 	private void Server_Poke(RPCMessage msg)
 	{
 		if (CanWobble() && !((Object)(object)msg.player == (Object)null))
@@ -13357,8 +13468,8 @@ public class DeployedRecorder : StorageContainer, ICassettePlayer
 		return base.OnRpcMessage(player, rpc, msg);
 	}
 
-	[RPC_Server]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server]
 	public void ServerTogglePlay(RPCMessage msg)
 	{
 		bool play = ((Stream)(object)msg.read).ReadByte() == 1;
@@ -13373,7 +13484,7 @@ public class DeployedRecorder : StorageContainer, ICassettePlayer
 	public void OnCassetteInserted(Cassette c)
 	{
 		//IL_0011: Unknown result type (might be due to invalid IL or missing references)
-		ClientRPC<NetworkableId>(RpcTarget.NetworkGroup("Client_OnCassetteInserted"), c.net.ID);
+		ClientRPC(RpcTarget.NetworkGroup("Client_OnCassetteInserted"), c.net.ID);
 		SendNetworkUpdate();
 	}
 
@@ -13667,8 +13778,8 @@ public class Deployer : HeldEntity
 		return true;
 	}
 
-	[RPC_Server]
 	[RPC_Server.IsActiveItem]
+	[RPC_Server]
 	private void DoDeploy(RPCMessage msg)
 	{
 		//IL_0025: Unknown result type (might be due to invalid IL or missing references)
@@ -14546,8 +14657,8 @@ public class DigitalClock : IOEntity, INotifyLOD
 	}
 
 	[RPC_Server.CallsPerSecond(5uL)]
-	[RPC_Server]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server]
 	public void RPC_SetAlarms(RPCMessage msg)
 	{
 		if (!CanPlayerAdmin(msg.player))
@@ -14674,8 +14785,8 @@ using UnityEngine.Assertions;
 
 public class DiverPropulsionVehicle : BaseMountable, IEngineControllerUser, IEntity
 {
-	[Header("DPV")]
 	[SerializeField]
+	[Header("DPV")]
 	private Buoyancy buoyancy;
 
 	[SerializeField]
@@ -14752,8 +14863,8 @@ public class DiverPropulsionVehicle : BaseMountable, IEngineControllerUser, IEnt
 	[SerializeField]
 	private RustText healthWarningText;
 
-	[SerializeField]
 	[Header("DPV - FX")]
+	[SerializeField]
 	private Transform leftHandGrip;
 
 	[SerializeField]
@@ -15429,12 +15540,12 @@ public class Door : AnimatedBuildingBlock, INotifyTrigger, ISimpleUpgradable
 
 	public Menu.Option UpgradeMenu;
 
-	[ReadOnly]
 	[SerializeField]
+	[ReadOnly]
 	private float openAnimLength = 4f;
 
-	[ReadOnly]
 	[SerializeField]
+	[ReadOnly]
 	private float closeAnimLength = 4f;
 
 	public const Flags ReverseOpen = Flags.Reserved1;
@@ -16051,8 +16162,8 @@ public class Door : AnimatedBuildingBlock, INotifyTrigger, ISimpleUpgradable
 		}
 	}
 
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server]
+	[RPC_Server.MaxDistance(3f)]
 	protected void RPC_OpenDoor(RPCMessage rpc)
 	{
 		//IL_0074: Unknown result type (might be due to invalid IL or missing references)
@@ -16156,8 +16267,8 @@ public class Door : AnimatedBuildingBlock, INotifyTrigger, ISimpleUpgradable
 		}
 	}
 
-	[RPC_Server]
 	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server]
 	private void RPC_CloseDoor(RPCMessage rpc)
 	{
 		//IL_005f: Unknown result type (might be due to invalid IL or missing references)
@@ -16188,8 +16299,8 @@ public class Door : AnimatedBuildingBlock, INotifyTrigger, ISimpleUpgradable
 		}
 	}
 
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server]
+	[RPC_Server.MaxDistance(3f)]
 	private void RPC_KnockDoor(RPCMessage rpc)
 	{
 		//IL_0076: Unknown result type (might be due to invalid IL or missing references)
@@ -16730,7 +16841,7 @@ public class DoorKnocker : BaseCombatEntity
 	public void Knock(BasePlayer player)
 	{
 		//IL_0011: Unknown result type (might be due to invalid IL or missing references)
-		ClientRPC<Vector3>(RpcTarget.NetworkGroup("ClientKnock"), ((Component)player).transform.position);
+		ClientRPC(RpcTarget.NetworkGroup("ClientKnock"), ((Component)player).transform.position);
 		Interface.CallHook("OnDoorKnocked", (object)this, (object)player);
 	}
 }
@@ -16965,7 +17076,7 @@ public class DroppedItemContainer : BaseCombatEntity, LootPanel.IHasLootPanel, I
 
 	public static void TakeFractionOfItems(ItemContainer[] source, ItemContainer output, float movePercent)
 	{
-		//IL_0099: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00a6: Unknown result type (might be due to invalid IL or missing references)
 		output.containerVolume = source.Max((ItemContainer x) => x.containerVolume);
 		List<Item> list = Pool.Get<List<Item>>();
 		ItemContainer[] array = source;
@@ -16976,16 +17087,26 @@ public class DroppedItemContainer : BaseCombatEntity, LootPanel.IHasLootPanel, I
 		}
 		foreach (Item item in list)
 		{
-			if (!item.MoveToContainer(output))
+			if (item.MoveToContainer(output))
 			{
-				array = source;
-				foreach (ItemContainer newcontainer in array)
+				continue;
+			}
+			bool flag = false;
+			array = source;
+			foreach (ItemContainer newcontainer in array)
+			{
+				if (item.MoveToContainer(newcontainer))
 				{
-					item.MoveToContainer(newcontainer);
+					flag = true;
+					break;
 				}
+			}
+			if (!flag)
+			{
 				item.DropAndTossUpwards(output.dropPosition);
 			}
 		}
+		Pool.Free<Item>(ref list, false);
 	}
 
 	[RPC_Server]
@@ -17349,6 +17470,15 @@ public class DudTimedExplosive : TimedExplosive, IIgniteable, ISplashable
 		return 1;
 	}
 
+	protected override bool ShouldBypassClippingWallCheck()
+	{
+		if (!IsWickBurning())
+		{
+			return true;
+		}
+		return false;
+	}
+
 	public override void Load(LoadInfo info)
 	{
 		base.Load(info);
@@ -17656,8 +17786,8 @@ public class ElectricalBranch : IOEntity
 		return 0;
 	}
 
-	[RPC_Server.IsVisible(3f)]
 	[RPC_Server]
+	[RPC_Server.IsVisible(3f)]
 	[RPC_Server.CallsPerSecond(5uL)]
 	public void RPC_SetBranchOffPower(RPCMessage msg)
 	{
@@ -17860,8 +17990,8 @@ public class ElectricSwitch : IOEntity
 		SetSwitch(!IsOn());
 	}
 
-	[RPC_Server]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server]
 	public void RPC_Switch(RPCMessage msg)
 	{
 		if (Interface.CallHook("OnSwitchToggle", (object)this, (object)msg.player) == null)
@@ -18053,8 +18183,8 @@ public class ElevatorLift : BaseCombatEntity
 		}
 	}
 
-	[RPC_Server.IsVisible(3f)]
 	[RPC_Server]
+	[RPC_Server.IsVisible(3f)]
 	public void Server_RaiseLowerFloor(RPCMessage msg)
 	{
 		//IL_00b2: Unknown result type (might be due to invalid IL or missing references)
@@ -18279,8 +18409,8 @@ public class EngineSwitch : BaseEntity
 		return base.OnRpcMessage(player, rpc, msg);
 	}
 
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server]
+	[RPC_Server.MaxDistance(3f)]
 	public void StopEngine(RPCMessage msg)
 	{
 		MiningQuarry miningQuarry = GetParentEntity() as MiningQuarry;
@@ -18291,8 +18421,8 @@ public class EngineSwitch : BaseEntity
 		}
 	}
 
-	[RPC_Server]
 	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server]
 	public void StartEngine(RPCMessage msg)
 	{
 		MiningQuarry miningQuarry = GetParentEntity() as MiningQuarry;
@@ -18522,8 +18652,8 @@ public class EntityPrivilege : SimplePrivilege
 		}
 	}
 
-	[RPC_Server]
 	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server]
 	private void ClearList(RPCMessage rpc)
 	{
 		if (rpc.player.CanInteract())
@@ -20302,7 +20432,7 @@ public class FlameThrower : AttackEntity
 		SetFlameState(flameState);
 	}
 
-	public override void ServerUse(float damageModifier = 1f, float speedModifier = 1f, Transform originOverride = null, bool useBulletThickness = true)
+	public override void ServerUse(float damageModifier = 1f, float speedModifier = 1f, Matrix4x4? originOverride = null, bool useBulletThickness = true)
 	{
 		if (!IsOnFire() && !ServerIsReloading())
 		{
@@ -20352,8 +20482,8 @@ public class FlameThrower : AttackEntity
 		SetFlameState(wantsOn: false);
 	}
 
-	[RPC_Server]
 	[RPC_Server.IsActiveItem]
+	[RPC_Server]
 	public void DoReload(RPCMessage msg)
 	{
 		BasePlayer ownerPlayer = GetOwnerPlayer();
@@ -20409,8 +20539,8 @@ public class FlameThrower : AttackEntity
 		}
 	}
 
-	[RPC_Server.IsActiveItem]
 	[RPC_Server]
+	[RPC_Server.IsActiveItem]
 	public void TogglePilotLight(RPCMessage msg)
 	{
 		PilotLightToggle_Shared();
@@ -20688,7 +20818,7 @@ public class FlameTurret : StorageContainer
 		float delta = Time.realtimeSinceStartup - lastMovementUpdate;
 		lastMovementUpdate = Time.realtimeSinceStartup;
 		MovementUpdate(delta);
-		ClientRPC<Vector3>(RpcTarget.NetworkGroup("CLIENT_ReceiveAimDir"), aimDir);
+		ClientRPC(RpcTarget.NetworkGroup("CLIENT_ReceiveAimDir"), aimDir);
 		((ObjectWorkQueue<FlameTurret>)updateFlameTurretQueueServer).Add(this);
 	}
 
@@ -21031,7 +21161,7 @@ public class Flashbang : TimedExplosive
 	public override void Explode()
 	{
 		//IL_0011: Unknown result type (might be due to invalid IL or missing references)
-		ClientRPC<Vector3>(RpcTarget.NetworkGroup("Client_DoFlash"), ((Component)this).transform.position);
+		ClientRPC(RpcTarget.NetworkGroup("Client_DoFlash"), ((Component)this).transform.position);
 		base.Explode();
 	}
 
@@ -21118,9 +21248,9 @@ public class Food : BaseMelee
 		return base.OnRpcMessage(player, rpc, msg);
 	}
 
-	[RPC_Server]
-	[RPC_Server.FromOwner(false)]
 	[RPC_Server.CallsPerSecond(5uL)]
+	[RPC_Server.FromOwner(false)]
+	[RPC_Server]
 	public void Consume()
 	{
 		if (base.isServer)
@@ -21157,8 +21287,8 @@ using UnityEngine;
 
 public class FrankensteinPet : BasePet, IAISenses, IAIAttack
 {
-	[Header("Frankenstein")]
 	[ServerVar(Help = "How long before a Frankenstein Pet dies un controlled and not asleep on table")]
+	[Header("Frankenstein")]
 	public static float decayminutes = 180f;
 
 	[Header("Audio")]
@@ -21751,8 +21881,8 @@ public class FrankensteinTable : StorageContainer
 		ItemManager.DoRemoves();
 	}
 
-	[RPC_Server]
 	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server]
 	private void RequestWakeFrankenstein(RPCMessage msg)
 	{
 		WakeFrankenstein(msg.player);
@@ -22091,8 +22221,8 @@ public class FreeableLootContainer : LootContainer
 		}
 	}
 
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server]
+	[RPC_Server.MaxDistance(3f)]
 	public void RPC_FreeCrate(RPCMessage msg)
 	{
 		if (IsTiedDown() && !(Mathf.Abs(startUntieTime + 6f - Time.realtimeSinceStartup) > ConVar.AntiHack.rpc_timer_forgiveness))
@@ -22102,8 +22232,8 @@ public class FreeableLootContainer : LootContainer
 		}
 	}
 
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server]
+	[RPC_Server.MaxDistance(3f)]
 	public void RPC_FreeCrateTimer(RPCMessage msg)
 	{
 		if (IsTiedDown())
@@ -22263,8 +22393,8 @@ public class FuelGenerator : ContainerIOEntity
 		return false;
 	}
 
-	[RPC_Server.IsVisible(3f)]
 	[RPC_Server]
+	[RPC_Server.IsVisible(3f)]
 	public void RPC_EngineSwitch(RPCMessage msg)
 	{
 		if (Interface.CallHook("OnSwitchToggle", (object)this, (object)msg.player) == null)
@@ -22705,7 +22835,7 @@ public class GlobalNetworkHandler : PointEntity
 		//IL_000e: Unknown result type (might be due to invalid IL or missing references)
 		if (Net.globalNetworkedBases)
 		{
-			ClientRPC<GlobalEntityCollection>(RpcTarget.SendInfo("CLIENT_EntityUpdates", info), entities);
+			ClientRPC(RpcTarget.SendInfo("CLIENT_EntityUpdates", info), entities);
 		}
 	}
 
@@ -22804,8 +22934,8 @@ public class GrowableEntity : BaseCombatEntity, IInstanceDataReceiver, IHeatSour
 
 	public TimeCachedValue<float> artificialTemperatureExposure;
 
-	[Help("How many miliseconds to budget for processing growable quality updates per frame")]
 	[ServerVar]
+	[Help("How many miliseconds to budget for processing growable quality updates per frame")]
 	public static float framebudgetms = 0.25f;
 
 	public const Flags GodSpawn = Flags.Reserved1;
@@ -24028,17 +24158,17 @@ public class GrowableEntity : BaseCombatEntity, IInstanceDataReceiver, IHeatSour
 		}
 	}
 
-	[RPC_Server]
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server]
 	public void RPC_TakeClone(RPCMessage msg)
 	{
 		TakeClones(msg.player);
 	}
 
 	[RPC_Server]
-	[RPC_Server.IsVisible(3f)]
 	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server.IsVisible(3f)]
 	public void RPC_TakeCloneAll(RPCMessage msg)
 	{
 		if ((Object)(object)GetParentEntity() != (Object)null)
@@ -24182,16 +24312,16 @@ public class GrowableEntity : BaseCombatEntity, IInstanceDataReceiver, IHeatSour
 	}
 
 	[RPC_Server.MaxDistance(3f)]
-	[RPC_Server]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server]
 	public void RPC_PickFruit(RPCMessage msg)
 	{
 		PickFruit(msg.player);
 	}
 
+	[RPC_Server]
 	[RPC_Server.IsVisible(3f)]
 	[RPC_Server.MaxDistance(3f)]
-	[RPC_Server]
 	public void RPC_EatFruit(RPCMessage msg)
 	{
 		PickFruit(msg.player, eat: true);
@@ -24349,8 +24479,8 @@ public class GrowableEntity : BaseCombatEntity, IInstanceDataReceiver, IHeatSour
 		Pool.FreeUnmanaged<GrowableEntity>(ref list);
 	}
 
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server]
+	[RPC_Server.MaxDistance(3f)]
 	private void RPC_RequestQualityUpdate(RPCMessage msg)
 	{
 		if ((Object)(object)msg.player != (Object)null)
@@ -24362,7 +24492,7 @@ public class GrowableEntity : BaseCombatEntity, IInstanceDataReceiver, IHeatSour
 			val.happiness = OverallQuality;
 			val.temperatureModifier = TemperatureQuality;
 			val.waterConsumption = WaterConsumption;
-			ClientRPC<GrowableEntity>(RpcTarget.Player("RPC_ReceiveQualityUpdate", msg.player), val);
+			ClientRPC(RpcTarget.Player("RPC_ReceiveQualityUpdate", msg.player), val);
 		}
 	}
 }
@@ -24545,7 +24675,7 @@ public class GunTrap : StorageContainer
 		float damageAmount = 10f;
 		Vector3 val = ((Component)muzzlePos).transform.position - muzzlePos.forward * 0.25f;
 		Vector3 val2 = AimConeUtil.GetModifiedAimConeDirection(inputVec: ((Component)muzzlePos).transform.forward, aimCone: aimCone);
-		ClientRPC<Vector3>(arg1: val + val2 * 300f, target: RpcTarget.NetworkGroup("CLIENT_FireGun"));
+		ClientRPC(arg1: val + val2 * 300f, target: RpcTarget.NetworkGroup("CLIENT_FireGun"));
 		List<RaycastHit> list = Pool.Get<List<RaycastHit>>();
 		int layerMask = 1220225793;
 		GamePhysics.TraceAll(new Ray(val, val2), 0.1f, list, 300f, layerMask, (QueryTriggerInteraction)0);
@@ -24888,8 +25018,8 @@ public class HackableLockedCrate : LootContainer
 
 	public override void OnAttacked(HitInfo info)
 	{
-		//IL_003e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0043: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0045: Unknown result type (might be due to invalid IL or missing references)
+		//IL_004a: Unknown result type (might be due to invalid IL or missing references)
 		if (base.isServer)
 		{
 			if (StringPool.Get(info.HitBone) == "laptopcollision")
@@ -24898,7 +25028,7 @@ public class HackableLockedCrate : LootContainer
 				{
 					return;
 				}
-				Effect.server.Run(shockEffect.resourcePath, info.HitPositionWorld, Vector3.up);
+				Effect.server.Run(shockEffect.resourcePath, this, info.HitBone, info.HitPositionLocal, Vector3.up);
 				hackSeconds -= 8f * (info.damageTypes.Total() / 50f);
 				if (hackSeconds < 0f)
 				{
@@ -25457,9 +25587,9 @@ public class Handcuffs : BaseMelee
 		}
 	}
 
-	[RPC_Server.CallsPerSecond(5uL)]
-	[RPC_Server.FromOwner(false)]
 	[RPC_Server]
+	[RPC_Server.FromOwner(false)]
+	[RPC_Server.CallsPerSecond(5uL)]
 	private void RPC_ReqStartUnlockMiniGame(RPCMessage rpc)
 	{
 		BasePlayer player = rpc.player;
@@ -25478,9 +25608,9 @@ public class Handcuffs : BaseMelee
 		}
 	}
 
-	[RPC_Server.CallsPerSecond(5uL)]
-	[RPC_Server.FromOwner(false)]
 	[RPC_Server]
+	[RPC_Server.FromOwner(false)]
+	[RPC_Server.CallsPerSecond(5uL)]
 	private void RPC_ReqCancelUnlockMiniGame(RPCMessage rpc)
 	{
 		BasePlayer player = rpc.player;
@@ -25495,9 +25625,9 @@ public class Handcuffs : BaseMelee
 		InterruptUnlockMiniGame();
 	}
 
-	[RPC_Server]
 	[RPC_Server.CallsPerSecond(5uL)]
 	[RPC_Server.FromOwner(false)]
+	[RPC_Server]
 	private void RPC_ReqCompleteUnlockMiniGame(RPCMessage rpc)
 	{
 		BasePlayer player = rpc.player;
@@ -25515,9 +25645,9 @@ public class Handcuffs : BaseMelee
 		Effect.server.Run(escapeEffect.resourcePath, player, 0u, Vector3.zero, Vector3.zero);
 	}
 
-	[RPC_Server]
-	[RPC_Server.FromOwner(false)]
 	[RPC_Server.CallsPerSecond(5uL)]
+	[RPC_Server.FromOwner(false)]
+	[RPC_Server]
 	private void RPC_ReqLock(RPCMessage rpc)
 	{
 		//IL_0017: Unknown result type (might be due to invalid IL or missing references)
@@ -25588,7 +25718,7 @@ public class Handcuffs : BaseMelee
 			{
 				Inventory.EquipItemInSlot(victim, 0);
 			}
-			victim.ClientRPC<int, ItemId>(RpcTarget.Player("SetActiveBeltSlot", victim), ownerItem.position, ownerItem.uid);
+			victim.ClientRPC(RpcTarget.Player("SetActiveBeltSlot", victim), ownerItem.position, ownerItem.uid);
 			SetLocked(flag: true, victim, ownerItem);
 			Effect.server.Run(lockEffect.resourcePath, victim, 0u, Vector3.zero, Vector3.zero);
 			Interface.CallHook("OnPlayerHandcuffed", (object)victim, (object)handcuffer);
@@ -25799,9 +25929,9 @@ public class HBHFSensor : BaseDetector
 		}
 	}
 
+	[RPC_Server.CallsPerSecond(5uL)]
 	[RPC_Server]
 	[RPC_Server.IsVisible(3f)]
-	[RPC_Server.CallsPerSecond(5uL)]
 	public void SetConfig(RPCMessage msg)
 	{
 		BasePlayer player = msg.player;
@@ -25999,8 +26129,8 @@ public class HeldBoomBox : HeldEntity, ICassettePlayer
 		BoxController.HurtCallback = HurtCallback;
 	}
 
-	[RPC_Server]
 	[RPC_Server.IsActiveItem]
+	[RPC_Server]
 	public void ServerTogglePlay(RPCMessage msg)
 	{
 		BoxController.ServerTogglePlay(msg);
@@ -26588,7 +26718,7 @@ public class HeldEntity : BaseEntity
 		return false;
 	}
 
-	public virtual void ServerUse(float damageModifier = 1f, float speedModifier = 1f, Transform originOverride = null, bool useBulletThickness = true)
+	public virtual void ServerUse(float damageModifier = 1f, float speedModifier = 1f, Matrix4x4? originOverride = null, bool useBulletThickness = true)
 	{
 	}
 
@@ -26615,7 +26745,7 @@ public class HeldEntity : BaseEntity
 	public void SendPunch(Vector3 amount, float duration)
 	{
 		//IL_0011: Unknown result type (might be due to invalid IL or missing references)
-		ClientRPC<Vector3, float>(RpcTarget.Player("CL_Punch", GetOwnerPlayer()), amount, duration);
+		ClientRPC(RpcTarget.Player("CL_Punch", GetOwnerPlayer()), amount, duration);
 	}
 }
 
@@ -27776,7 +27906,7 @@ public class HuntingTrophy : StorageContainer
 
 	public Renderer[] HorseHairRenderers;
 
-	public const uint HORSE_PREFAB_ID = 1239439581u;
+	public const uint HORSE_PREFAB_ID = 497279334u;
 
 	public GameObject NameRoot;
 
@@ -28998,7 +29128,7 @@ public class IndustrialConveyor : IndustrialEntity
 			{
 				List<Connection> list3 = Pool.Get<List<Connection>>();
 				BaseNetworkable.GetCloseConnections(((Component)this).transform.position, 30f, list3);
-				ClientRPC<IndustrialConveyorTransfer>(RpcTarget.Players("ReceiveItemTransferDetails", list3), transfer);
+				ClientRPC(RpcTarget.Players("ReceiveItemTransferDetails", list3), transfer);
 				Pool.FreeUnmanaged<Connection>(ref list3);
 			}
 			isFirstTransfer = false;
@@ -29227,9 +29357,9 @@ public class IndustrialConveyor : IndustrialEntity
 		}
 	}
 
-	[RPC_Server.CallsPerSecond(1uL)]
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server]
+	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server.CallsPerSecond(1uL)]
 	private void RPC_ChangeFilters(RPCMessage msg)
 	{
 		if ((Object)(object)msg.player == (Object)null || !msg.player.CanBuild())
@@ -29267,8 +29397,8 @@ public class IndustrialConveyor : IndustrialEntity
 	}
 
 	[RPC_Server]
-	[RPC_Server.CallsPerSecond(2uL)]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server.CallsPerSecond(2uL)]
 	private void SvSwitch(RPCMessage msg)
 	{
 		if (Interface.CallHook("OnSwitchToggle", (object)this, (object)msg.player) == null)
@@ -29389,9 +29519,9 @@ public class IndustrialConveyor : IndustrialEntity
 		return inputIndex == 1;
 	}
 
-	[RPC_Server.IsVisible(3f)]
-	[RPC_Server]
 	[RPC_Server.CallsPerSecond(1uL)]
+	[RPC_Server]
+	[RPC_Server.IsVisible(3f)]
 	private void Server_RequestUpToDateFilters(RPCMessage msg)
 	{
 		if (!IsOn())
@@ -29408,7 +29538,7 @@ public class IndustrialConveyor : IndustrialEntity
 				filterItem.CopyTo(val2);
 				val.filters.Add(val2);
 			}
-			ClientRPC<ItemFilterList>(RpcTarget.Player("Client_ReceiveBufferInfo", msg.player), val);
+			ClientRPC(RpcTarget.Player("Client_ReceiveBufferInfo", msg.player), val);
 		}
 		finally
 		{
@@ -29766,8 +29896,8 @@ public class IndustrialCrafter : IndustrialEntity, IItemContainerEntity, IIdealS
 	{
 	}
 
-	[RPC_Server.IsVisible(3f)]
 	[RPC_Server]
+	[RPC_Server.IsVisible(3f)]
 	private void RPC_OpenLoot(RPCMessage rpc)
 	{
 		if (_inventory != null)
@@ -30159,9 +30289,9 @@ public class IndustrialCrafter : IndustrialEntity, IItemContainerEntity, IIdealS
 		SetFlag(Flags.Busy, b: false);
 	}
 
-	[RPC_Server.IsVisible(3f)]
 	[RPC_Server.CallsPerSecond(2uL)]
 	[RPC_Server]
+	[RPC_Server.IsVisible(3f)]
 	private void SvSwitch(RPCMessage msg)
 	{
 		SetSwitch(!IsOn());
@@ -30312,9 +30442,9 @@ public class InstantCameraTool : HeldEntity
 		return base.OnRpcMessage(player, rpc, msg);
 	}
 
+	[RPC_Server.CallsPerSecond(3uL)]
 	[RPC_Server]
 	[RPC_Server.FromOwner(false)]
-	[RPC_Server.CallsPerSecond(3uL)]
 	private void TakePhoto(RPCMessage msg)
 	{
 		//IL_00bc: Unknown result type (might be due to invalid IL or missing references)
@@ -30548,7 +30678,7 @@ public class InstrumentTool : HeldEntity
 		ClientRPC(RpcTarget.NetworkGroup("Client_StopNote"), arg, arg2, arg3);
 	}
 
-	public override void ServerUse(float damageModifier = 1f, float speedModifier = 1f, Transform originOverride = null, bool useBulletThickness = true)
+	public override void ServerUse(float damageModifier = 1f, float speedModifier = 1f, Matrix4x4? originOverride = null, bool useBulletThickness = true)
 	{
 		base.ServerUse(damageModifier, speedModifier, originOverride, useBulletThickness);
 		if (!((FacepunchBehaviour)this).IsInvoking((Action)StopAfterTime))
@@ -30828,20 +30958,20 @@ public class IOEntity : DecayEntity
 	[NonSerialized]
 	public int lastResetIndex;
 
-	[ServerVar]
 	[Help("How many milliseconds to budget for processing high priority electric io entities per server frame (monuments)")]
+	[ServerVar]
 	public static float frameBudgetElectricHighPriorityMs = 1f;
 
-	[ServerVar]
 	[Help("How many milliseconds to budget for processing low priority io entities per server frame (player placed)")]
+	[ServerVar]
 	public static float frameBudgetElectricLowPriorityMs = 0.5f;
 
-	[ServerVar]
 	[Help("How many milliseconds to budget for processing fluid io entities per server frame")]
+	[ServerVar]
 	public static float frameBudgetFluidMs = 0.25f;
 
-	[ServerVar]
 	[Help("How many milliseconds to budget for processing kinetic io entities per server frame (monuments)")]
+	[ServerVar]
 	public static float frameBudgetKineticMs = 1f;
 
 	[ServerVar]
@@ -31346,8 +31476,8 @@ public class IOEntity : DecayEntity
 	}
 
 	[RPC_Server.CallsPerSecond(10uL)]
-	[RPC_Server]
 	[RPC_Server.IsVisible(6f)]
+	[RPC_Server]
 	private void Server_RequestData(RPCMessage msg)
 	{
 		BasePlayer player = msg.player;
@@ -33045,8 +33175,8 @@ public class ItemBasedFlowRestrictor : IOEntity, IContainerSounds
 		MarkDirty();
 	}
 
-	[RPC_Server]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server]
 	private void RPC_OpenLoot(RPCMessage rpc)
 	{
 		if (inventory != null)
@@ -34071,8 +34201,8 @@ public class KeyLock : BaseLock
 		return !IsLocked();
 	}
 
-	[RPC_Server.MaxDistance(3f, CheckParent = true)]
 	[RPC_Server]
+	[RPC_Server.MaxDistance(3f, CheckParent = true)]
 	private void RPC_Unlock(RPCMessage rpc)
 	{
 		if (rpc.player.CanInteract() && IsLocked() && Interface.CallHook("CanUnlock", (object)rpc.player, (object)this) == null && HasLockPermission(rpc.player))
@@ -34446,8 +34576,8 @@ public class Lift : AnimatedBuildingBlock
 		return base.OnRpcMessage(player, rpc, msg);
 	}
 
-	[RPC_Server]
 	[RPC_Server.MaxDistance(3f)]
+	[RPC_Server]
 	private void RPC_UseLift(RPCMessage rpc)
 	{
 		if (rpc.player.CanInteract() && Interface.CallHook("OnLiftUse", (object)this, (object)rpc.player) == null)
@@ -35508,8 +35638,8 @@ public class LiquidWeapon : BaseLiquidVessel
 		}
 	}
 
-	[RPC_Server]
 	[RPC_Server.IsActiveItem]
+	[RPC_Server]
 	private void StopFiring()
 	{
 		((FacepunchBehaviour)this).CancelInvoke((Action)FireTick);

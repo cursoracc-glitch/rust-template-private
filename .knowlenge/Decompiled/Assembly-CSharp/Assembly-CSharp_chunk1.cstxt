@@ -9,6 +9,38 @@ internal sealed class IsUnmanagedAttribute : Attribute
 }
 
 
+using UnityEngine;
+
+public class BiomeBenchmarkScene : BenchmarkScene
+{
+	[Header("Biome Benchmark")]
+	public uint IslandWidth = 300u;
+
+	public uint IslandHeight = 1000u;
+
+	public uint IslandGap = 50u;
+
+	public float FlyingSpeed = 16f;
+
+	public GameObject WorldSetupPrefab;
+
+	public TerrainConfig TerrainConfig;
+
+	public Enum BiomesToTest = (Enum)(-1);
+
+	public float StreamingPause = 4f;
+
+	[Header("Biome Benchmark - Debug")]
+	public bool DebugMode;
+
+	[Range(0f, 4f)]
+	public int DebugIslandNum;
+
+	[Range(0f, 1f)]
+	public float DebugProgress;
+}
+
+
 public class ClothingBenchmarkScene : BenchmarkScene
 {
 	public GameObjectRef PlayerModelPrefab;
@@ -31,34 +63,6 @@ public class FireworkBenchmarkScene : BenchmarkScene
 }
 
 
-using UnityEngine;
-
-public class FoliageGridBenchmarkScene : BenchmarkScene
-{
-	private static TerrainMeta terrainMeta;
-
-	public GameObjectRef foliagePrefab;
-
-	private GameObject foliageInstance;
-
-	public GameObjectRef lodPrefab;
-
-	private GameObject lodInstance;
-
-	public GameObjectRef batchingPrefab;
-
-	private GameObject batchingInstance;
-
-	public Terrain terrain;
-
-	public Transform viewpointA;
-
-	public Transform viewpointB;
-
-	public bool moveVantangePoint = true;
-}
-
-
 public class HitDetectionBenchmark : BenchmarkScene
 {
 	private const int PlayerCount = 50;
@@ -73,8 +77,6 @@ using UnityEngine;
 
 public class MonumentBenchmarkScene : BenchmarkScene
 {
-	public string[] monumentPrefabs;
-
 	public Transform[] vantagePoints;
 }
 
@@ -90,20 +92,6 @@ public class BenchmarkScene : MonoBehaviour
 	public int MaxNumberOfFrames;
 
 	public int MaxNumberOfSeconds = 10;
-}
-
-
-using UnityEngine;
-
-public class TerrainBenchmarkScene : BenchmarkScene
-{
-	public Terrain terrain;
-
-	private TerrainMeta terrainMeta;
-
-	public Transform viewpointA;
-
-	public Transform viewpointB;
 }
 
 
@@ -2104,8 +2092,8 @@ public class NexusFerrySounds : MonoBehaviour, IClientComponent
 
 	private float soundCullDistanceSq;
 
-	[SerializeField]
 	[Header("Engine")]
+	[SerializeField]
 	private SoundDefinition engineLoopDef;
 
 	private Sound engineLoop;
@@ -2168,8 +2156,8 @@ public class NexusFerrySounds : MonoBehaviour, IClientComponent
 	[SerializeField]
 	private Vector3 sideSoundLineBow;
 
-	[Header("Dock")]
 	[SerializeField]
+	[Header("Dock")]
 	private SoundDefinition dockArrivalSoundDef;
 
 	[SerializeField]
@@ -2693,8 +2681,8 @@ public class PatternFirework : MortarFirework, IUGCBrowserEntity
 		ShellFuseLength = FuseLength.Medium;
 	}
 
-	[RPC_Server]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server]
 	[RPC_Server.CallsPerSecond(5uL)]
 	private void StartOpenDesigner(RPCMessage rpc)
 	{
@@ -2704,9 +2692,9 @@ public class PatternFirework : MortarFirework, IUGCBrowserEntity
 		}
 	}
 
-	[RPC_Server.CallsPerSecond(5uL)]
-	[RPC_Server]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server]
+	[RPC_Server.CallsPerSecond(5uL)]
 	private void ServerSetFireworkDesign(RPCMessage rpc)
 	{
 		//IL_00d1: Unknown result type (might be due to invalid IL or missing references)
@@ -3027,8 +3015,8 @@ public class PatternFireworkShell : FireworkShell
 
 	public float Scale = 5f;
 
-	[Header("Random Design")]
 	[MinMax(0f, 1f)]
+	[Header("Random Design")]
 	public MinMax RandomSaturation = new MinMax(0f, 0.5f);
 
 	[MinMax(0f, 1f)]
@@ -3196,8 +3184,8 @@ public class FogMachine : ContainerIOEntity, IAlwaysOn
 		}
 	}
 
-	[RPC_Server]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server]
 	public void SetFogOff(RPCMessage msg)
 	{
 		if (IsOn() && msg.player.CanBuild())
@@ -3207,8 +3195,8 @@ public class FogMachine : ContainerIOEntity, IAlwaysOn
 		}
 	}
 
-	[RPC_Server]
 	[RPC_Server.IsVisible(3f)]
+	[RPC_Server]
 	public void SetMotionDetection(RPCMessage msg)
 	{
 		bool flag = msg.read.Bit();
@@ -3904,8 +3892,8 @@ public class CoalingTower : IOEntity, INotifyEntityTrigger
 		TrainHasThrottle
 	}
 
-	[SerializeField]
 	[Header("Coaling Tower")]
+	[SerializeField]
 	private BoxCollider unloadingBounds;
 
 	[SerializeField]
@@ -3932,8 +3920,8 @@ public class CoalingTower : IOEntity, INotifyEntityTrigger
 	[SerializeField]
 	private float vacuumStartDelay = 2f;
 
-	[FormerlySerializedAs("unloadingFXContainer")]
 	[SerializeField]
+	[FormerlySerializedAs("unloadingFXContainer")]
 	private ParticleSystemContainer unloadingFXContainerOre;
 
 	[SerializeField]
@@ -3945,8 +3933,8 @@ public class CoalingTower : IOEntity, INotifyEntityTrigger
 	[SerializeField]
 	private ParticleSystemContainer unloadingFXContainerFuel;
 
-	[Header("Coaling Tower Text")]
 	[SerializeField]
+	[Header("Coaling Tower Text")]
 	private TokenisedPhrase noTraincar;
 
 	[SerializeField]
@@ -4586,8 +4574,8 @@ public class CoalingTower : IOEntity, INotifyEntityTrigger
 		}
 	}
 
-	[RPC_Server.MaxDistance(3f)]
 	[RPC_Server]
+	[RPC_Server.MaxDistance(3f)]
 	private void RPC_Next(RPCMessage msg)
 	{
 		if (TryShuntTrain(next: true, out var attemptStatus))

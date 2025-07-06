@@ -6871,6 +6871,11 @@ public static class Approved
 
 	private static void Add_2024()
 	{
+		Add_July_03_2025();
+		Add_June_26_2025();
+		Add_June_19th_2025_TWITCHDROPS();
+		Add_June_19th_2025();
+		Add_June_12_2025();
 		Add_June_05_2025();
 		Add_May_29_2025();
 		Add_May_22_2025();
@@ -6963,18 +6968,105 @@ public static class Approved
 		Add_January_04_2024();
 	}
 
+	private static void Add_July_03_2025()
+	{
+		Add(new ApprovedSkinInfo(3507122074uL, "Temple Garage Door", "", "Garage Door").ItemId(64408uL).Store(Price.ThreeDollars, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3513372274uL, "Training Backpack", "", "Large Backpack").ItemId(64407uL).Store(Price.TwoDollars, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3503693633uL, "Work Crate", "", "Wood Storage Box").ItemId(64406uL).Store(Price.TwoDollarsFifty, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3507051684uL, "Croco Bolt Rifle", "", "Bolt Rifle").ItemId(64405uL).Store(Price.OneDollar, CanBeTraded: true, CanBeSold: true));
+		Add(new ApprovedSkinInfo(3513158792uL, "Stinger Crossbow", "", "Crossbow").ItemId(64404uL).Store(Price.OneDollar, CanBeTraded: true, CanBeSold: true));
+		Add(new ApprovedSkinInfo(3507008745uL, "No Mercy Rocket Launcher", "", "Rocket Launcher").ItemId(64403uL).Store(Price.TwoDollarsFifty, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3506126802uL, "Island Assault Team Boots", "", "Work Boots").ItemId(64402uL).Store(Price.OneDollar, CanBeTraded: true, CanBeSold: true));
+		Add(new ApprovedSkinInfo(3279897926uL, "Apocalypse Nomad LR", "", "LR300").ItemId(64401uL).Store(Price.TwoDollarsFifty, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3507331913uL, "Modern Military SAP", "", "Semi-Automatic Pistol").ItemId(64400uL).Store(Price.OneDollar, CanBeTraded: true, CanBeSold: true));
+	}
+
+	private static void Add_June_26_2025()
+	{
+		Add(new ApprovedSkinInfo(3500895805uL, "Bone Box", "", "Wood Storage Box").ItemId(64310uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3500721390uL, "Steel Bandana", "", "Bandana").ItemId(64309uL).Store(Price.OneDollar, CanBeTraded: true, CanBeSold: true));
+		Add(new ApprovedSkinInfo(3500720435uL, "Steel Poncho", "", "Hide Poncho").ItemId(64308uL).Store(Price.OneDollar, CanBeTraded: true, CanBeSold: true));
+		Add(new ApprovedSkinInfo(3495920101uL, "Steel Boonie Hat", "", "Boonie Hat").ItemId(64307uL).Store(Price.OneDollar, CanBeTraded: true, CanBeSold: true));
+		Add(new ApprovedSkinInfo(3501633212uL, "Cryo Furnace", "", "Furnace").ItemId(64306uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3498689540uL, "Isoparam L96", "This skin glows in the dark", "L96").ItemId(64305uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3506813136uL, "Dominus Mortis AR", "", "AK47").ItemId(64304uL).Store(Price.OneDollar, CanBeTraded: true, CanBeSold: true));
+		Add(new ApprovedSkinInfo(3506128246uL, "Island Assault Team Roadsign Gloves", "", "Roadsign Gloves").ItemId(64303uL).Store(Price.OneDollar, CanBeTraded: true, CanBeSold: true));
+		Add(new ApprovedSkinInfo(3505469180uL, "Nuke Vibe Garage Door", "This skin glows in the dark", "Garage Door").ItemId(64302uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3250851953uL, "No Mercy Sheet Metal Double Door", "", "Sheet Metal Double Door").ItemId(64301uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3506097553uL, "Big Toe Boots", "", "Work Boots").ItemId(64300uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
+	}
+
+	private static void Add_June_19th_2025_TWITCHDROPS()
+	{
+		Add(new ApprovedSkinInfo(3489406291uL, "Staryuuki Double Door", "", "Sheet Metal Double Door").ItemId(11438uL).Store(Price.NotForSale, CanBeTraded: false, CanBeSold: false).NoCrate()
+			.TwitchDrop());
+		Add(new ApprovedSkinInfo(3489410169uL, "Starwraith Garage Door", "", "Garage Door").ItemId(11437uL).Store(Price.NotForSale, CanBeTraded: false, CanBeSold: false).NoCrate()
+			.TwitchDrop());
+		Add(new ApprovedSkinInfo(3491138293uL, "Silithur SAR", "", "Semi-Automatic Rifle").ItemId(11436uL).Store(Price.NotForSale, CanBeTraded: false, CanBeSold: false).NoCrate()
+			.TwitchDrop());
+		Add(new ApprovedSkinInfo(3491117717uL, "Aroyitt Thompson", "", "Thompson").ItemId(11435uL).Store(Price.NotForSale, CanBeTraded: false, CanBeSold: false).NoCrate()
+			.TwitchDrop());
+		Add(new ApprovedSkinInfo(3485459030uL, "Agustabell212 MP5", "", "Mp5").ItemId(11434uL).Store(Price.NotForSale, CanBeTraded: false, CanBeSold: false).NoCrate()
+			.TwitchDrop());
+		Add(new ApprovedSkinInfo(3461987249uL, "Ricoy DB", "", "Double Barrel Shotgun").ItemId(11433uL).Store(Price.NotForSale, CanBeTraded: false, CanBeSold: false).NoCrate()
+			.TwitchDrop());
+		Add(new ApprovedSkinInfo(3488346191uL, "Carola AR", "", "AK47").ItemId(11432uL).Store(Price.NotForSale, CanBeTraded: false, CanBeSold: false).NoCrate()
+			.TwitchDrop());
+		Add(new ApprovedSkinInfo(3491155351uL, "Crystalmolly Large Box", "", "Large Wood Box").ItemId(11431uL).Store(Price.NotForSale, CanBeTraded: false, CanBeSold: false).NoCrate()
+			.TwitchDrop());
+		Add(new ApprovedSkinInfo(3483923693uL, "Mixwell Door", "", "Sheet Metal Door").ItemId(11430uL).Store(Price.NotForSale, CanBeTraded: false, CanBeSold: false).NoCrate()
+			.TwitchDrop());
+		Add(new ApprovedSkinInfo(3501429829uL, "Elxokas Bolt Rifle", "", "Bolt Rifle").ItemId(11429uL).Store(Price.NotForSale, CanBeTraded: false, CanBeSold: false).NoCrate()
+			.TwitchDrop());
+		Add(new ApprovedSkinInfo(3490029043uL, "Bellum Armored Double Door", "", "Armored Double Door").ItemId(11428uL).Store(Price.NotForSale, CanBeTraded: false, CanBeSold: false).NoCrate()
+			.TwitchDrop());
+		Add(new ApprovedSkinInfo(3501400768uL, "Bellum Furnace", "", "Furnace").ItemId(11427uL).Store(Price.NotForSale, CanBeTraded: false, CanBeSold: false).NoCrate()
+			.TwitchDrop());
+		Add(new ApprovedSkinInfo(3447914040uL, "aLudovici AR", "", "AK47").ItemId(11426uL).Store(Price.NotForSale, CanBeTraded: false, CanBeSold: false).NoCrate()
+			.TwitchDrop());
+		Add(new ApprovedSkinInfo(3489851716uL, "M2cG M249", "", "M249").ItemId(11425uL).Store(Price.NotForSale, CanBeTraded: false, CanBeSold: false).NoCrate()
+			.TwitchDrop());
+	}
+
+	private static void Add_June_19th_2025()
+	{
+		Add(new ApprovedSkinInfo(3500802783uL, "Cock Pump Shotgun", "", "Pump Shotgun").ItemId(64209uL).Store(Price.OneDollar, CanBeTraded: true, CanBeSold: true));
+		Add(new ApprovedSkinInfo(3488440112uL, "Black Ops Jackhammer", "", "Jackhammer").ItemId(64208uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3492212664uL, "Hellborn SAR", "", "Semi-Automatic Rifle").ItemId(64207uL).Store(Price.OneDollar, CanBeTraded: true, CanBeSold: true));
+		Add(new ApprovedSkinInfo(3495355534uL, "Tire Jacket", "", "Vagabond Jacket").ItemId(64206uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3496251246uL, "Termite MP5", "", "Mp5").ItemId(64205uL).Store(Price.OneDollar, CanBeTraded: true, CanBeSold: true));
+		Add(new ApprovedSkinInfo(3402325299uL, "Cyberpack", "", "Large Backpack").ItemId(64204uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3371604730uL, "Nuke Room Fridge", "This skin glows in the dark", "Fridge").ItemId(64203uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3494947807uL, "Deep Ruby Hoodie", "", "Hoodie").ItemId(64202uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3494948421uL, "Deep Ruby Pants", "", "Pants").ItemId(64201uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3494932683uL, "Heat Seeker Revolver", "", "Revolver").ItemId(64200uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
+	}
+
+	private static void Add_June_12_2025()
+	{
+		Add(new ApprovedSkinInfo(3496446403uL, "Bamboo Cage Locker", "", "Locker").ItemId(64108uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3496304344uL, "Twisted Metal Double Door", "", "Sheet Metal Double Door").ItemId(64107uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3488211916uL, "Grim Garden AR", "", "AK47").ItemId(64106uL).Store(Price.OneDollar, CanBeTraded: true, CanBeSold: true));
+		Add(new ApprovedSkinInfo(3491308407uL, "Cryo Small Box", "This skin glows in the dark", "Wood Storage Box").ItemId(64105uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3491499778uL, "Island Assault Team Chestplate", "", "Metal Chest Plate").ItemId(64104uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3491502191uL, "Island Assault Team Facemask", "", "Metal Facemask").ItemId(64103uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3491318716uL, "Heat Seeker Python", "", "Python").ItemId(64102uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3496390798uL, "Cobalt Jungle Container SMD", "", "Sheet Metal Door").ItemId(64101uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3491162569uL, "CocoKnight Bandana", "", "Bandana").ItemId(64100uL).Store(Price.OneDollar, CanBeTraded: true, CanBeSold: true));
+	}
+
 	private static void Add_June_05_2025()
 	{
 		Add(new ApprovedSkinInfo(3492275291uL, "Antique Hatchet", "", "Hatchet").ItemId(64009uL).Store(Price.OneDollar, CanBeTraded: true, CanBeSold: true));
 		Add(new ApprovedSkinInfo(3492273891uL, "Antique Pick Axe", "", "Pick Axe").ItemId(64008uL).Store(Price.OneDollar, CanBeTraded: true, CanBeSold: true));
-		Add(new ApprovedSkinInfo(3492402650uL, "Croco AR", "", "AK47").ItemId(64007uL).Store(Price.TwoDollarsFifty, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3492402650uL, "Croco AR", "", "AK47").ItemId(64007uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
 		Add(new ApprovedSkinInfo(3492489288uL, "Ruin SMG", "", "Custom SMG").ItemId(64006uL).Store(Price.OneDollar, CanBeTraded: true, CanBeSold: true));
-		Add(new ApprovedSkinInfo(3487981325uL, "Boneforged Facemask", "", "Metal Facemask").ItemId(64005uL).Store(Price.TwoDollars, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3487981325uL, "Boneforged Facemask", "", "Metal Facemask").ItemId(64005uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
 		Add(new ApprovedSkinInfo(3487979488uL, "Boneforged Chestplate", "", "Metal Chest Plate").ItemId(64004uL).Store(Price.OneDollar, CanBeTraded: true, CanBeSold: true));
-		Add(new ApprovedSkinInfo(3491713026uL, "Night Hunters Door", "This skin glows in the dark", "Sheet Metal Door").ItemId(64003uL).Store(Price.TwoDollarsFifty, CanBeTraded: true, CanBeSold: true).NoCrate());
-		Add(new ApprovedSkinInfo(3484617792uL, "Neon Farm Door", "This skin glows in the dark", "Garage Door").ItemId(64002uL).Store(Price.TwoDollarsFifty, CanBeTraded: true, CanBeSold: true).NoCrate());
-		Add(new ApprovedSkinInfo(3491881414uL, "Bamboo Cage Large", "", "Large Wood Box").ItemId(64001uL).Store(Price.TwoDollarsFifty, CanBeTraded: true, CanBeSold: true).NoCrate());
-		Add(new ApprovedSkinInfo(3484542114uL, "Tempered Backpack", "", "Large Backpack").ItemId(64000uL).Store(Price.TwoDollarsFifty, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3491713026uL, "Night Hunters Door", "This skin glows in the dark", "Sheet Metal Door").ItemId(64003uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3484617792uL, "Neon Farm Door", "This skin glows in the dark", "Garage Door").ItemId(64002uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3491881414uL, "Bamboo Cage Large", "", "Large Wood Box").ItemId(64001uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
+		Add(new ApprovedSkinInfo(3484542114uL, "Tempered Backpack", "", "Large Backpack").ItemId(64000uL).Store(Price.NotForSale, CanBeTraded: true, CanBeSold: true).NoCrate());
 	}
 
 	private static void Add_May_29_2025()
@@ -10198,6 +10290,8 @@ public class WorkshopItemEditor : SingletonComponent<WorkshopItemEditor>
 
 	public GameObject item_position_b;
 
+	public static Action<GameObject> PrefabPreviewSpawned = null;
+
 	private static readonly Regex ModelCleanup = new Regex("(_mesh)?(_LOD0)?$", RegexOptions.IgnoreCase);
 
 	internal GameObject Prefab { get; set; }
@@ -10428,8 +10522,8 @@ public class WorkshopItemEditor : SingletonComponent<WorkshopItemEditor>
 
 	private bool LoadItemType(string v)
 	{
-		//IL_0097: Unknown result type (might be due to invalid IL or missing references)
-		//IL_009c: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00ad: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00b2: Unknown result type (might be due to invalid IL or missing references)
 		ClearEditor();
 		Skinnable = Skinnable.FindForItem(v);
 		if ((Object)(object)Skinnable == (Object)null)
@@ -10438,6 +10532,7 @@ public class WorkshopItemEditor : SingletonComponent<WorkshopItemEditor>
 		}
 		ItemTypeSelector.value = ItemTypeSelector.options.IndexOf(ItemTypeSelector.options.First((OptionData x) => x.text == Skinnable.Name));
 		Prefab = LoadForPreview(Skinnable.EntityPrefabName);
+		PrefabPreviewSpawned?.Invoke(Prefab);
 		float workshopDefaultZoom = Skinnable.WorkshopDefaultZoom;
 		CameraEx.FocusOnRenderer(Camera.main, Prefab, new Vector3(0.3f, 0.5f, 1f), Vector3.up, -1, workshopDefaultZoom);
 		if (Skin == null)
@@ -10583,8 +10678,11 @@ public class WorkshopItemEditor : SingletonComponent<WorkshopItemEditor>
 
 	public void RandomizePlayerPreview()
 	{
-		ulong playerid = (ulong)Random.Range(0, int.MaxValue);
-		InitPlayerPreview(playerid, focus: false);
+		if (Skinnable.Category != Category.Deployable)
+		{
+			ulong playerid = (ulong)Random.Range(0, int.MaxValue);
+			InitPlayerPreview(playerid, focus: false);
+		}
 	}
 
 	public void DownloadModel()
@@ -11018,6 +11116,10 @@ public class Publisher : MonoBehaviour
 
 	public Texture2D IconBackground;
 
+	public static Action PreIconRender;
+
+	public static Action PostIconRender;
+
 	private Skinnable Skinnable;
 
 	private Skin Skin;
@@ -11161,8 +11263,11 @@ public class Publisher : MonoBehaviour
 				group.Colors.Add("_DetailColor", new Skin.Manifest.ColorEntry(mat.GetColor("_DetailColor")));
 			}
 		}
+		PreIconRender?.Invoke();
+		await Task.Delay(TimeSpan.FromSeconds(1.0));
 		PropRenderer.RenderScreenshot(Prefab, folder + "/icon.png", 512, 512, 4);
 		CreateWorkshopIcon(folder);
+		PostIconRender?.Invoke();
 		string contents = JsonConvert.SerializeObject((object)data, (Formatting)1);
 		File.WriteAllText(folder + "/manifest.txt", contents);
 		if (OpenFolder)
@@ -11336,403 +11441,6 @@ internal class WorkshopPlayerPreview : MonoBehaviour
 			Cleanup();
 		}
 	}
-}
-
-
-using Facepunch.Extend;
-using Rust.Platform.Steam;
-using Rust.Workshop;
-using Steamworks.Ugc;
-using TMPro;
-using UnityEngine;
-using UnityEngine.UI;
-
-public class WorkshopView : MonoBehaviour
-{
-	public TextMeshProUGUI Title;
-
-	public TextMeshProUGUI AuthorName;
-
-	public TextMeshProUGUI VoteInfo;
-
-	public Button VoteUp;
-
-	public Button VoteDown;
-
-	private IWorkshopContent item;
-
-	protected WorkshopInterface Interface => ((Component)this).GetComponentInParent<WorkshopInterface>();
-
-	protected WorkshopItemEditor Editor => Interface.Editor;
-
-	public void Update()
-	{
-		if (item != null && string.IsNullOrEmpty(((TMP_Text)AuthorName).text))
-		{
-			((TMP_Text)AuthorName).text = StringExtensions.Truncate(item.Owner.UserName, 32, (string)null).ToUpper();
-		}
-	}
-
-	public void UpdateFrom(IWorkshopContent item)
-	{
-		this.item = item;
-		if (this.item != null)
-		{
-			((TMP_Text)Title).text = StringExtensions.Truncate(item.Title, 24, (string)null).ToUpper();
-			((TMP_Text)AuthorName).text = StringExtensions.Truncate(item.Owner.UserName, 32, (string)null).ToUpper();
-		}
-		else
-		{
-			((TMP_Text)Title).text = "FAILED TO LOAD SKIN";
-			((TMP_Text)AuthorName).text = "";
-		}
-	}
-
-	public void OnVoteUp()
-	{
-		//IL_0019: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001e: Unknown result type (might be due to invalid IL or missing references)
-		if (item != null)
-		{
-			IWorkshopContent obj = item;
-			SteamWorkshopContent val = (SteamWorkshopContent)(object)((obj is SteamWorkshopContent) ? obj : null);
-			if (val != null)
-			{
-				Item value = val.Value;
-				((Item)(ref value)).Vote(true);
-			}
-			UpdateFrom(item);
-		}
-	}
-
-	public void OnVoteDown()
-	{
-		//IL_0019: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001e: Unknown result type (might be due to invalid IL or missing references)
-		if (item != null)
-		{
-			IWorkshopContent obj = item;
-			SteamWorkshopContent val = (SteamWorkshopContent)(object)((obj is SteamWorkshopContent) ? obj : null);
-			if (val != null)
-			{
-				Item value = val.Value;
-				((Item)(ref value)).Vote(false);
-			}
-			UpdateFrom(item);
-		}
-	}
-
-	public void OpenWeb()
-	{
-		if (item != null)
-		{
-			IWorkshopContent obj = item;
-			Application.OpenURL((obj != null) ? obj.Url : null);
-		}
-	}
-
-	internal void Clear()
-	{
-		item = null;
-		((TMP_Text)Title).text = "";
-		((TMP_Text)AuthorName).text = "";
-	}
-}
-
-
-using System.Collections;
-using Facepunch.Utility;
-using Rust.Workshop;
-using Rust.Workshop.Import;
-using UnityEngine;
-
-internal class ImportVersion1 : SingletonComponent<ImportVersion1>
-{
-	internal IEnumerator DoImport(IWorkshopContent item, Skin skin)
-	{
-		WorkshopItemEditor.Loading(v1: true, "Downloading..", "", 0f);
-		if (!item.IsInstalled)
-		{
-			item.Download();
-			while (item.IsDownloading)
-			{
-				yield return null;
-			}
-			WorkshopItemEditor.Loading(v1: true, "Installing..", "", 0f);
-			while (!item.IsInstalled)
-			{
-				yield return null;
-			}
-		}
-		Os.OpenFolder(item.Directory);
-		WorkshopItemEditor.Loading(v1: true, "Unable To Import", "", 0f);
-		yield return (object)new WaitForSeconds(5f);
-	}
-}
-
-
-using System;
-using System.Collections;
-using System.IO;
-using Facepunch.Utility;
-using Rust;
-using Rust.Workshop;
-using Rust.Workshop.Import;
-using UnityEngine;
-
-internal class ImportVersion2 : SingletonComponent<ImportVersion2>
-{
-	private AssetBundle Bundle;
-
-	public void OnDisable()
-	{
-		if (!Application.isQuitting && (Object)(object)Bundle != (Object)null)
-		{
-			Bundle.Unload(true);
-			Bundle = null;
-			Debug.Log((object)"CLEANUP BUNDLE");
-		}
-	}
-
-	internal IEnumerator DoImport(IWorkshopContent item, Skin skin)
-	{
-		if ((Object)(object)Bundle != (Object)null)
-		{
-			Bundle.Unload(true);
-			Bundle = null;
-		}
-		WorkshopItemEditor.Loading(v1: true, "Downloading..", "", 0f);
-		if (!item.IsInstalled)
-		{
-			item.Download();
-			while (item.IsDownloading)
-			{
-				yield return null;
-			}
-			while (!item.IsInstalled)
-			{
-				yield return null;
-			}
-		}
-		string text = item.Directory + "/bundle";
-		if (File.Exists(text))
-		{
-			yield return ((MonoBehaviour)this).StartCoroutine(LoadItem(item.Directory, text, skin));
-			yield break;
-		}
-		Debug.LogWarning((object)"No Bundle Found!");
-		Os.OpenFolder(item.Directory);
-		yield return (object)new WaitForSeconds(5f);
-	}
-
-	public IEnumerator LoadItem(string Folder, string BundleName, Skin skin)
-	{
-		AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(BundleName);
-		yield return (object)new WaitUntil((Func<bool>)(() => ((AsyncOperation)request).isDone));
-		if ((Object)(object)request.assetBundle == (Object)null)
-		{
-			Debug.LogWarning((object)"Asset bundle is null!");
-			yield break;
-		}
-		Bundle = request.assetBundle;
-		WorkshopSkinBase asset = request.assetBundle.LoadAsset<WorkshopSkinBase>("Meta.asset");
-		if ((Object)(object)asset == (Object)null)
-		{
-			string[] allAssetNames = request.assetBundle.GetAllAssetNames();
-			foreach (string text in allAssetNames)
-			{
-				asset = request.assetBundle.LoadAsset<WorkshopSkinBase>(text);
-				if ((Object)(object)asset != (Object)null)
-				{
-					break;
-				}
-			}
-		}
-		if ((Object)(object)asset == (Object)null)
-		{
-			Os.OpenFolder(Folder);
-			yield return (object)new WaitForSeconds(5f);
-			yield break;
-		}
-		yield return ((MonoBehaviour)this).StartCoroutine(ProcessMaterial(0, asset.skinMaterial0, skin));
-		yield return ((MonoBehaviour)this).StartCoroutine(ProcessMaterial(1, asset.skinMaterial1, skin));
-		yield return ((MonoBehaviour)this).StartCoroutine(ProcessMaterial(2, asset.skinMaterial2, skin));
-		yield return ((MonoBehaviour)this).StartCoroutine(ProcessMaterial(3, asset.skinMaterial3, skin));
-	}
-
-	private IEnumerator ProcessMaterial(int v, Material inputMaterial, Skin skin)
-	{
-		if ((Object)(object)inputMaterial == (Object)null || skin.Materials.Length <= v)
-		{
-			yield break;
-		}
-		yield return null;
-		ImportTexture("_MainTex", inputMaterial, skin.Materials[v], normal: false, skin, v);
-		ImportTexture("_BumpMap", inputMaterial, skin.Materials[v], normal: true, skin, v);
-		ImportTexture("_OcclusionMap", inputMaterial, skin.Materials[v], normal: false, skin, v);
-		if ((Object)(object)ImportTexture("_SpecGlossMap", inputMaterial, skin.Materials[v], normal: false, skin, v) == (Object)null)
-		{
-			Texture2D val = ImportTexture("_MetallicGlossMap", inputMaterial, skin.Materials[v], normal: false, skin, v, "_SpecGlossMap");
-			if ((Object)(object)val != (Object)null)
-			{
-				ConvertMetalToSpec(val, skin.Materials[v]);
-			}
-		}
-	}
-
-	private Texture2D ImportTexture(string name, Material inputMaterial, Material outputMaterial, bool normal, Skin skin, int group, string targetName = null)
-	{
-		if (targetName == null)
-		{
-			targetName = name;
-		}
-		Texture texture = outputMaterial.GetTexture(name);
-		Texture texture2 = inputMaterial.GetTexture(name);
-		if ((Object)(object)texture2 == (Object)null)
-		{
-			return null;
-		}
-		if ((Object)(object)texture == (Object)null || ((Object)texture2).name == ((Object)texture).name)
-		{
-			return null;
-		}
-		texture2 = (Texture)(object)Texture.LimitSize((Texture2D)(object)((texture2 is Texture2D) ? texture2 : null), skin.Skinnable.Groups[group].MaxTextureSize, skin.Skinnable.Groups[group].MaxTextureSize, normal);
-		outputMaterial.SetTexture(targetName, texture2);
-		return (Texture2D)(object)((texture2 is Texture2D) ? texture2 : null);
-	}
-
-	private Texture2D ConvertMetalToSpec(Texture2D tex, Material outputMaterial)
-	{
-		//IL_009f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0016: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0037: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0043: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0049: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0057: Unknown result type (might be due to invalid IL or missing references)
-		tex = Texture.CreateReadableCopy(tex, 0, 0, false);
-		Color val = default(Color);
-		for (int i = 0; i < ((Texture)tex).height; i++)
-		{
-			for (int j = 0; j < ((Texture)tex).width; j++)
-			{
-				Color pixel = tex.GetPixel(j, i);
-				if (pixel.a == 0f)
-				{
-					pixel.a = 0.007843138f;
-				}
-				((Color)(ref val))..ctor(pixel.r, pixel.r, pixel.r, pixel.a);
-				tex.SetPixel(j, i, val);
-			}
-		}
-		tex.Apply();
-		outputMaterial.SetTexture("_SpecGlossMap", (Texture)(object)tex);
-		outputMaterial.SetFloat("_Glossiness", 1f);
-		outputMaterial.SetColor("_SpecColor", Color.white);
-		return tex;
-	}
-}
-
-
-using System.Collections;
-using Rust.Workshop;
-using Rust.Workshop.Import;
-using UnityEngine;
-
-internal class ImportVersion3 : SingletonComponent<ImportVersion3>
-{
-	internal IEnumerator DoImport(IWorkshopContent item, Skin skin, bool compressTexturesOnLoad = true)
-	{
-		WorkshopItemEditor.Loading(v1: true, "Downloading..", "", 0f);
-		yield return ((MonoBehaviour)this).StartCoroutine(DownloadFromWorkshop(item));
-		if (!item.IsInstalled || item.Directory == null)
-		{
-			Debug.Log((object)"Error opening item, not downloaded properly.");
-			Debug.Log((object)("item.Directory: " + item.Directory));
-			Debug.Log((object)("item.Installed: " + item.IsInstalled));
-		}
-		else
-		{
-			WorkshopItemEditor.Loading(v1: true, "Loading..", "Reloading Textures", 0f);
-			yield return ((MonoBehaviour)this).StartCoroutine(skin.LoadIcon(item.WorkshopId, item.Directory));
-			yield return ((MonoBehaviour)this).StartCoroutine(skin.LoadAssets(item.WorkshopId, item.Directory, null, compressTexturesOnLoad));
-		}
-	}
-
-	private IEnumerator DownloadFromWorkshop(IWorkshopContent item)
-	{
-		item.Download();
-		while (item.IsDownloading)
-		{
-			yield return null;
-		}
-		while (!item.IsInstalled)
-		{
-			yield return null;
-		}
-	}
-}
-
-
-using System;
-using UnityEngine;
-
-[Serializable]
-public class Group
-{
-	public string Name = "MAIN";
-
-	public Material Material;
-
-	public int MaxTextureSize = 1024;
-}
-
-
-public enum SkinType
-{
-	TShirt,
-	Pants,
-	SleepingBag,
-	Hoodie,
-	LongTShirt,
-	Cap,
-	Beenie,
-	Boots,
-	Jacket,
-	Balaclava,
-	Boonie,
-	SnowJacket,
-	Bandana,
-	AK47,
-	BoltRifle,
-	Revolver,
-	Rock,
-	Hammer,
-	PipeShotgun,
-	PumpShotgun,
-	SemiAutoPistol,
-	Thompson,
-	WoodStorage,
-	BucketHat,
-	BurlapGloves,
-	BurlapPants,
-	BurlapShirt
-}
-
-
-private struct MonoScriptData
-{
-	public byte[] FilePathsData;
-
-	public byte[] TypesData;
-
-	public int TotalTypes;
-
-	public int TotalFiles;
-
-	public bool IsEditorOnly;
 }
 
 

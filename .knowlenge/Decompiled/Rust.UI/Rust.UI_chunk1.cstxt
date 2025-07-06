@@ -4962,6 +4962,8 @@ public class HttpImage : MonoBehaviour
 
 	private bool didLoad;
 
+	public bool IsLoading { get; private set; }
+
 	private void Init()
 	{
 		rawImage = ((Component)this).GetComponent<RawImage>();
@@ -5017,6 +5019,7 @@ public class HttpImage : MonoBehaviour
 		{
 			Init();
 		}
+		IsLoading = true;
 		SetLoadingImage();
 		Url = url;
 		didLoad = true;
@@ -5214,6 +5217,10 @@ public class HttpImage : MonoBehaviour
 			if ((Object)(object)image != (Object)null)
 			{
 				((Behaviour)image).enabled = enabled;
+			}
+			if (enabled)
+			{
+				IsLoading = false;
 			}
 		}
 	}

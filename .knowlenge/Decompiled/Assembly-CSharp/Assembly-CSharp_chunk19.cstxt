@@ -1555,33 +1555,33 @@ public class LegStepAnimatingParameters
 	[Range(0f, 2f)]
 	public float SpherizePower = 0.3f;
 
-	[Tooltip("Minimum leg raise height. If distance of target step animation is small, then foot raise is smaller - down to this minimum raise value.")]
 	[Range(0f, 1f)]
+	[Tooltip("Minimum leg raise height. If distance of target step animation is small, then foot raise is smaller - down to this minimum raise value.")]
 	public float MinFootRaise = 0.1f;
 
-	[Tooltip("Maximum leg raise height. If distance of target step animation is very big, then foot raise is bigger - up to this maximum raise value.")]
 	[Range(0f, 1f)]
+	[Tooltip("Maximum leg raise height. If distance of target step animation is very big, then foot raise is bigger - up to this maximum raise value.")]
 	public float MaxFootRaise = 0.4f;
 
 	[Tooltip("Raise height step animation curve evaluated on step animation duration.")]
 	[FPD_FixedCurveWindow(0f, 0f, 1f, 1f, 0.5f, 1f, 0.5f, 1f)]
 	public AnimationCurve RaiseYAxisCurve;
 
-	[Range(0f, 1f)]
-	[Tooltip("Allowing to speed up leg adjusting animation when leg is getting stretched, when opposite leg is requesting adjustement or when main character is rotating in place quickly")]
 	[Space(3f)]
+	[Tooltip("Allowing to speed up leg adjusting animation when leg is getting stretched, when opposite leg is requesting adjustement or when main character is rotating in place quickly")]
+	[Range(0f, 1f)]
 	public float AllowSpeedups = 0.4f;
 
-	[Range(0.1f, 1f)]
 	[Tooltip("You can allow to use opposite leg before idle glue leg adjustement finishes")]
+	[Range(0.1f, 1f)]
 	public float AllowDetachBefore = 1f;
 
 	[Tooltip("Extra hips push power animation curve evaluated on step animation duration.")]
 	[FPD_FixedCurveWindow(0f, 0f, 1f, 1f, 1f, 0.6f, 0.6f, 1f)]
 	public AnimationCurve PushHipsOnMoveCurve;
 
-	[Tooltip("Extra foot ankle rotation animation curve evaluated on step animation duration.")]
 	[FPD_FixedCurveWindow(0f, -1f, 1f, 1f, 0f, 1f, 1f, 1f)]
+	[Tooltip("Extra foot ankle rotation animation curve evaluated on step animation duration.")]
 	public AnimationCurve FootRotationCurve;
 
 	public void RefreshDefaultCurves()
@@ -6513,8 +6513,8 @@ public class FGroundFitter_Movement : MonoBehaviour
 	[Tooltip("Protecting from going through walls when slope is very big and ground fitter is jumping into it")]
 	public bool NotFallingThrough;
 
-	[Tooltip("You need collider and rigidbody on object to make it work right - ALSO CHANGE YOUR CAMERA UPDATE CLOCK TO FIXED UPDATE AND USE TIME.fixedDeltaTime - ! For now it can cause errors when jumping, character can go through floor sometimes ! - Will be upgraded in future versions")]
 	[Header("(experimental)")]
+	[Tooltip("You need collider and rigidbody on object to make it work right - ALSO CHANGE YOUR CAMERA UPDATE CLOCK TO FIXED UPDATE AND USE TIME.fixedDeltaTime - ! For now it can cause errors when jumping, character can go through floor sometimes ! - Will be upgraded in future versions")]
 	public bool UsePhysics;
 
 	[Tooltip("Disabling translating object from code and running animation without need to hold minimum movement speed")]
@@ -6570,12 +6570,12 @@ public class FGroundFitter_Movement : MonoBehaviour
 
 	private float? yAdjustPos;
 
-	[HideInInspector]
 	[Tooltip("If you want to set some animator parameter during being grounded")]
+	[HideInInspector]
 	public string SetIsGroundedParam = "";
 
-	[HideInInspector]
 	[Tooltip("If you want to set some animator parameter during accelerating moving")]
+	[HideInInspector]
 	public string SetIsMovingParam = "";
 
 	[HideInInspector]
@@ -7255,46 +7255,46 @@ using UnityEngine;
 public abstract class FGroundFitter_Base : MonoBehaviour
 {
 	[Header("> Main Variables <", order = 0)]
-	[Range(1f, 30f)]
-	[Tooltip("How quick rotation should be corrected to target")]
 	[Space(4f, order = 1)]
+	[Tooltip("How quick rotation should be corrected to target")]
+	[Range(1f, 30f)]
 	public float FittingSpeed = 6f;
 
 	[Tooltip("Smoothing whole rotation motion")]
 	[Range(0f, 1f)]
 	public float TotalSmoother;
 
-	[Tooltip("Transform which will be rotated by script, usually it can be the same transform as component's")]
 	[HideInInspector]
 	[Space(3f)]
+	[Tooltip("Transform which will be rotated by script, usually it can be the same transform as component's")]
 	public Transform TransformToRotate;
 
 	[Tooltip("If you want this script only to change your object's rotation and do nothing with position, untoggle this")]
 	[Space(3f)]
 	public bool GlueToGround;
 
+	[Header("> Tweaking Settings <", order = 0)]
 	[Space(4f, order = 1)]
 	[Range(0f, 1f)]
-	[Header("> Tweaking Settings <", order = 0)]
 	[Tooltip("If forward/pitch rotation value should go in lighter value than real normal hit direction")]
 	public float MildForwardValue;
 
-	[Range(0f, 90f)]
 	[Tooltip("Maximum rotation angle in rotation of x/pitch axis, so rotating forward - degrees value of maximum rotation")]
+	[Range(0f, 90f)]
 	public float MaxForwardRotation = 90f;
 
-	[Range(0f, 1f)]
 	[Space(5f)]
+	[Range(0f, 1f)]
 	[Tooltip("If side rotation value/roll should go in lighter value than real normal hit direction")]
 	public float MildHorizontalValue;
 
-	[Range(0f, 90f)]
 	[Tooltip("Max roll rotation. If rotation should work on also on x axis - good for spiders, can look wrong on quadropeds etc.")]
+	[Range(0f, 90f)]
 	public float MaxHorizontalRotation = 90f;
 
-	[Tooltip("We should cast raycast from position little higher than foots of your game object")]
-	[Space(4f, order = 1)]
 	[Header("> Advanced settings <", order = 0)]
+	[Space(4f, order = 1)]
+	[Tooltip("We should cast raycast from position little higher than foots of your game object")]
 	public float RaycastHeightOffset = 0.5f;
 
 	[Tooltip("How far ray should cast to check if ground is under feet")]
@@ -7306,12 +7306,12 @@ public abstract class FGroundFitter_Base : MonoBehaviour
 	[Tooltip("Blending with predicted forward raycast rotation")]
 	public float AheadBlend = 0.5f;
 
-	[HideInInspector]
 	[Tooltip("Offset over ground")]
+	[HideInInspector]
 	public float UpOffset;
 
-	[Tooltip("What collision layers should be included by algorithm")]
 	[Space(8f)]
+	[Tooltip("What collision layers should be included by algorithm")]
 	public LayerMask GroundLayerMask = LayerMask.op_Implicit(1);
 
 	[Tooltip("When casting down vector should adjust with transform's rotation")]
@@ -7333,8 +7333,8 @@ public abstract class FGroundFitter_Base : MonoBehaviour
 	[Range(0f, 10f)]
 	public float ZoneCastBias;
 
-	[Range(0f, 1f)]
 	[Tooltip("More precision = more raycasts = lower performance")]
+	[Range(0f, 1f)]
 	public float ZoneCastPrecision = 0.25f;
 
 	[NonSerialized]
@@ -7738,8 +7738,8 @@ using UnityEngine;
 
 public abstract class FGroundFitter_Base_RootMotion : FGroundFitter_Base
 {
-	[Tooltip("Making ground fitter translate with root motion")]
 	[HideInInspector]
+	[Tooltip("Making ground fitter translate with root motion")]
 	public bool HandleRootMotion;
 
 	[SerializeField]
@@ -14327,8 +14327,8 @@ public struct RaycastRaySetupJob : IJobParallelFor
 	[ReadOnly]
 	public NativeArray<int2> samplePositions;
 
-	[NativeMatchesParallelForLength]
 	[WriteOnly]
+	[NativeMatchesParallelForLength]
 	public NativeArray<RaycastCommand> raycastCommands;
 
 	public void Execute(int index)
@@ -14396,8 +14396,8 @@ public struct RaycastRayProcessingJob : IJobParallelFor
 	[NativeDisableParallelForRestriction]
 	public NativeArray<int> colliderHits;
 
-	[WriteOnly]
 	[NativeMatchesParallelForLength]
+	[WriteOnly]
 	public NativeArray<int> outputs;
 
 	[NativeDisableParallelForRestriction]
@@ -19318,6 +19318,774 @@ public struct CullingParameters
 }
 
 
+using TerrainTopologyMapJobs;
+using Unity.Burst;
+using Unity.Collections;
+using Unity.Jobs;
+using Unity.Mathematics;
+using UnityEngine;
+
+[BurstCompile(/*Could not decode attribute arguments.*/)]
+internal struct PaintSplatJob : IJobFor
+{
+	[NativeDisableParallelForRestriction]
+	public ReadOnly<float> HeightMapDelta;
+
+	public int HeightMapRes;
+
+	[NativeDisableParallelForRestriction]
+	public ReadOnly<float> AngleMapDeg;
+
+	[NativeDisableParallelForRestriction]
+	public ReadOnly<int> TopologyMap;
+
+	public int TopologyMapRes;
+
+	[NativeDisableParallelForRestriction]
+	public NativeArray<byte> SplatMap;
+
+	public int SplatMapRes;
+
+	public int SplatNum;
+
+	[NativeDisableParallelForRestriction]
+	public ReadOnly<int, int> SplatType2Index;
+
+	public float TerrainOneOverSizeX;
+
+	public void Execute(int index)
+	{
+		//IL_0035: Unknown result type (might be due to invalid IL or missing references)
+		//IL_005c: Unknown result type (might be due to invalid IL or missing references)
+		//IL_009c: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00d9: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00eb: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00f9: Unknown result type (might be due to invalid IL or missing references)
+		//IL_010b: Unknown result type (might be due to invalid IL or missing references)
+		//IL_014b: Unknown result type (might be due to invalid IL or missing references)
+		//IL_015d: Unknown result type (might be due to invalid IL or missing references)
+		//IL_017d: Unknown result type (might be due to invalid IL or missing references)
+		//IL_018f: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01c2: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01d4: Unknown result type (might be due to invalid IL or missing references)
+		//IL_020b: Unknown result type (might be due to invalid IL or missing references)
+		//IL_021d: Unknown result type (might be due to invalid IL or missing references)
+		//IL_023d: Unknown result type (might be due to invalid IL or missing references)
+		//IL_024f: Unknown result type (might be due to invalid IL or missing references)
+		int num = index % HeightMapRes;
+		int num2 = index / HeightMapRes;
+		float num3 = ((float)num - 0.5f) / (float)HeightMapRes;
+		float num4 = ((float)num2 - 0.5f) / (float)HeightMapRes;
+		if ((TerrainTopologyMapJobUtil.GetTopologyRadius(TopologyMap, TopologyMapRes, TerrainOneOverSizeX, 0f, num3, num4) & 0xB4990) != 0 || (TerrainTopologyMapJobUtil.GetTopologyRadius(TopologyMap, TopologyMapRes, TerrainOneOverSizeX, 8f, num3, num4) & 2) != 0 || AngleMapDeg[num2 * HeightMapRes + num] < 3f)
+		{
+			return;
+		}
+		float grad;
+		float num5 = ConcavityFactor(HeightMapDelta, HeightMapRes, num, num2, out grad);
+		if (!(num5 < 3.5762787E-07f))
+		{
+			int x = Index(num3, SplatMapRes);
+			int z = Index(num4, SplatMapRes);
+			float splat = GetSplat(SplatMap, SplatMapRes, SplatNum, SplatType2Index, num3, num4, 2);
+			float splat2 = GetSplat(SplatMap, SplatMapRes, SplatNum, SplatType2Index, num3, num4, 4);
+			if (splat > 0.25f || splat2 > 0.25f)
+			{
+				num5 = math.saturate(num5 * 3f);
+				grad = math.pow(grad, 2f);
+				AddSplat(SplatMap, SplatMapRes, SplatNum, SplatType2Index, x, z, 64, math.pow(num5, 0.8f) * grad);
+				AddSplat(SplatMap, SplatMapRes, SplatNum, SplatType2Index, x, z, 128, math.pow(num5, 1.5f) * grad);
+			}
+			else
+			{
+				num5 = math.saturate(num5 * 3f);
+				AddSplat(SplatMap, SplatMapRes, SplatNum, SplatType2Index, x, z, 1, math.pow(num5, 4f) * math.pow(grad, 1.5f));
+				grad = math.pow(grad, 2f);
+				AddSplat(SplatMap, SplatMapRes, SplatNum, SplatType2Index, x, z, 64, math.pow(num5, 0.8f) * grad);
+				AddSplat(SplatMap, SplatMapRes, SplatNum, SplatType2Index, x, z, 128, math.pow(num5, 1.4f) * grad);
+			}
+		}
+		static int Index(float normalized, int res)
+		{
+			int num6 = (int)(normalized * (float)res);
+			if (num6 >= 0)
+			{
+				if (num6 <= res - 1)
+				{
+					return num6;
+				}
+				return res - 1;
+			}
+			return 0;
+		}
+	}
+
+	private static void AddSplat(NativeArray<byte> src, int res, int splatNum, ReadOnly<int, int> type2Index, int x, int z, int id, float d)
+	{
+		//IL_0000: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0003: Unknown result type (might be due to invalid IL or missing references)
+		float splat = GetSplat(src, res, splatNum, type2Index, x, z, id);
+		float num = math.saturate(splat + d);
+		int num2 = type2Index[id];
+		if (splat >= 1f)
+		{
+			return;
+		}
+		float num3 = (1f - num) / (1f - splat);
+		for (int i = 0; i < splatNum; i++)
+		{
+			if (i == num2)
+			{
+				src[(i * res + z) * res + x] = BitUtility.Float2Byte(num);
+			}
+			else
+			{
+				src[(i * res + z) * res + x] = BitUtility.Float2Byte(num3 * BitUtility.Byte2Float((int)src[(i * res + z) * res + x]));
+			}
+		}
+	}
+
+	private static float GetSplat(NativeArray<byte> src, int res, int splatNum, ReadOnly<int, int> type2Index, float xn, float zn, int mask)
+	{
+		//IL_003c: Unknown result type (might be due to invalid IL or missing references)
+		//IL_003f: Unknown result type (might be due to invalid IL or missing references)
+		//IL_004a: Unknown result type (might be due to invalid IL or missing references)
+		//IL_004d: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0062: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0065: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0070: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0073: Unknown result type (might be due to invalid IL or missing references)
+		int num = res - 1;
+		float num2 = xn * (float)num;
+		float num3 = zn * (float)num;
+		int num4 = Mathf.Clamp((int)num2, 0, num);
+		int num5 = Mathf.Clamp((int)num3, 0, num);
+		int x = Mathf.Min(num4 + 1, num);
+		int z = Mathf.Min(num5 + 1, num);
+		float num6 = Mathf.Lerp(GetSplat(src, res, splatNum, type2Index, num4, num5, mask), GetSplat(src, res, splatNum, type2Index, x, num5, mask), num2 - (float)num4);
+		float num7 = Mathf.Lerp(GetSplat(src, res, splatNum, type2Index, num4, z, mask), GetSplat(src, res, splatNum, type2Index, x, z, mask), num2 - (float)num4);
+		return Mathf.Lerp(num6, num7, num3 - (float)num5);
+	}
+
+	private static float GetSplat(NativeArray<byte> src, int res, int splatNum, ReadOnly<int, int> type2Index, int x, int z, int mask)
+	{
+		if (Mathf.IsPowerOfTwo(mask))
+		{
+			return BitUtility.Byte2Float((int)src[(type2Index[mask] * res + z) * res + x]);
+		}
+		int num = 0;
+		for (int i = 0; i < splatNum; i++)
+		{
+			if ((TerrainSplat.IndexToType(i) & mask) != 0)
+			{
+				num += src[(i * res + z) * res + x];
+			}
+		}
+		return Mathf.Clamp01(BitUtility.Byte2Float(num));
+	}
+
+	private static float ConcavityFactor(ReadOnly<float> data, int res, int x, int z, out float grad)
+	{
+		int num = x - 1;
+		int num2 = x + 1;
+		int num3 = z - 1;
+		int num4 = z + 1;
+		float num5 = data[z * res + x];
+		float num6 = data[z * res + num];
+		float num7 = data[z * res + num2];
+		float num8 = data[num4 * res + x];
+		float num9 = data[num3 * res + x];
+		float num10 = num6 + num7 + num8 + num9;
+		float num11 = data[num3 * res + num] + data[num3 * res + num2] + data[num4 * res + num] + data[num4 * res + num2];
+		float num12 = num7 - num6;
+		float num13 = num8 - num9;
+		grad = math.sqrt(num12 * num12 + num13 * num13);
+		return math.max(num10 / 4f + num11 / 4f - num5, 0f);
+	}
+}
+
+
+using Unity.Burst;
+using Unity.Collections;
+using Unity.Jobs;
+
+[BurstCompile(/*Could not decode attribute arguments.*/)]
+internal struct PopulateDeltaHeightJob : IJobParallelFor
+{
+	public ReadOnly<float> HeightMapOriginal;
+
+	public ReadOnly<float> HeightMap;
+
+	[WriteOnly]
+	public NativeArray<float> DeltaHeightMap;
+
+	public void Execute(int index)
+	{
+		DeltaHeightMap[index] = HeightMapOriginal[index] - HeightMap[index];
+	}
+}
+
+
+using Unity.Burst;
+using Unity.Collections;
+using Unity.Jobs;
+
+[BurstCompile(/*Could not decode attribute arguments.*/)]
+internal struct CopyBackFloatHeightToShortHeightJob : IJobParallelFor
+{
+	public ReadOnly<float> HeightMapAsFloat;
+
+	[WriteOnly]
+	public NativeArray<short> HeightMapAsShort;
+
+	public float TerrainOneOverSizeY;
+
+	public float TerrainPositionY;
+
+	public void Execute(int index)
+	{
+		HeightMapAsShort[index] = BitUtility.Float2Short(TerrainOneOverSizeY * (HeightMapAsFloat[index] - TerrainPositionY));
+	}
+}
+
+
+using Unity.Burst;
+using Unity.Collections;
+using Unity.Jobs;
+
+[BurstCompile(/*Could not decode attribute arguments.*/)]
+internal struct EvaporationJob : IJobParallelFor
+{
+	public NativeArray<float> WaterMap;
+
+	public float DT;
+
+	public float EvaporationRate;
+
+	public void Execute(int index)
+	{
+		ref NativeArray<float> waterMap = ref WaterMap;
+		waterMap[index] *= 1f - EvaporationRate * DT;
+	}
+}
+
+
+using Unity.Burst;
+using Unity.Collections;
+using Unity.Jobs;
+
+[BurstCompile(/*Could not decode attribute arguments.*/)]
+internal struct CopyArrayJob<T> : IJob where T : unmanaged
+{
+	[WriteOnly]
+	public NativeArray<T> CopyTarget;
+
+	[ReadOnly]
+	public NativeArray<T> CopySource;
+
+	public void Execute()
+	{
+		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
+		CopyTarget.CopyFrom(CopySource);
+	}
+}
+
+
+using Unity.Burst;
+using Unity.Collections;
+using Unity.Jobs;
+
+[BurstCompile(/*Could not decode attribute arguments.*/)]
+internal struct PrepareMapJob : IJobParallelForBatch
+{
+	public ReadOnly<short> HeightMapAsShort;
+
+	[WriteOnly]
+	public NativeArray<float> HeightMapAsFloat;
+
+	public ParallelWriter<int> OceanIndicesWriter;
+
+	public float TerrainPositionY;
+
+	public float TerrainSizeY;
+
+	public float OceanLevel;
+
+	public void Execute(int startIndex, int count)
+	{
+		//IL_0004: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0061: Unknown result type (might be due to invalid IL or missing references)
+		NativeList<int> val = default(NativeList<int>);
+		val..ctor(count, AllocatorHandle.op_Implicit((Allocator)2));
+		for (int i = startIndex; i < startIndex + count; i++)
+		{
+			float num2 = (HeightMapAsFloat[i] = TerrainPositionY + BitUtility.Short2Float((int)HeightMapAsShort[i]) * TerrainSizeY);
+			if (num2 <= OceanLevel)
+			{
+				val.Add(ref i);
+			}
+		}
+		OceanIndicesWriter.AddRangeNoResize(val);
+	}
+}
+
+
+using Unity.Burst;
+using Unity.Collections;
+using Unity.Jobs;
+using Unity.Mathematics;
+
+[BurstCompile(/*Could not decode attribute arguments.*/)]
+internal struct TransportSedimentJob : IJobParallelFor
+{
+	public NativeArray<float> SedimentMap;
+
+	public ReadOnly<float> SedimentReadOnlyMap;
+
+	public ReadOnly<float2> VelocityMap;
+
+	public int Res;
+
+	public float DT;
+
+	public void Execute(int index)
+	{
+		//IL_0018: Unknown result type (might be due to invalid IL or missing references)
+		//IL_001d: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0025: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0037: Unknown result type (might be due to invalid IL or missing references)
+		int num = index % Res;
+		int num2 = index / Res;
+		float2 val = VelocityMap[index];
+		int num3 = (int)((float)num - DT * val.x);
+		int num4 = (int)((float)num2 - DT * val.y);
+		num3 = math.clamp(num3, 0, Res - 1);
+		num4 = math.clamp(num4, 0, Res - 1);
+		SedimentMap[index] = SedimentReadOnlyMap[num4 * Res + num3];
+	}
+}
+
+
+using TerrainTopologyMapJobs;
+using Unity.Burst;
+using Unity.Collections;
+using Unity.Jobs;
+using Unity.Mathematics;
+
+[BurstCompile(/*Could not decode attribute arguments.*/)]
+internal struct CalcMinHeightMapJob : IJobParallelFor
+{
+	public ReadOnly<float> TerrainHeightMap;
+
+	public int HeightMapRes;
+
+	[WriteOnly]
+	public NativeArray<float> MinTerrainHeightMap;
+
+	public ReadOnly<int> TopologyMap;
+
+	public int TopologyMapRes;
+
+	public float OceanHeight;
+
+	public float TerrainOneOverSizeX;
+
+	public void Execute(int index)
+	{
+		//IL_004c: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0085: Unknown result type (might be due to invalid IL or missing references)
+		float num = TerrainHeightMap[index];
+		if (!(num < OceanHeight))
+		{
+			int num2 = index % HeightMapRes;
+			int num3 = index / HeightMapRes;
+			float normX = ((float)num2 - 0.5f) / (float)HeightMapRes;
+			float normZ = ((float)num3 - 0.5f) / (float)HeightMapRes;
+			bool flag = (TerrainTopologyMapJobUtil.GetTopologyRadius(TopologyMap, TopologyMapRes, TerrainOneOverSizeX, 0f, normX, normZ) & 0x14080) != 0;
+			float num4 = 8f;
+			float num5 = 8f;
+			while (num5 > 0f && !flag && (TerrainTopologyMapJobUtil.GetTopologyRadius(TopologyMap, TopologyMapRes, TerrainOneOverSizeX, num5, normX, normZ) & 0x3C198) != 0)
+			{
+				num4 = num5;
+				num5 -= 0.25f;
+			}
+			float num6 = (flag ? 0f : math.unlerp(0f, 8f, num4));
+			num = math.max(OceanHeight, num - 1f * num6);
+		}
+		MinTerrainHeightMap[index] = num;
+	}
+}
+
+
+using Unity.Burst;
+using Unity.Collections;
+using Unity.Jobs;
+using Unity.Mathematics;
+
+[BurstCompile(/*Could not decode attribute arguments.*/)]
+internal struct ErosionAndDepositionJob : IJobParallelFor
+{
+	public NativeArray<float> SedimentMap;
+
+	public ReadOnly<float> MinTerrainHeightMap;
+
+	public ReadOnly<float> TerrainHeightMapSrcFloat;
+
+	public NativeArray<float> TerrainHeightMapDstFloat;
+
+	public NativeArray<float> WaterMap;
+
+	public ReadOnly<float2> VelocityMap;
+
+	public ReadOnly<float> AngleMap;
+
+	public float DT;
+
+	private const float SedimentCapacityConst = 0.0015f;
+
+	private const float DissolveRateConstant = 0.15f;
+
+	public void Execute(int index)
+	{
+		//IL_001e: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0023: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0030: Unknown result type (might be due to invalid IL or missing references)
+		float num = math.max(0.01047198f, AngleMap[index]);
+		float2 val = VelocityMap[index];
+		float num2 = 0.0015f * math.sin(num) * math.length(val);
+		ref float reference = ref BurstUtil.Get<float>(ref WaterMap, index);
+		float num3 = 1f - math.smoothstep(0f, 10f, reference);
+		ref float reference2 = ref BurstUtil.Get<float>(ref SedimentMap, index);
+		float num4 = DT * 0.15f * (num2 - reference2) * num3;
+		float num5 = math.select(-1f, 1f, num2 > reference2) * num4;
+		num5 = math.max(num5, 0f);
+		float num6 = TerrainHeightMapSrcFloat[index];
+		float num7 = num6 - num5;
+		num7 = math.max(num7, MinTerrainHeightMap[index]);
+		num5 = num7 - (num6 - num5);
+		TerrainHeightMapDstFloat[index] = num7;
+		reference2 += num5;
+		reference += num5;
+	}
+}
+
+
+using Unity.Burst;
+using Unity.Collections;
+using Unity.Jobs;
+using Unity.Mathematics;
+
+[BurstCompile(/*Could not decode attribute arguments.*/)]
+internal struct TileCalculateAngleMap : IJobParallelFor
+{
+	[WriteOnly]
+	[NativeDisableParallelForRestriction]
+	public NativeArray<float> AngleMap;
+
+	[ReadOnly]
+	public ReadOnly<float> TerrainHeightMapSrcFloat;
+
+	public float NormY;
+
+	public int Res;
+
+	public int NumXTiles;
+
+	public int TileSizeX;
+
+	public int TileSizeZ;
+
+	public void Execute(int index)
+	{
+		//IL_007b: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0080: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0082: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0087: Unknown result type (might be due to invalid IL or missing references)
+		//IL_008b: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0090: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0092: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0097: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00a1: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00b3: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00b8: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00bd: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00c2: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00ca: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00dd: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00f7: Unknown result type (might be due to invalid IL or missing references)
+		//IL_010a: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0128: Unknown result type (might be due to invalid IL or missing references)
+		//IL_012d: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0132: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0134: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0136: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0151: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0156: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0158: Unknown result type (might be due to invalid IL or missing references)
+		int num = index % NumXTiles;
+		int num2 = index / NumXTiles;
+		int num3 = math.max(num * TileSizeX, 1);
+		int num4 = math.max(num2 * TileSizeZ, 1);
+		int num5 = math.min(num3 + TileSizeX, Res - 1);
+		int num6 = math.min(num4 + TileSizeZ, Res - 1);
+		int4 val = default(int4);
+		((int4)(ref val))..ctor(Res);
+		int2 val2 = default(int2);
+		((int2)(ref val2))..ctor(1, -1);
+		for (int i = num4; i < num6; i++)
+		{
+			int2 val3 = new int2(i) + val2;
+			int4 val4 = ((int2)(ref val3)).yyxy * val;
+			for (int j = num3; j < num5; j++)
+			{
+				float4 val5 = float4.op_Implicit(val4 + new int4(j + 1, j - 1, j - 1, j - 1));
+				float num7 = (TerrainHeightMapSrcFloat[(int)val5.x] - TerrainHeightMapSrcFloat[(int)val5.y]) * -0.5f;
+				float num8 = (TerrainHeightMapSrcFloat[(int)val5.z] - TerrainHeightMapSrcFloat[(int)val5.w]) * -0.5f;
+				float3 val6 = math.normalize(new float3(num7, NormY, num8));
+				float num9 = math.dot(val6, val6);
+				AngleMap[i * Res + j] = math.acos(math.clamp(math.dot(math.up(), math.normalize(val6)) / num9, -1f, 1f));
+			}
+		}
+	}
+}
+
+
+using System.Runtime.CompilerServices;
+using Unity.Burst;
+using Unity.Burst.CompilerServices;
+using Unity.Collections;
+using Unity.Jobs;
+using Unity.Mathematics;
+
+[BurstCompile(/*Could not decode attribute arguments.*/)]
+internal struct AdjustWaterHeightByFluxJob : IJobParallelFor
+{
+	public NativeArray<float> WaterMap;
+
+	public NativeArray<float2> VelocityMap;
+
+	public ReadOnly<float4> FluxMap;
+
+	public int Res;
+
+	public float DT;
+
+	public float InvGridCellSquareSize;
+
+	public void Execute(int index)
+	{
+		//IL_003c: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0041: Unknown result type (might be due to invalid IL or missing references)
+		//IL_004e: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0053: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0054: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0066: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0073: Unknown result type (might be due to invalid IL or missing references)
+		//IL_007f: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0081: Unknown result type (might be due to invalid IL or missing references)
+		//IL_008c: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0091: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0093: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0098: Unknown result type (might be due to invalid IL or missing references)
+		//IL_009d: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00a8: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00aa: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00b4: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00c6: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00c8: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00d2: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00e4: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00e6: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00f0: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0102: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0104: Unknown result type (might be due to invalid IL or missing references)
+		//IL_010e: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0150: Unknown result type (might be due to invalid IL or missing references)
+		//IL_015a: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0161: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0174: Unknown result type (might be due to invalid IL or missing references)
+		//IL_017b: Unknown result type (might be due to invalid IL or missing references)
+		//IL_018a: Unknown result type (might be due to invalid IL or missing references)
+		//IL_018c: Unknown result type (might be due to invalid IL or missing references)
+		//IL_018e: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0195: Unknown result type (might be due to invalid IL or missing references)
+		//IL_019a: Unknown result type (might be due to invalid IL or missing references)
+		//IL_019e: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01a3: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01ab: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01b0: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01b5: Unknown result type (might be due to invalid IL or missing references)
+		int num = index % Res;
+		int num2 = index / Res;
+		ref float2 reference = ref BurstUtil.Get<float2>(ref VelocityMap, index);
+		if (num == 0 || num2 == 0 || num == Res - 1 || num2 == Res - 1)
+		{
+			reference = float2.zero;
+			return;
+		}
+		float4 val = FluxMap[index];
+		float num3 = math.csum(val);
+		int4x2 val2 = default(int4x2);
+		((int4x2)(ref val2))..ctor(new int4(num - 1, num + 1, num, num), new int4(num2, num2, num2 + 1, num2 - 1));
+		val2.c0 = val2.c1 * Res + val2.c0;
+		float y = FluxMap[val2.c0.x].y;
+		float x = FluxMap[val2.c0.y].x;
+		float w = FluxMap[val2.c0.z].w;
+		float z = FluxMap[val2.c0.w].z;
+		float num4 = y + x + w + z;
+		float num5 = DT * (num4 - num3);
+		BurstUtil.Get<float>(ref WaterMap, index) += num5 * InvGridCellSquareSize;
+		float2 val3 = default(float2);
+		val3.x = y - val.x + val.y - x;
+		val3.y = w - val.z + val.w - z;
+		float2 val4 = val3;
+		val4 *= 0.5f;
+		reference += val4 * DT;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	private static int ToIndex([AssumeRange(0L, 2147483647L)] int x, [AssumeRange(0L, 2147483647L)] int y, [AssumeRange(0L, 2147483647L)] int res)
+	{
+		return y * res + x;
+	}
+}
+
+
+using Unity.Burst;
+using Unity.Burst.CompilerServices;
+using Unity.Collections;
+using Unity.Jobs;
+using Unity.Mathematics;
+
+[BurstCompile(/*Could not decode attribute arguments.*/)]
+internal struct CalculateOutputFluxJob : IJobParallelFor
+{
+	public ReadOnly<float> TerrainHeightMapFloatVal;
+
+	public ReadOnly<float> WaterMap;
+
+	public NativeArray<float4> FluxMap;
+
+	public int Res;
+
+	public float DT;
+
+	public float GridCellSquareSize;
+
+	public float PipeLength;
+
+	public float PipeArea;
+
+	private const float Gravity = 10f;
+
+	[SkipLocalsInit]
+	public unsafe void Execute(int index)
+	{
+		//IL_003c: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0041: Unknown result type (might be due to invalid IL or missing references)
+		//IL_006e: Unknown result type (might be due to invalid IL or missing references)
+		//IL_007b: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0085: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0087: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0092: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0097: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0099: Unknown result type (might be due to invalid IL or missing references)
+		//IL_009e: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00a3: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00ad: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00c0: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00db: Unknown result type (might be due to invalid IL or missing references)
+		//IL_00ee: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0109: Unknown result type (might be due to invalid IL or missing references)
+		//IL_011c: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0137: Unknown result type (might be due to invalid IL or missing references)
+		//IL_014a: Unknown result type (might be due to invalid IL or missing references)
+		//IL_015e: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0164: Unknown result type (might be due to invalid IL or missing references)
+		//IL_017d: Unknown result type (might be due to invalid IL or missing references)
+		//IL_017f: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0184: Unknown result type (might be due to invalid IL or missing references)
+		//IL_018f: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0194: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0199: Unknown result type (might be due to invalid IL or missing references)
+		//IL_019e: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01a3: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01b6: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01d1: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01d8: Unknown result type (might be due to invalid IL or missing references)
+		//IL_01dd: Unknown result type (might be due to invalid IL or missing references)
+		ref float4 reference = ref BurstUtil.Get<float4>(ref FluxMap, index);
+		int num = index % Res;
+		int num2 = index / Res;
+		if (num == 0 || num2 == 0 || num == Res - 1 || num2 == Res - 1)
+		{
+			reference = float4.zero;
+			return;
+		}
+		float num3 = TerrainHeightMapFloatVal[index];
+		float num4 = WaterMap[index];
+		float num5 = num3 + num4;
+		int4x2 val = default(int4x2);
+		((int4x2)(ref val))..ctor(new int4(num - 1, num + 1, num, num), new int4(num2, num2, num2 + 1, num2 - 1));
+		int4 val2 = math.mad(val.c1, int4.op_Implicit(Res), val.c0);
+		float4 val3 = default(float4);
+		val3.x = *(float*)BurstUtil.GetReadonly<float>(ref TerrainHeightMapFloatVal, val2.x) + *(float*)BurstUtil.GetReadonly<float>(ref WaterMap, val2.x);
+		val3.y = *(float*)BurstUtil.GetReadonly<float>(ref TerrainHeightMapFloatVal, val2.y) + *(float*)BurstUtil.GetReadonly<float>(ref WaterMap, val2.y);
+		val3.z = *(float*)BurstUtil.GetReadonly<float>(ref TerrainHeightMapFloatVal, val2.z) + *(float*)BurstUtil.GetReadonly<float>(ref WaterMap, val2.z);
+		val3.w = *(float*)BurstUtil.GetReadonly<float>(ref TerrainHeightMapFloatVal, val2.w) + *(float*)BurstUtil.GetReadonly<float>(ref WaterMap, val2.w);
+		reference = math.max(float4.zero, reference + DT * PipeArea * (10f * (num5 - val3) / PipeLength));
+		float num6 = math.min(1f, num4 * GridCellSquareSize / (math.csum(reference) * DT));
+		reference *= num6;
+	}
+}
+
+
+using Unity.Burst;
+using Unity.Collections;
+using Unity.Jobs;
+
+[BurstCompile(/*Could not decode attribute arguments.*/)]
+internal struct RefillOceanJob : IJobParallelFor
+{
+	public ReadOnly<int> OceanIndices;
+
+	public ReadOnly<float> HeightMap;
+
+	[NativeDisableParallelForRestriction]
+	[WriteOnly]
+	public NativeArray<float> WaterMap;
+
+	public float OceanLevel;
+
+	public void Execute(int index)
+	{
+		int num = OceanIndices[index];
+		float num2 = HeightMap[num];
+		WaterMap[num] = OceanLevel - num2;
+	}
+}
+
+
+using Unity.Burst;
+using Unity.Collections;
+using Unity.Jobs;
+
+[BurstCompile(/*Could not decode attribute arguments.*/)]
+internal struct WaterIncrementationJob : IJobParallelFor
+{
+	public NativeArray<float> WaterMap;
+
+	public float WaterFillRate;
+
+	public float DT;
+
+	public void Execute(int index)
+	{
+		ref NativeArray<float> waterMap = ref WaterMap;
+		waterMap[index] += WaterFillRate * DT;
+	}
+}
+
+
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
@@ -19585,6 +20353,59 @@ public struct GetHeightByIndexJob : IJob
 }
 
 
+using Unity.Collections;
+
+public static class TerrainTopologyMapJobUtil
+{
+	public static int GetTopologyRadius(ReadOnly<int> src, int res, float terrainOneOverSizeX, float radius, float normX, float normZ)
+	{
+		//IL_0045: Unknown result type (might be due to invalid IL or missing references)
+		float num = terrainOneOverSizeX * radius;
+		int x_mid = Index(normX, res);
+		int z_mid = Index(normZ, res);
+		int x_min = Index(normX - num, res);
+		int x_max = Index(normX + num, res);
+		int z_min = Index(normZ - num, res);
+		int z_max = Index(normZ + num, res);
+		return GetTopologyRadius(src, res, radius, x_min, x_mid, x_max, z_min, z_mid, z_max);
+	}
+
+	private static int Index(float normalized, int res)
+	{
+		int num = (int)(normalized * (float)res);
+		if (num >= 0)
+		{
+			if (num <= res - 1)
+			{
+				return num;
+			}
+			return res - 1;
+		}
+		return 0;
+	}
+
+	internal static int GetTopologyRadius(ReadOnly<int> src, int res, float radius, int x_min, int x_mid, int x_max, int z_min, int z_mid, int z_max)
+	{
+		int num = 0;
+		float num2 = radius * radius;
+		for (int i = z_min; i <= z_max; i++)
+		{
+			int num3 = i - z_mid;
+			int num4 = num3 * num3;
+			for (int j = x_min; j <= x_max; j++)
+			{
+				int num5 = j - x_mid;
+				if (!((float)(num5 * num5 + num4) > num2))
+				{
+					num |= src[i * res + j];
+				}
+			}
+		}
+		return num;
+	}
+}
+
+
 using System;
 using Unity.Burst;
 using Unity.Collections;
@@ -19665,6 +20486,7 @@ public struct GetTopologyByUVJob : IJob
 }
 
 
+using TerrainTopologyMapJobs;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
@@ -19690,25 +20512,44 @@ internal struct GetTopologyRadiusJob : IJob
 
 	public int z_max;
 
-	public float radius2;
+	public float radius;
 
 	public void Execute()
 	{
-		int num = 0;
-		for (int i = z_min; i <= z_max; i++)
+		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
+		Topo.Value = TerrainTopologyMapJobUtil.GetTopologyRadius(Src, Res, radius, x_min, x_mid, x_max, z_min, z_mid, z_max);
+	}
+}
+
+
+using Unity.Burst;
+using Unity.Collections;
+using Unity.Jobs;
+
+[BurstCompile]
+public struct GetTopologyByIndexJob : IJob
+{
+	[WriteOnly]
+	public NativeArray<int> Topologies;
+
+	[ReadOnly]
+	public NativeArray<Vector2i> Indices;
+
+	[ReadOnly]
+	public NativeArray<int> Data;
+
+	[ReadOnly]
+	public int Res;
+
+	public void Execute()
+	{
+		//IL_000b: Unknown result type (might be due to invalid IL or missing references)
+		//IL_0023: Unknown result type (might be due to invalid IL or missing references)
+		for (int i = 0; i < Indices.Length; i++)
 		{
-			int num2 = i - z_mid;
-			int num3 = num2 * num2;
-			for (int j = x_min; j <= x_max; j++)
-			{
-				int num4 = j - x_mid;
-				if (!((float)(num4 * num4 + num3) > radius2))
-				{
-					num |= Src[i * Res + j];
-				}
-			}
+			int num = Indices[i].y * Res + Indices[i].x;
+			Topologies[i] = Data[num];
 		}
-		Topo.Value = num;
 	}
 }
 
@@ -19748,38 +20589,6 @@ public struct GetTopologyByUVJobIndirect : IJob
 			int num2 = Math.Clamp((int)(UV[num].x * (float)Res), 0, max);
 			int num3 = Math.Clamp((int)(UV[num].y * (float)Res), 0, max) * Res + num2;
 			Topologies[num] = Data[num3];
-		}
-	}
-}
-
-
-using Unity.Burst;
-using Unity.Collections;
-using Unity.Jobs;
-
-[BurstCompile]
-public struct GetTopologyByIndexJob : IJob
-{
-	[WriteOnly]
-	public NativeArray<int> Topologies;
-
-	[ReadOnly]
-	public NativeArray<Vector2i> Indices;
-
-	[ReadOnly]
-	public NativeArray<int> Data;
-
-	[ReadOnly]
-	public int Res;
-
-	public void Execute()
-	{
-		//IL_000b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0023: Unknown result type (might be due to invalid IL or missing references)
-		for (int i = 0; i < Indices.Length; i++)
-		{
-			int num = Indices[i].y * Res + Indices[i].x;
-			Topologies[i] = Data[num];
 		}
 	}
 }
@@ -20122,8 +20931,8 @@ public struct CheckBoundsJobIndirect : IJob
 	[WriteOnly]
 	public NativeList<int> OverlapIndices;
 
-	[ReadOnly]
 	[NativeDisableContainerSafetyRestriction]
+	[ReadOnly]
 	public CoarseQueryGrid Grid;
 
 	[ReadOnly]
@@ -20351,9 +21160,9 @@ using System;
 using UnityEngine;
 using UnityStandardAssets.CinematicEffects;
 
-[ExecuteInEditMode]
-[AddComponentMenu("Image Effects/Cinematic/Tonemapping and Color Grading")]
 [ImageEffectAllowedInSceneView]
+[AddComponentMenu("Image Effects/Cinematic/Tonemapping and Color Grading")]
+[ExecuteInEditMode]
 public class TonemappingColorGrading : MonoBehaviour
 {
 	[AttributeUsage(AttributeTargets.Field)]
@@ -20411,8 +21220,8 @@ public class TonemappingColorGrading : MonoBehaviour
 	{
 		public bool enabled;
 
-		[Min(0f)]
 		[Tooltip("Midpoint Adjustment.")]
+		[Min(0f)]
 		public float middleGrey;
 
 		[Tooltip("The lowest possible exposure value; adjust this value to modify the brightest areas of your level.")]
@@ -20567,29 +21376,29 @@ public class TonemappingColorGrading : MonoBehaviour
 	[Serializable]
 	public struct BasicsSettings
 	{
-		[Range(-2f, 2f)]
 		[Tooltip("Sets the white balance to a custom color temperature.")]
+		[Range(-2f, 2f)]
 		public float temperatureShift;
 
 		[Tooltip("Sets the white balance to compensate for a green or magenta tint.")]
 		[Range(-2f, 2f)]
 		public float tint;
 
-		[Space]
-		[Range(-0.5f, 0.5f)]
 		[Tooltip("Shift the hue of all colors.")]
+		[Range(-0.5f, 0.5f)]
+		[Space]
 		public float hue;
 
-		[Range(0f, 2f)]
 		[Tooltip("Pushes the intensity of all colors.")]
+		[Range(0f, 2f)]
 		public float saturation;
 
-		[Range(-1f, 1f)]
 		[Tooltip("Adjusts the saturation so that clipping is minimized as colors approach full saturation.")]
+		[Range(-1f, 1f)]
 		public float vibrance;
 
-		[Tooltip("Brightens or darkens all colors.")]
 		[Range(0f, 10f)]
+		[Tooltip("Brightens or darkens all colors.")]
 		public float value;
 
 		[Space]
@@ -20601,8 +21410,8 @@ public class TonemappingColorGrading : MonoBehaviour
 		[Tooltip("Contrast gain curve. Controls the steepness of the curve.")]
 		public float gain;
 
-		[Tooltip("Applies a pow function to the source.")]
 		[Range(0.01f, 5f)]
+		[Tooltip("Applies a pow function to the source.")]
 		public float gamma;
 
 		public static BasicsSettings defaultSettings
@@ -20711,16 +21520,16 @@ public class TonemappingColorGrading : MonoBehaviour
 		[IndentedGroup]
 		public BasicsSettings basics;
 
-		[Space]
 		[ChannelMixer]
+		[Space]
 		public ChannelMixerSettings channelMixer;
 
 		[IndentedGroup]
 		[Space]
 		public CurvesSettings curves;
 
-		[Tooltip("Use dithering to try and minimize color banding in dark areas.")]
 		[Space]
+		[Tooltip("Use dithering to try and minimize color banding in dark areas.")]
 		public bool useDithering;
 
 		[Tooltip("Displays the generated LUT in the top left corner of the GameView.")]
@@ -20753,16 +21562,16 @@ public class TonemappingColorGrading : MonoBehaviour
 	[SettingsGroup]
 	private EyeAdaptationSettings m_EyeAdaptation = EyeAdaptationSettings.defaultSettings;
 
-	[SettingsGroup]
 	[SerializeField]
+	[SettingsGroup]
 	private TonemappingSettings m_Tonemapping = TonemappingSettings.defaultSettings;
 
-	[SettingsGroup]
 	[SerializeField]
+	[SettingsGroup]
 	private ColorGradingSettings m_ColorGrading = ColorGradingSettings.defaultSettings;
 
-	[SerializeField]
 	[SettingsGroup]
+	[SerializeField]
 	private LUTSettings m_Lut = LUTSettings.defaultSettings;
 
 	[SerializeField]
@@ -20843,8 +21652,8 @@ public struct EyeAdaptationSettings
 {
 	public bool enabled;
 
-	[Min(0f)]
 	[Tooltip("Midpoint Adjustment.")]
+	[Min(0f)]
 	public float middleGrey;
 
 	[Tooltip("The lowest possible exposure value; adjust this value to modify the brightest areas of your level.")]
@@ -21016,29 +21825,29 @@ using UnityEngine;
 [Serializable]
 public struct BasicsSettings
 {
-	[Range(-2f, 2f)]
 	[Tooltip("Sets the white balance to a custom color temperature.")]
+	[Range(-2f, 2f)]
 	public float temperatureShift;
 
 	[Tooltip("Sets the white balance to compensate for a green or magenta tint.")]
 	[Range(-2f, 2f)]
 	public float tint;
 
-	[Space]
-	[Range(-0.5f, 0.5f)]
 	[Tooltip("Shift the hue of all colors.")]
+	[Range(-0.5f, 0.5f)]
+	[Space]
 	public float hue;
 
-	[Range(0f, 2f)]
 	[Tooltip("Pushes the intensity of all colors.")]
+	[Range(0f, 2f)]
 	public float saturation;
 
-	[Range(-1f, 1f)]
 	[Tooltip("Adjusts the saturation so that clipping is minimized as colors approach full saturation.")]
+	[Range(-1f, 1f)]
 	public float vibrance;
 
-	[Tooltip("Brightens or darkens all colors.")]
 	[Range(0f, 10f)]
+	[Tooltip("Brightens or darkens all colors.")]
 	public float value;
 
 	[Space]
@@ -21050,8 +21859,8 @@ public struct BasicsSettings
 	[Tooltip("Contrast gain curve. Controls the steepness of the curve.")]
 	public float gain;
 
-	[Tooltip("Applies a pow function to the source.")]
 	[Range(0.01f, 5f)]
+	[Tooltip("Applies a pow function to the source.")]
 	public float gamma;
 
 	public static BasicsSettings defaultSettings
@@ -21173,16 +21982,16 @@ public struct ColorGradingSettings
 	[IndentedGroup]
 	public BasicsSettings basics;
 
-	[Space]
 	[ChannelMixer]
+	[Space]
 	public ChannelMixerSettings channelMixer;
 
 	[IndentedGroup]
 	[Space]
 	public CurvesSettings curves;
 
-	[Tooltip("Use dithering to try and minimize color banding in dark areas.")]
 	[Space]
+	[Tooltip("Use dithering to try and minimize color banding in dark areas.")]
 	public bool useDithering;
 
 	[Tooltip("Displays the generated LUT in the top left corner of the GameView.")]
@@ -21215,8 +22024,8 @@ public struct ColorGradingSettings
 using UnityEngine;
 using UnityStandardAssets.ImageEffects;
 
-[ExecuteInEditMode]
 [AddComponentMenu("Image Effects/Other/Scope Overlay")]
+[ExecuteInEditMode]
 public class ScopeEffect : PostEffectsBase, IImageEffect
 {
 	public Material overlayMaterial;
@@ -23471,10 +24280,10 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-[AddComponentMenu("UI/Scroll Rect Ex", 37)]
-[SelectionBase]
 [ExecuteInEditMode]
 [RequireComponent(typeof(RectTransform))]
+[AddComponentMenu("UI/Scroll Rect Ex", 37)]
+[SelectionBase]
 public class ScrollRectEx : UIBehaviour, IInitializePotentialDragHandler, IEventSystemHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IScrollHandler, ICanvasElement, ILayoutGroup, ILayoutController
 {
 	public enum MovementType
@@ -25105,12 +25914,12 @@ public class UICircle : UIPrimitiveBase
 	[Range(0f, 1f)]
 	public float Arc = 1f;
 
-	[Tooltip("The Arc Steps property defines the number of segments that the Arc will be divided into.")]
 	[Range(0f, 1000f)]
+	[Tooltip("The Arc Steps property defines the number of segments that the Arc will be divided into.")]
 	public int ArcSteps = 100;
 
-	[Tooltip("The Arc Rotation property permits adjusting the geometry orientation around the Z axis.")]
 	[Range(0f, 360f)]
+	[Tooltip("The Arc Rotation property permits adjusting the geometry orientation around the Z axis.")]
 	public int ArcRotation;
 
 	[Tooltip("The Progress property allows the primitive to be used as a progression indicator.")]
@@ -25630,12 +26439,12 @@ public class UICornerCut : UIPrimitiveBase
 	[SerializeField]
 	private bool m_cutLR;
 
-	[Tooltip("Up-Down colors become Left-Right colors")]
 	[SerializeField]
+	[Tooltip("Up-Down colors become Left-Right colors")]
 	private bool m_makeColumns;
 
-	[Header("Color the cut bars differently")]
 	[SerializeField]
+	[Header("Color the cut bars differently")]
 	private bool m_useColorUp;
 
 	[SerializeField]
@@ -26293,8 +27102,8 @@ using UnityEngine.Sprites;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 
-[AddComponentMenu("UI/Extensions/Primitives/UILineRenderer")]
 [RequireComponent(typeof(RectTransform))]
+[AddComponentMenu("UI/Extensions/Primitives/UILineRenderer")]
 public class UILineRenderer : UIPrimitiveBase
 {
 	private enum SegmentType
@@ -26356,12 +27165,12 @@ public class UILineRenderer : UIPrimitiveBase
 	[Tooltip("Segments to be drawn\n This is a list of arrays of points")]
 	internal List<Vector2[]> m_segments;
 
-	[Tooltip("Thickness of the line")]
 	[SerializeField]
+	[Tooltip("Thickness of the line")]
 	internal float lineThickness = 2f;
 
-	[Tooltip("Use the relative bounds of the Rect Transform (0,0 -> 0,1) or screen space coordinates")]
 	[SerializeField]
+	[Tooltip("Use the relative bounds of the Rect Transform (0,0 -> 0,1) or screen space coordinates")]
 	internal bool relativeSize;
 
 	[Tooltip("Do the points identify a single line or split pairs of lines")]
@@ -27106,8 +27915,8 @@ using UnityEngine.Sprites;
 using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 
-[RequireComponent(typeof(RectTransform))]
 [AddComponentMenu("UI/Extensions/Primitives/UILineRendererList")]
+[RequireComponent(typeof(RectTransform))]
 public class UILineRendererList : UIPrimitiveBase
 {
 	private enum SegmentType
@@ -27177,8 +27986,8 @@ public class UILineRendererList : UIPrimitiveBase
 	[SerializeField]
 	internal bool lineList;
 
-	[Tooltip("Add end caps to each line\nMultiple caps when used with Line List")]
 	[SerializeField]
+	[Tooltip("Add end caps to each line\nMultiple caps when used with Line List")]
 	internal bool lineCaps;
 
 	[Tooltip("Resolution of the Bezier curve, different to line Resolution")]
@@ -27817,568 +28626,6 @@ public enum BezierType
 	Basic,
 	Improved,
 	Catenary
-}
-
-
-using System;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UI.Extensions;
-
-[AddComponentMenu("UI/Extensions/Primitives/UILineTextureRenderer")]
-public class UILineTextureRenderer : UIPrimitiveBase
-{
-	[SerializeField]
-	private Rect m_UVRect = new Rect(0f, 0f, 1f, 1f);
-
-	[SerializeField]
-	private Vector2[] m_points;
-
-	public float LineThickness = 2f;
-
-	public bool UseMargins;
-
-	public Vector2 Margin;
-
-	public bool relativeSize;
-
-	public Rect uvRect
-	{
-		get
-		{
-			//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-			return m_UVRect;
-		}
-		set
-		{
-			//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0010: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0011: Unknown result type (might be due to invalid IL or missing references)
-			if (!(m_UVRect == value))
-			{
-				m_UVRect = value;
-				((Graphic)this).SetVerticesDirty();
-			}
-		}
-	}
-
-	public Vector2[] Points
-	{
-		get
-		{
-			return m_points;
-		}
-		set
-		{
-			if (m_points != value)
-			{
-				m_points = value;
-				((Graphic)this).SetAllDirty();
-			}
-		}
-	}
-
-	protected override void OnPopulateMesh(VertexHelper vh)
-	{
-		//IL_0026: Unknown result type (might be due to invalid IL or missing references)
-		//IL_002b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0041: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0054: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0059: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0069: Unknown result type (might be due to invalid IL or missing references)
-		//IL_006e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_007e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_008f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0094: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00a5: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00b6: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00bb: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00eb: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00fc: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0108: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0114: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0119: Unknown result type (might be due to invalid IL or missing references)
-		//IL_011e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0122: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0129: Unknown result type (might be due to invalid IL or missing references)
-		//IL_012e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0133: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0137: Unknown result type (might be due to invalid IL or missing references)
-		//IL_014d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_017b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0190: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01a5: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01aa: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01af: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01b3: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01ba: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01bf: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01c4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01c8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01e1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0248: Unknown result type (might be due to invalid IL or missing references)
-		//IL_024d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_024f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0254: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0264: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0269: Unknown result type (might be due to invalid IL or missing references)
-		//IL_026f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0274: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0278: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0283: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0296: Unknown result type (might be due to invalid IL or missing references)
-		//IL_02a1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_02b2: Unknown result type (might be due to invalid IL or missing references)
-		//IL_02b9: Unknown result type (might be due to invalid IL or missing references)
-		//IL_02c1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_02c8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_02e3: Unknown result type (might be due to invalid IL or missing references)
-		//IL_02f7: Unknown result type (might be due to invalid IL or missing references)
-		//IL_02fc: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0301: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0303: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0316: Unknown result type (might be due to invalid IL or missing references)
-		//IL_031b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0320: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0322: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0335: Unknown result type (might be due to invalid IL or missing references)
-		//IL_033a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_033f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0341: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0355: Unknown result type (might be due to invalid IL or missing references)
-		//IL_035a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_035f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0362: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0364: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0369: Unknown result type (might be due to invalid IL or missing references)
-		//IL_036b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_037c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0381: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0386: Unknown result type (might be due to invalid IL or missing references)
-		//IL_038b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_038e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0390: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0395: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0397: Unknown result type (might be due to invalid IL or missing references)
-		//IL_03a8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_03ad: Unknown result type (might be due to invalid IL or missing references)
-		//IL_03b2: Unknown result type (might be due to invalid IL or missing references)
-		//IL_03b7: Unknown result type (might be due to invalid IL or missing references)
-		//IL_03ba: Unknown result type (might be due to invalid IL or missing references)
-		//IL_03bc: Unknown result type (might be due to invalid IL or missing references)
-		//IL_03c1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_03c3: Unknown result type (might be due to invalid IL or missing references)
-		//IL_03d4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_03d9: Unknown result type (might be due to invalid IL or missing references)
-		//IL_03de: Unknown result type (might be due to invalid IL or missing references)
-		//IL_03e3: Unknown result type (might be due to invalid IL or missing references)
-		//IL_03e6: Unknown result type (might be due to invalid IL or missing references)
-		//IL_03e8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_03ed: Unknown result type (might be due to invalid IL or missing references)
-		//IL_03ef: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0400: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0405: Unknown result type (might be due to invalid IL or missing references)
-		//IL_040a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_040f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0411: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0416: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0475: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0477: Unknown result type (might be due to invalid IL or missing references)
-		//IL_047e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0480: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0487: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0489: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0490: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0492: Unknown result type (might be due to invalid IL or missing references)
-		//IL_04a8: Unknown result type (might be due to invalid IL or missing references)
-		//IL_04aa: Unknown result type (might be due to invalid IL or missing references)
-		//IL_04b1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_04b3: Unknown result type (might be due to invalid IL or missing references)
-		//IL_04ba: Unknown result type (might be due to invalid IL or missing references)
-		//IL_04bc: Unknown result type (might be due to invalid IL or missing references)
-		//IL_04c3: Unknown result type (might be due to invalid IL or missing references)
-		//IL_04c5: Unknown result type (might be due to invalid IL or missing references)
-		//IL_04e3: Unknown result type (might be due to invalid IL or missing references)
-		//IL_04e5: Unknown result type (might be due to invalid IL or missing references)
-		//IL_04ec: Unknown result type (might be due to invalid IL or missing references)
-		//IL_04ee: Unknown result type (might be due to invalid IL or missing references)
-		//IL_04f5: Unknown result type (might be due to invalid IL or missing references)
-		//IL_04f7: Unknown result type (might be due to invalid IL or missing references)
-		//IL_04fe: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0500: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0549: Unknown result type (might be due to invalid IL or missing references)
-		//IL_054b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0552: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0554: Unknown result type (might be due to invalid IL or missing references)
-		//IL_055b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_055d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0564: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0566: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0577: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0579: Unknown result type (might be due to invalid IL or missing references)
-		//IL_057b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_057d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_051b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_051d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0524: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0526: Unknown result type (might be due to invalid IL or missing references)
-		//IL_052d: Unknown result type (might be due to invalid IL or missing references)
-		//IL_052f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0536: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0538: Unknown result type (might be due to invalid IL or missing references)
-		if (m_points == null || m_points.Length < 2)
-		{
-			m_points = (Vector2[])(object)new Vector2[2]
-			{
-				new Vector2(0f, 0f),
-				new Vector2(1f, 1f)
-			};
-		}
-		int num = 24;
-		Rect rect = ((Graphic)this).rectTransform.rect;
-		float num2 = ((Rect)(ref rect)).width;
-		rect = ((Graphic)this).rectTransform.rect;
-		float num3 = ((Rect)(ref rect)).height;
-		float num4 = 0f - ((Graphic)this).rectTransform.pivot.x;
-		rect = ((Graphic)this).rectTransform.rect;
-		float num5 = num4 * ((Rect)(ref rect)).width;
-		float num6 = 0f - ((Graphic)this).rectTransform.pivot.y;
-		rect = ((Graphic)this).rectTransform.rect;
-		float num7 = num6 * ((Rect)(ref rect)).height;
-		if (!relativeSize)
-		{
-			num2 = 1f;
-			num3 = 1f;
-		}
-		List<Vector2> list = new List<Vector2>();
-		list.Add(m_points[0]);
-		Vector2 val = m_points[0];
-		Vector2 val2 = m_points[1] - m_points[0];
-		Vector2 item = val + ((Vector2)(ref val2)).normalized * (float)num;
-		list.Add(item);
-		for (int i = 1; i < m_points.Length - 1; i++)
-		{
-			list.Add(m_points[i]);
-		}
-		Vector2 val3 = m_points[m_points.Length - 1];
-		val2 = m_points[m_points.Length - 1] - m_points[m_points.Length - 2];
-		item = val3 - ((Vector2)(ref val2)).normalized * (float)num;
-		list.Add(item);
-		list.Add(m_points[m_points.Length - 1]);
-		Vector2[] array = list.ToArray();
-		if (UseMargins)
-		{
-			num2 -= Margin.x;
-			num3 -= Margin.y;
-			num5 += Margin.x / 2f;
-			num7 += Margin.y / 2f;
-		}
-		vh.Clear();
-		Vector2 val4 = Vector2.zero;
-		Vector2 val5 = Vector2.zero;
-		Vector2 val12 = default(Vector2);
-		Vector2 val13 = default(Vector2);
-		Vector2 val14 = default(Vector2);
-		Vector2 val15 = default(Vector2);
-		Vector2 val16 = default(Vector2);
-		for (int j = 1; j < array.Length; j++)
-		{
-			Vector2 val6 = array[j - 1];
-			Vector2 val7 = array[j];
-			((Vector2)(ref val6))..ctor(val6.x * num2 + num5, val6.y * num3 + num7);
-			((Vector2)(ref val7))..ctor(val7.x * num2 + num5, val7.y * num3 + num7);
-			float num8 = Mathf.Atan2(val7.y - val6.y, val7.x - val6.x) * 180f / MathF.PI;
-			Vector2 val8 = val6 + new Vector2(0f, (0f - LineThickness) / 2f);
-			Vector2 val9 = val6 + new Vector2(0f, LineThickness / 2f);
-			Vector2 val10 = val7 + new Vector2(0f, LineThickness / 2f);
-			Vector2 val11 = val7 + new Vector2(0f, (0f - LineThickness) / 2f);
-			val8 = Vector2.op_Implicit(RotatePointAroundPivot(Vector2.op_Implicit(val8), Vector2.op_Implicit(val6), new Vector3(0f, 0f, num8)));
-			val9 = Vector2.op_Implicit(RotatePointAroundPivot(Vector2.op_Implicit(val9), Vector2.op_Implicit(val6), new Vector3(0f, 0f, num8)));
-			val10 = Vector2.op_Implicit(RotatePointAroundPivot(Vector2.op_Implicit(val10), Vector2.op_Implicit(val7), new Vector3(0f, 0f, num8)));
-			val11 = Vector2.op_Implicit(RotatePointAroundPivot(Vector2.op_Implicit(val11), Vector2.op_Implicit(val7), new Vector3(0f, 0f, num8)));
-			Vector2 zero = Vector2.zero;
-			((Vector2)(ref val12))..ctor(0f, 1f);
-			((Vector2)(ref val13))..ctor(0.5f, 0f);
-			((Vector2)(ref val14))..ctor(0.5f, 1f);
-			((Vector2)(ref val15))..ctor(1f, 0f);
-			((Vector2)(ref val16))..ctor(1f, 1f);
-			Vector2[] uvs = (Vector2[])(object)new Vector2[4] { val13, val14, val14, val13 };
-			if (j > 1)
-			{
-				vh.AddUIVertexQuad(SetVbo((Vector2[])(object)new Vector2[4] { val4, val5, val8, val9 }, uvs));
-			}
-			if (j == 1)
-			{
-				uvs = (Vector2[])(object)new Vector2[4] { zero, val12, val14, val13 };
-			}
-			else if (j == array.Length - 1)
-			{
-				uvs = (Vector2[])(object)new Vector2[4] { val13, val14, val16, val15 };
-			}
-			vh.AddUIVertexQuad(SetVbo((Vector2[])(object)new Vector2[4] { val8, val9, val10, val11 }, uvs));
-			val4 = val10;
-			val5 = val11;
-		}
-	}
-
-	public Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Vector3 angles)
-	{
-		//IL_0000: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0008: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0009: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000e: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0014: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0015: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0016: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0017: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001e: Unknown result type (might be due to invalid IL or missing references)
-		Vector3 val = point - pivot;
-		val = Quaternion.Euler(angles) * val;
-		point = val + pivot;
-		return point;
-	}
-}
-
-
-using System;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UI.Extensions;
-
-[AddComponentMenu("UI/Extensions/Primitives/UI Polygon")]
-public class UIPolygon : UIPrimitiveBase
-{
-	public bool fill = true;
-
-	public float thickness = 5f;
-
-	[Range(3f, 360f)]
-	public int sides = 3;
-
-	[Range(0f, 360f)]
-	public float rotation;
-
-	[Range(0f, 1f)]
-	public float[] VerticesDistances = new float[3];
-
-	private float size;
-
-	public void DrawPolygon(int _sides)
-	{
-		sides = _sides;
-		VerticesDistances = new float[_sides + 1];
-		for (int i = 0; i < _sides; i++)
-		{
-			VerticesDistances[i] = 1f;
-		}
-		rotation = 0f;
-		((Graphic)this).SetAllDirty();
-	}
-
-	public void DrawPolygon(int _sides, float[] _VerticesDistances)
-	{
-		sides = _sides;
-		VerticesDistances = _VerticesDistances;
-		rotation = 0f;
-		((Graphic)this).SetAllDirty();
-	}
-
-	public void DrawPolygon(int _sides, float[] _VerticesDistances, float _rotation)
-	{
-		sides = _sides;
-		VerticesDistances = _VerticesDistances;
-		rotation = _rotation;
-		((Graphic)this).SetAllDirty();
-	}
-
-	private void Update()
-	{
-		//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_001f: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0024: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0032: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0037: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0063: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0068: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0048: Unknown result type (might be due to invalid IL or missing references)
-		//IL_004d: Unknown result type (might be due to invalid IL or missing references)
-		Rect rect = ((Graphic)this).rectTransform.rect;
-		size = ((Rect)(ref rect)).width;
-		rect = ((Graphic)this).rectTransform.rect;
-		float width = ((Rect)(ref rect)).width;
-		rect = ((Graphic)this).rectTransform.rect;
-		if (width > ((Rect)(ref rect)).height)
-		{
-			rect = ((Graphic)this).rectTransform.rect;
-			size = ((Rect)(ref rect)).height;
-		}
-		else
-		{
-			rect = ((Graphic)this).rectTransform.rect;
-			size = ((Rect)(ref rect)).width;
-		}
-		thickness = Mathf.Clamp(thickness, 0f, size / 2f);
-	}
-
-	protected override void OnPopulateMesh(VertexHelper vh)
-	{
-		//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_000c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0011: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ca: Unknown result type (might be due to invalid IL or missing references)
-		//IL_00ee: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0179: Unknown result type (might be due to invalid IL or missing references)
-		//IL_017a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01b6: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01b7: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0195: Unknown result type (might be due to invalid IL or missing references)
-		//IL_019a: Unknown result type (might be due to invalid IL or missing references)
-		//IL_019c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01a1: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01b9: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01bb: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01bc: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01be: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01c9: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01cb: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01d2: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01d4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01db: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01dd: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01e4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01e6: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01f3: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01f4: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01fb: Unknown result type (might be due to invalid IL or missing references)
-		//IL_01fc: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0203: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0205: Unknown result type (might be due to invalid IL or missing references)
-		//IL_020c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_020e: Unknown result type (might be due to invalid IL or missing references)
-		vh.Clear();
-		Vector2 val = Vector2.zero;
-		Vector2 val2 = Vector2.zero;
-		Vector2 val3 = default(Vector2);
-		((Vector2)(ref val3))..ctor(0f, 0f);
-		Vector2 val4 = default(Vector2);
-		((Vector2)(ref val4))..ctor(0f, 1f);
-		Vector2 val5 = default(Vector2);
-		((Vector2)(ref val5))..ctor(1f, 1f);
-		Vector2 val6 = default(Vector2);
-		((Vector2)(ref val6))..ctor(1f, 0f);
-		float num = 360f / (float)sides;
-		int num2 = sides + 1;
-		if (VerticesDistances.Length != num2)
-		{
-			VerticesDistances = new float[num2];
-			for (int i = 0; i < num2 - 1; i++)
-			{
-				VerticesDistances[i] = 1f;
-			}
-		}
-		VerticesDistances[num2 - 1] = VerticesDistances[0];
-		Vector2 val8 = default(Vector2);
-		Vector2 zero = default(Vector2);
-		for (int j = 0; j < num2; j++)
-		{
-			float num3 = (0f - ((Graphic)this).rectTransform.pivot.x) * size * VerticesDistances[j];
-			float num4 = (0f - ((Graphic)this).rectTransform.pivot.x) * size * VerticesDistances[j] + thickness;
-			float num5 = MathF.PI / 180f * ((float)j * num + rotation);
-			float num6 = Mathf.Cos(num5);
-			float num7 = Mathf.Sin(num5);
-			((Vector2)(ref val3))..ctor(0f, 1f);
-			((Vector2)(ref val4))..ctor(1f, 1f);
-			((Vector2)(ref val5))..ctor(1f, 0f);
-			((Vector2)(ref val6))..ctor(0f, 0f);
-			Vector2 val7 = val;
-			((Vector2)(ref val8))..ctor(num3 * num6, num3 * num7);
-			Vector2 val9;
-			if (fill)
-			{
-				zero = Vector2.zero;
-				val9 = Vector2.zero;
-			}
-			else
-			{
-				((Vector2)(ref zero))..ctor(num4 * num6, num4 * num7);
-				val9 = val2;
-			}
-			val = val8;
-			val2 = zero;
-			vh.AddUIVertexQuad(SetVbo((Vector2[])(object)new Vector2[4] { val7, val8, zero, val9 }, (Vector2[])(object)new Vector2[4] { val3, val4, val5, val6 }));
-		}
-	}
-}
-
-
-public enum ResolutionMode
-{
-	None,
-	PerSegment,
-	PerLine
-}
-
-
-using System;
-using UnityEngine;
-
-internal static class SetPropertyUtility
-{
-	public static bool SetColor(ref Color currentValue, Color newValue)
-	{
-		//IL_0006: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003b: Unknown result type (might be due to invalid IL or missing references)
-		//IL_003c: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0014: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0022: Unknown result type (might be due to invalid IL or missing references)
-		//IL_0030: Unknown result type (might be due to invalid IL or missing references)
-		if (currentValue.r == newValue.r && currentValue.g == newValue.g && currentValue.b == newValue.b && currentValue.a == newValue.a)
-		{
-			return false;
-		}
-		currentValue = newValue;
-		return true;
-	}
-
-	public static bool SetEquatableStruct<T>(ref T currentValue, T newValue) where T : IEquatable<T>
-	{
-		if (currentValue.Equals(newValue))
-		{
-			return false;
-		}
-		currentValue = newValue;
-		return true;
-	}
-
-	public static bool SetStruct<T>(ref T currentValue, T newValue) where T : struct
-	{
-		if (currentValue.Equals(newValue))
-		{
-			return false;
-		}
-		currentValue = newValue;
-		return true;
-	}
-
-	public static bool SetClass<T>(ref T currentValue, T newValue) where T : class
-	{
-		if ((currentValue == null && newValue == null) || (currentValue != null && currentValue.Equals(newValue)))
-		{
-			return false;
-		}
-		currentValue = newValue;
-		return true;
-	}
 }
 
 

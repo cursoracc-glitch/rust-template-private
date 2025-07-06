@@ -1,3 +1,20 @@
+using Epic.OnlineServices.RTCAdmin;
+
+public delegate void OnQueryJoinRoomTokenCompleteCallback(ref QueryJoinRoomTokenCompleteCallbackInfo data);
+
+
+using System.Runtime.InteropServices;
+using Epic.OnlineServices.RTCAdmin;
+
+[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+internal delegate void OnQueryJoinRoomTokenCompleteCallbackInternal(ref QueryJoinRoomTokenCompleteCallbackInfoInternal data);
+
+
+using Epic.OnlineServices.RTCAdmin;
+
+public delegate void OnSetParticipantHardMuteCompleteCallback(ref SetParticipantHardMuteCompleteCallbackInfo data);
+
+
 using System.Runtime.InteropServices;
 using Epic.OnlineServices.RTCAdmin;
 
