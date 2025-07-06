@@ -56,7 +56,7 @@ This rule describes the **full development workflow** for creating high-quality,
 
 ## Step 5: Compile and Fix Every Error
 
-- Run `dotnet build` **after every significant change**.
+- Run `dotnet tool run rust-build <PluginName>` **after every significant change**.
 - You MUST fix all compiler errors and warnings — there is no "partial implementation" allowed.
 - If errors occur:
   - Re-run `search_codebase(...)` or `search_web(...)`

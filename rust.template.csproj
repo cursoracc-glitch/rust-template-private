@@ -9,6 +9,7 @@
     <Nullable>enable</Nullable>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>latest</AnalysisLevel>
+    <DefaultItemExcludes>$(DefaultItemExcludes);build\**</DefaultItemExcludes>
   </PropertyGroup>
   <ItemGroup>
     <CompilerVisibleProperty Include="RustVersion" />
@@ -51,5 +52,7 @@
     <AdditionalFiles Include="./.rust-analyzer/hooksPlugin.json" />
     <AdditionalFiles Include="./.rust-analyzer/apiMethodsPlugin.json" />
   </ItemGroup>
+
+
 
 </Project>

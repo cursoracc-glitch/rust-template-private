@@ -2,7 +2,7 @@ namespace Oxide.Plugins
 {
     [Info("HelloWorld", "PublicRust", "1.0.0")]
     [Description("Simple Hello World plugin for Rust")]
-    public class HelloWorld : RustPlugin
+    public partial class HelloWorld : RustPlugin
     {
         private void Init()
         {

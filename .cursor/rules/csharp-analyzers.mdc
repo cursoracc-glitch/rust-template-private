@@ -8,7 +8,7 @@ alwaysApply: true
 
 - All code MUST follow Microsoft's official C# coding standards.
 - You MUST fix all diagnostics from:
-  - `dotnet build`
+  - `dotnet tool run rust-build <PluginName>`
   - IDE analyzers (CAxxxx, CSxxxx, IDExxxx)
 - Suppressions like `#pragma warning disable` are forbidden.
 
