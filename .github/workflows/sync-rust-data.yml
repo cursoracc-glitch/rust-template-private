@@ -1,11 +1,6 @@
 # .github/workflows/run-rust-plugin.yml
 name: Run Rust Server Plugin
 
-on:
-  workflow_dispatch:
-  schedule:
-    - cron: '0 0 * * *'  # run once a day at midnight (UTC)
-
 # Add permissions needed for artifact upload
 permissions:
   contents: write # Allow pushing changes to the repo
